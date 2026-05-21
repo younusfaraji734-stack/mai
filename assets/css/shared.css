@@ -1,0 +1,110 @@
+/* ============================================================
+   MAI Platform — Shared CSS (shared.css)
+   Common styles used across multiple pages
+============================================================ */
+
+/* ── MINE PAGE BALANCE CARD (continued) ─────────────────────── */
+.mbc-lbl { font-size: 12px; color: var(--text2); margin-bottom: 4px; }
+.mbc-val { font-size: 26px; font-weight: 800; }
+.mbc-val span { font-size: 14px; color: var(--text2); font-weight: 500; }
+.mbc-sub { font-size: 12px; color: var(--text3); margin-top: 2px; }
+.mbc-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 16px; border-radius: 50px;
+  font-size: 13px; font-weight: 600; cursor: pointer;
+  border: none; transition: all 0.2s;
+}
+.mbc-btn.green { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+.mbc-btn.green:hover { background: rgba(34,197,94,0.25); }
+.mbc-btn.red { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.mbc-btn.red:hover { background: rgba(239,68,68,0.25); }
+
+/* ── REFERRAL CARD ───────────────────────────────────────────── */
+.referral-card {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  background: linear-gradient(135deg, rgba(108,99,255,0.12), rgba(255,101,132,0.08));
+  border: 1px solid rgba(108,99,255,0.25);
+  border-radius: 20px; padding: 20px;
+}
+.ref-left { flex: 1; min-width: 200px; }
+.ref-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.ref-desc { font-size: 12px; color: var(--text2); margin-bottom: 12px; }
+.ref-code {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(0,0,0,0.3); border: 1px solid rgba(108,99,255,0.3);
+  border-radius: 10px; padding: 8px 12px;
+}
+.ref-code span { flex: 1; font-family: monospace; font-size: 14px; font-weight: 700; color: #a89fff; letter-spacing: 1px; word-break: break-all; }
+.ref-code button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white; border: none; padding: 6px 12px;
+  border-radius: 8px; font-size: 11px; font-weight: 600;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+.ref-right { display: flex; align-items: center; }
+.ref-tiers { display: flex; flex-direction: column; gap: 8px; }
+.rt {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(0,0,0,0.2); border-radius: 10px; padding: 8px 14px;
+}
+.rt span { font-size: 11px; color: var(--text2); font-weight: 600; min-width: 20px; }
+.rt strong { font-size: 16px; font-weight: 800; color: var(--green); }
+
+/* ── MENU LIST ───────────────────────────────────────────────── */
+.menu-list { display: flex; flex-direction: column; gap: 8px; }
+.menu-item {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 14px 16px;
+  text-decoration: none; color: var(--text);
+  transition: all 0.2s; cursor: pointer;
+}
+.menu-item:hover { border-color: rgba(108,99,255,0.3); transform: translateX(4px); }
+.mi-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.mi-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.mi-info span { font-size: 14px; font-weight: 600; }
+.mi-info small { font-size: 11px; color: var(--text2); }
+.mi-arrow { color: var(--text3); font-size: 14px; }
+
+/* ── LOGOUT BUTTON ───────────────────────────────────────────── */
+.logout-btn {
+  width: 100%; padding: 14px;
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25);
+  color: var(--red); border-radius: 14px;
+  font-size: 14px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: all 0.2s;
+}
+.logout-btn:hover { background: rgba(239,68,68,0.2); }
+
+/* ── HERO ORBS ───────────────────────────────────────────────── */
+.hero-orb {
+  position: absolute; border-radius: 50%;
+  pointer-events: none; animation: orbFloat 6s ease-in-out infinite;
+}
+.hero-orb1 { width: 300px; height: 300px; top: -100px; right: -80px; background: radial-gradient(circle, rgba(108,99,255,0.2) 0%, transparent 70%); }
+.hero-orb2 { width: 200px; height: 200px; bottom: -60px; left: -60px; background: radial-gradient(circle, rgba(255,101,132,0.15) 0%, transparent 70%); animation-delay: 2s; }
+.hero-orb3 { width: 150px; height: 150px; top: 40%; left: 30%; background: radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%); animation-delay: 4s; }
+@keyframes orbFloat { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-20px) scale(1.05)} }
+
+/* ── ACTIVITY LIST ───────────────────────────────────────────── */
+.activity-list { display: flex; flex-direction: column; gap: 8px; }
+
+/* ── EMPTY STATE ─────────────────────────────────────────────── */
+.empty-rec { text-align: center; padding: 60px 20px; color: var(--text2); }
+.empty-rec .icon { font-size: 48px; margin-bottom: 12px; }
+.empty-rec p { font-size: 13px; }
+
+/* ── TASK PAGE HEADER BALANCE ────────────────────────────────── */
+#headerBalance { font-size: 18px; font-weight: 800; }
+#headerBalance span { font-size: 12px; color: var(--text2); font-weight: 500; }
+
+/* ── UTILITY ─────────────────────────────────────────────────── */
+.green { color: var(--green); }
+.red   { color: var(--red); }
+.blue  { color: var(--blue); }
+.text2 { color: var(--text2); }

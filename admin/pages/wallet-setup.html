@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Wallet Setup — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item active"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Wallet Setup</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content" style="padding-bottom:80px">
+    <div class="info-banner">
+      <strong>👛 Deposit Wallet Addresses</strong> — These are the USDT wallet addresses shown to users when they make a deposit. Keep them up to date. Users will send funds directly to these addresses.
+    </div>
+    <div class="wallet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span class="network-badge trc20">TRC20</span>
+        <h3 style="margin:0;color:var(--yellow)">USDT TRC20 — Tron Network</h3>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Wallet Address</label>
+        <input type="text" id="wTRC20" placeholder="T... (Tron TRC20 address)" style="font-family:monospace;font-size:13px"/>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:var(--text3)">Starts with T — e.g. TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE</div>
+    </div>
+    <div class="wallet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span class="network-badge erc20">ERC20</span>
+        <h3 style="margin:0;color:var(--blue)">USDT ERC20 — Ethereum Network</h3>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Wallet Address</label>
+        <input type="text" id="wERC20" placeholder="0x... (Ethereum ERC20 address)" style="font-family:monospace;font-size:13px"/>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:var(--text3)">Starts with 0x — e.g. 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48</div>
+    </div>
+    <div class="wallet-card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+        <span class="network-badge bep20">BEP20</span>
+        <h3 style="margin:0;color:var(--green)">USDT BEP20 — BSC Network</h3>
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label>Wallet Address</label>
+        <input type="text" id="wBEP20" placeholder="0x... (BSC BEP20 address)" style="font-family:monospace;font-size:13px"/>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:var(--text3)">Starts with 0x — e.g. 0x55d398326f99059fF775485246999027B3197955</div>
+    </div>
+    <div class="save-bar">
+      <span class="save-bar-left">💡 Changes take effect immediately for new deposit requests.</span>
+      <button class="btn-primary" onclick="saveWallets()" id="saveBtn">💾 Save Wallet Addresses</button>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+async function loadWallets() {
+  var d = await ADMIN.getSettings();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  var s = d.settings||{};
+  document.getElementById('wTRC20').value = s.walletTRC20||s.depositAddress||'';
+  document.getElementById('wERC20').value = s.walletERC20||'';
+  document.getElementById('wBEP20').value = s.walletBEP20||'';
+}
+async function saveWallets() {
+  var trc20 = document.getElementById('wTRC20').value.trim();
+  var erc20 = document.getElementById('wERC20').value.trim();
+  var bep20 = document.getElementById('wBEP20').value.trim();
+  if (!trc20&&!erc20&&!bep20) { showToast('Enter at least one wallet address','error'); return; }
+  var btn = document.getElementById('saveBtn');
+  btn.textContent='⏳ Saving…'; btn.disabled=true;
+  var current = await ADMIN.getSettings();
+  var existing = (current.ok&&current.settings)?current.settings:{};
+  var d = await ADMIN.saveSettings(Object.assign({},existing,{
+    walletTRC20:trc20, walletERC20:erc20, walletBEP20:bep20,
+    depositAddress:trc20||existing.depositAddress||''
+  }));
+  btn.textContent='💾 Save Wallet Addresses'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Wallet addresses saved!','success');
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadWallets(); })();
+</script>
+</body>
+</html>

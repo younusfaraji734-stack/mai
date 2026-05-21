@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Content Management — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+<style>
+.dyn-item{background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px}
+.dyn-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.dyn-hdr span{font-size:12px;font-weight:600;color:var(--text2)}
+.btn-rm{background:rgba(239,68,68,0.12);color:var(--red);border:1px solid rgba(239,68,68,0.25);padding:4px 10px;border-radius:7px;font-size:11px;font-weight:600;cursor:pointer}
+.btn-add-dyn{background:rgba(34,197,94,0.1);color:var(--green);border:1px solid rgba(34,197,94,0.25);padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;margin-top:8px;width:100%;text-align:center;display:block}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item active"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Content Management</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content" style="padding-bottom:80px">
+
+    <!-- Hero Section -->
+    <div class="content-section">
+      <h3>🎯 Homepage Hero</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Badge Text</label><input type="text" id="heroBadge" placeholder="🌍 Global Investment Platform"/></div>
+        <div class="form-group"><label>Trust Items (comma-separated)</label><input type="text" id="heroTrust" placeholder="SSL Secured, Daily Payouts, 150+ Countries"/></div>
+      </div>
+      <div class="form-group"><label>Title (HTML allowed)</label><textarea id="heroTitle" style="min-height:60px" placeholder="Invest, Earn &amp; Grow&lt;br/&gt;with Global Opportunities"></textarea></div>
+      <div class="form-group"><label>Subtitle</label><textarea id="heroSubtitle" style="min-height:60px" placeholder="AI-powered intelligent cloud order matching center..."></textarea></div>
+    </div>
+
+    <!-- Hero Cards -->
+    <div class="content-section">
+      <h3>📊 Hero Stats Cards</h3>
+      <div id="heroCardsList"></div>
+      <button class="btn-add-dyn" onclick="addHeroCard()">➕ Add Card</button>
+    </div>
+
+    <!-- Platform Intro -->
+    <div class="content-section">
+      <h3>🏢 Platform Introduction Cards</h3>
+      <div id="platformIntroList"></div>
+      <button class="btn-add-dyn" onclick="addPlatformIntro()">➕ Add Intro Card</button>
+    </div>
+
+    <!-- Service Hero -->
+    <div class="content-section">
+      <h3>🎧 Service Page Hero</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Icon (emoji)</label><input type="text" id="serviceIcon" placeholder="🎧"/></div>
+        <div class="form-group"><label>Title</label><input type="text" id="serviceTitle" placeholder="We're Here to Help"/></div>
+      </div>
+      <div class="form-group"><label>Subtitle (HTML allowed)</label><textarea id="serviceSubtitle" style="min-height:60px"></textarea></div>
+      <div style="font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">Stats (3 items)</div>
+      <div id="serviceStatsList"></div>
+    </div>
+
+    <!-- FAQs -->
+    <div class="content-section">
+      <h3>❓ FAQs</h3>
+      <div id="faqList"></div>
+      <button class="btn-add-dyn" onclick="addFaq()">➕ Add FAQ</button>
+    </div>
+
+    <div class="save-bar">
+      <span class="save-bar-left">📝 Changes are reflected on the website immediately after saving.</span>
+      <button class="btn-primary" onclick="saveContent()" id="saveBtn">💾 Save All Content</button>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+// ── HERO CARDS ────────────────────────────────────────────────
+function renderHeroCards(cards) {
+  var list = document.getElementById('heroCardsList');
+  list.innerHTML = '';
+  (cards||[]).forEach(function(c,i){ list.appendChild(makeHeroCard(c,i)); });
+}
+function makeHeroCard(c,i) {
+  var d = document.createElement('div'); d.className='dyn-item';
+  d.innerHTML='<div class="dyn-hdr"><span>Card #'+(i+1)+'</span><button class="btn-rm" onclick="rmItem(\'heroCardsList\','+i+')">✕ Remove</button></div>'+
+    '<div class="form-row">'+
+      '<div class="form-group"><label>Icon</label><input type="text" class="hc-icon" value="'+escHtml(c.icon||'')+'" placeholder="📈"/></div>'+
+      '<div class="form-group"><label>Value</label><input type="text" class="hc-value" value="'+escHtml(c.value||'')+'" placeholder="+24.8%"/></div>'+
+    '</div>'+
+    '<div class="form-row">'+
+      '<div class="form-group"><label>Label</label><input type="text" class="hc-label" value="'+escHtml(c.label||'')+'" placeholder="Monthly Return"/></div>'+
+      '<div class="form-group"><label>Trend</label><select class="hc-trend" style="width:100%;background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;color:var(--text);font-size:13px">'+
+        '<option value="up"'+(c.trend==='up'?' selected':'')+'>▲ Up</option>'+
+        '<option value="down"'+(c.trend==='down'?' selected':'')+'>▼ Down</option>'+
+      '</select></div>'+
+    '</div>';
+  return d;
+}
+function addHeroCard() {
+  var list=document.getElementById('heroCardsList');
+  list.appendChild(makeHeroCard({icon:'📈',value:'+0%',label:'New Stat',trend:'up'},list.children.length));
+}
+function getHeroCards() {
+  return Array.from(document.querySelectorAll('#heroCardsList .dyn-item')).map(function(el){
+    return {icon:el.querySelector('.hc-icon').value,value:el.querySelector('.hc-value').value,
+      label:el.querySelector('.hc-label').value,trend:el.querySelector('.hc-trend').value};
+  });
+}
+
+// ── PLATFORM INTRO ────────────────────────────────────────────
+function renderPlatformIntro(items) {
+  var list=document.getElementById('platformIntroList');
+  list.innerHTML='';
+  (items||[]).forEach(function(item,i){ list.appendChild(makePlatformIntro(item,i)); });
+}
+function makePlatformIntro(item,i) {
+  var d=document.createElement('div'); d.className='dyn-item';
+  d.innerHTML='<div class="dyn-hdr"><span>Card #'+(i+1)+'</span><button class="btn-rm" onclick="rmItem(\'platformIntroList\','+i+')">✕ Remove</button></div>'+
+    '<div class="form-row">'+
+      '<div class="form-group"><label>Title</label><input type="text" class="pi-title" value="'+escHtml(item.title||'')+'" placeholder="Platform Profile"/></div>'+
+      '<div class="form-group"><label>Image Filename</label><input type="text" class="pi-image" value="'+escHtml(item.image||'')+'" placeholder="platform-intro-1.svg"/></div>'+
+    '</div>'+
+    '<div class="form-group"><label>Description</label><textarea class="pi-desc" style="min-height:60px">'+escHtml(item.desc||'')+'</textarea></div>'+
+    '<div class="form-group"><label>Gradient CSS</label><input type="text" class="pi-gradient" value="'+escHtml(item.gradient||'')+'" placeholder="135deg,#667eea,#764ba2"/></div>';
+  return d;
+}
+function addPlatformIntro() {
+  var list=document.getElementById('platformIntroList');
+  list.appendChild(makePlatformIntro({title:'New Card',desc:'Description here',image:'platform-intro-1.svg',gradient:'135deg,#667eea,#764ba2'},list.children.length));
+}
+function getPlatformIntro() {
+  return Array.from(document.querySelectorAll('#platformIntroList .dyn-item')).map(function(el){
+    return {title:el.querySelector('.pi-title').value,desc:el.querySelector('.pi-desc').value,
+      image:el.querySelector('.pi-image').value,gradient:el.querySelector('.pi-gradient').value};
+  });
+}
+
+// ── SERVICE STATS ─────────────────────────────────────────────
+function renderServiceStats(stats) {
+  var list=document.getElementById('serviceStatsList');
+  list.innerHTML='';
+  var data=(stats&&stats.length)?stats:[{},{},{}];
+  data.slice(0,3).forEach(function(s,i){
+    var d=document.createElement('div'); d.className='dyn-item';
+    d.innerHTML='<div style="font-size:11px;font-weight:700;color:var(--text3);margin-bottom:10px;text-transform:uppercase">Stat '+(i+1)+'</div>'+
+      '<div class="form-row">'+
+        '<div class="form-group"><label>Value</label><input type="text" class="ss-val" value="'+escHtml(s.val||s.value||'')+'" placeholder="24/7"/></div>'+
+        '<div class="form-group"><label>Label</label><input type="text" class="ss-label" value="'+escHtml(s.lbl||s.label||'')+'" placeholder="Support"/></div>'+
+      '</div>';
+    list.appendChild(d);
+  });
+}
+function getServiceStats() {
+  return Array.from(document.querySelectorAll('#serviceStatsList .dyn-item')).map(function(el){
+    return {val:el.querySelector('.ss-val').value,lbl:el.querySelector('.ss-label').value};
+  });
+}
+
+// ── FAQs ──────────────────────────────────────────────────────
+function renderFaqs(faqs) {
+  var list=document.getElementById('faqList');
+  list.innerHTML='';
+  (faqs||[]).forEach(function(f,i){ list.appendChild(makeFaq(f,i)); });
+}
+function makeFaq(f,i) {
+  var d=document.createElement('div'); d.className='dyn-item';
+  d.innerHTML='<div class="dyn-hdr"><span>FAQ #'+(i+1)+'</span><button class="btn-rm" onclick="rmItem(\'faqList\','+i+')">✕ Remove</button></div>'+
+    '<div class="form-group"><label>Question</label><input type="text" class="faq-q" value="'+escHtml(f.q||f.question||'')+'" placeholder="Frequently asked question…"/></div>'+
+    '<div class="form-group"><label>Answer</label><textarea class="faq-a" style="min-height:70px">'+escHtml(f.a||f.answer||'')+'</textarea></div>';
+  return d;
+}
+function addFaq() {
+  var list=document.getElementById('faqList');
+  list.appendChild(makeFaq({q:'New question?',a:'Answer here.'},list.children.length));
+}
+function getFaqs() {
+  return Array.from(document.querySelectorAll('#faqList .dyn-item')).map(function(el){
+    return {q:el.querySelector('.faq-q').value,a:el.querySelector('.faq-a').value};
+  });
+}
+
+// ── REMOVE ITEM ───────────────────────────────────────────────
+function rmItem(listId, idx) {
+  var list=document.getElementById(listId);
+  var items=list.querySelectorAll('.dyn-item');
+  if(items[idx]) items[idx].remove();
+  // Re-number
+  list.querySelectorAll('.dyn-item').forEach(function(el,i){
+    var span=el.querySelector('.dyn-hdr span');
+    if(span){
+      var label=listId==='heroCardsList'?'Card':listId==='platformIntroList'?'Card':'FAQ';
+      span.textContent=label+' #'+(i+1);
+    }
+    var btn=el.querySelector('.btn-rm');
+    if(btn) btn.setAttribute('onclick','rmItem(\''+listId+'\','+i+')');
+  });
+}
+
+// ── LOAD ──────────────────────────────────────────────────────
+async function loadContent() {
+  var d = await ADMIN.getContent();
+  if (!d.ok) { showToast('Failed to load content','error'); return; }
+  var c = d.content||{};
+  var hero = c.hero||{};
+  document.getElementById('heroBadge').value = hero.badge||'';
+  document.getElementById('heroTitle').value = hero.title||'';
+  document.getElementById('heroSubtitle').value = hero.subtitle||'';
+  document.getElementById('heroTrust').value = Array.isArray(hero.trustItems)?hero.trustItems.join(', '):(hero.trustItems||'');
+  renderHeroCards(c.heroCards||[]);
+  renderPlatformIntro(c.platformIntro||[]);
+  var sh = c.serviceHero||{};
+  document.getElementById('serviceIcon').value = sh.icon||'';
+  document.getElementById('serviceTitle').value = sh.title||'';
+  document.getElementById('serviceSubtitle').value = sh.subtitle||'';
+  renderServiceStats(sh.stats||[]);
+  renderFaqs(c.faqs||[]);
+}
+
+// ── SAVE ──────────────────────────────────────────────────────
+async function saveContent() {
+  var btn=document.getElementById('saveBtn');
+  btn.textContent='⏳ Saving…'; btn.disabled=true;
+  var trustRaw=document.getElementById('heroTrust').value;
+  var data = {
+    hero:{
+      badge:document.getElementById('heroBadge').value,
+      title:document.getElementById('heroTitle').value,
+      subtitle:document.getElementById('heroSubtitle').value,
+      trustItems:trustRaw.split(',').map(function(s){return s.trim();}).filter(Boolean)
+    },
+    heroCards:getHeroCards(),
+    platformIntro:getPlatformIntro(),
+    serviceHero:{
+      icon:document.getElementById('serviceIcon').value,
+      title:document.getElementById('serviceTitle').value,
+      subtitle:document.getElementById('serviceSubtitle').value,
+      stats:getServiceStats()
+    },
+    faqs:getFaqs()
+  };
+  var d = await ADMIN.saveContent(data);
+  btn.textContent='💾 Save All Content'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error saving','error'); return; }
+  showToast('✅ Content saved! Changes are live on the website.','success');
+}
+
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadContent(); })();
+</script>
+</body>
+</html>

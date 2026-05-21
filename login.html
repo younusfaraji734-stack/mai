@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+<title>MAI — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0f0f1a;color:#f1f1f1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+body::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(108,99,255,0.15) 0%,transparent 70%);pointer-events:none}
+body::after{content:'';position:absolute;bottom:-200px;left:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(255,101,132,0.1) 0%,transparent 70%);pointer-events:none}
+.card{background:#16162a;border:1px solid rgba(255,255,255,0.08);border-radius:24px;padding:40px 32px;width:100%;max-width:420px;position:relative;z-index:1;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+.logo{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:32px}
+.logo-text{font-size:28px;font-weight:800;background:linear-gradient(135deg,#6C63FF,#FF6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+h2{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px}
+.sub{font-size:13px;color:#a0a0c0;text-align:center;margin-bottom:28px}
+.form-group{margin-bottom:18px}
+label{display:block;font-size:12px;font-weight:600;color:#a0a0c0;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+input{width:100%;background:#1e1e35;border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:13px 16px;color:#f1f1f1;font-size:14px;font-family:inherit;outline:none;transition:border-color 0.2s}
+input:focus{border-color:#6C63FF}
+input::placeholder{color:#6b6b8a}
+.btn{width:100%;background:linear-gradient(135deg,#6C63FF,#FF6584);color:white;border:none;padding:14px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:8px;box-shadow:0 4px 20px rgba(108,99,255,0.4)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(108,99,255,0.5)}
+.btn:active{transform:scale(0.98)}
+.err{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);color:#ef4444;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;display:none}
+.link-row{text-align:center;margin-top:20px;font-size:13px;color:#a0a0c0}
+.link-row a{color:#6C63FF;text-decoration:none;font-weight:600}
+.link-row a:hover{text-decoration:underline}
+
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <svg width="40" height="40" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span class="logo-text">MAI</span>
+  </div>
+  <h2>Welcome Back</h2>
+  <p class="sub">Sign in to your MAI account</p>
+
+  <div class="err" id="errMsg"></div>
+  <div class="form-group">
+    <label>Email Address or Username</label>
+    <input type="text" id="email" placeholder="Enter your email or username" autocomplete="username"/>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password"/>
+  </div>
+  <button class="btn" onclick="doLogin()">Sign In</button>
+  <div class="link-row">Don't have an account? <a href="register.html">Register</a></div>
+</div>
+<script src="assets/js/api.js"></script>
+<script>
+// If already logged in, redirect
+(async function(){
+  var u = API.getCurrentUser();
+  if (u && API.getToken()) {
+    var fresh = await API.me();
+    if (fresh) window.location.href = fresh.isAdmin ? 'admin/pages/dashboard.html' : 'index.html';
+  }
+})();
+
+async function doLogin() {
+  var email = document.getElementById('email').value.trim();
+  var pass  = document.getElementById('password').value;
+  var errEl = document.getElementById('errMsg');
+  errEl.style.display = 'none';
+  if (!email || !pass) { errEl.textContent = 'Please fill in all fields'; errEl.style.display = 'block'; return; }
+  var res = await API.login(email, pass);
+  if (!res.ok) { errEl.textContent = res.msg; errEl.style.display = 'block'; return; }
+  window.location.href = res.user.isAdmin ? 'admin/pages/dashboard.html' : 'index.html';
+}
+document.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
+</script>
+</body>
+</html>

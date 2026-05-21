@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+<title>MAI — Records</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/shared.css"/>
+<style>
+.rec-header{background:linear-gradient(135deg,#1e1e35,#2a1f4e);padding:20px 16px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+.rec-header h1{font-size:20px;font-weight:800;text-align:center;margin-bottom:16px}
+.rec-summary{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:16px;background:var(--bg3);border-radius:14px;overflow:hidden}
+.rs-item{flex:1;text-align:center;padding:12px 8px}
+.rs-item+.rs-item{border-left:1px solid var(--border)}
+.rs-val{font-size:15px;font-weight:800}
+.rs-val.green{color:var(--green)}.rs-val.red{color:var(--red)}.rs-val.blue{color:var(--primary)}
+.rs-lbl{font-size:10px;color:var(--text2);margin-top:2px}
+.rtabs{display:flex;gap:4px;background:var(--bg3);border-radius:50px;padding:4px;margin-bottom:0}
+.rtab{flex:1;padding:7px 6px;border:none;border-radius:50px;background:transparent;color:var(--text2);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s}
+.rtab.active{background:var(--primary);color:white;box-shadow:0 2px 10px rgba(108,99,255,0.4)}
+.rtab-content{display:none}.rtab-content.active{display:block}
+.date-group{margin-bottom:20px}
+.dg-label{font-size:11px;font-weight:600;color:var(--text2);margin-bottom:10px;padding:0 16px;text-transform:uppercase;letter-spacing:0.5px;display:flex;align-items:center;gap:8px}
+.dg-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.rec-list{display:flex;flex-direction:column;gap:8px;padding:0 16px}
+.rec-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;cursor:pointer;transition:all 0.2s}
+.rec-item:hover{border-color:rgba(108,99,255,0.3);transform:translateX(2px)}
+.rec-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.rec-icon.deposit{background:rgba(34,197,94,0.15);color:var(--green)}
+.rec-icon.withdraw{background:rgba(239,68,68,0.15);color:var(--red)}
+.rec-icon.profit{background:rgba(108,99,255,0.15);color:var(--primary)}
+.rec-icon.task{background:rgba(59,130,246,0.15);color:var(--blue)}
+.rec-icon.referral{background:rgba(255,165,0,0.15);color:#FFA500;font-size:14px}
+.rec-info{flex:1;display:flex;flex-direction:column;gap:3px}
+.rec-type{font-size:13px;font-weight:600;color:var(--text)}
+.rec-hash{font-size:11px;color:var(--text2);font-family:monospace}
+.rec-date{font-size:10px;color:var(--text3)}
+.rec-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.rec-amt{font-size:14px;font-weight:700}
+.rec-amt.up{color:var(--green)}.rec-amt.down{color:var(--red)}
+.rec-status{font-size:10px;font-weight:600;padding:2px 8px;border-radius:50px}
+.rec-status.success{background:rgba(34,197,94,0.1);color:var(--green)}
+.rec-status.pending{background:rgba(255,165,0,0.1);color:#FFA500}
+.rec-status.failed{background:rgba(239,68,68,0.1);color:var(--red)}
+.rec-status.active-s{background:rgba(59,130,246,0.1);color:var(--blue)}
+.empty-rec{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-rec .icon{font-size:48px;margin-bottom:12px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="rec-header">
+  <h1>Transaction Records</h1>
+  <div class="rec-summary" id="recSummary">
+    <div class="rs-item"><div class="rs-val green" id="sumIn">+$0.00</div><div class="rs-lbl">Total In</div></div>
+    <div class="rs-item"><div class="rs-val red" id="sumOut">-$0.00</div><div class="rs-lbl">Total Out</div></div>
+    <div class="rs-item"><div class="rs-val blue" id="sumCount">0</div><div class="rs-lbl">Transactions</div></div>
+  </div>
+  <div class="rtabs">
+    <button class="rtab active" onclick="switchRTab(this,'all')">All</button>
+    <button class="rtab" onclick="switchRTab(this,'deposit')">Deposits</button>
+    <button class="rtab" onclick="switchRTab(this,'withdraw')">Withdrawals</button>
+    <button class="rtab" onclick="switchRTab(this,'profit')">Profits</button>
+  </div>
+</div>
+
+<div style="height:16px"></div>
+<div class="rtab-content active" id="rtab-all"></div>
+<div class="rtab-content" id="rtab-deposit"></div>
+<div class="rtab-content" id="rtab-withdraw"></div>
+<div class="rtab-content" id="rtab-profit"></div>
+
+<div style="height:90px"></div>
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a href="service.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Service</span></a>
+  <a href="invest.html" class="nav-item center-nav"><div class="center-btn"><svg width="26" height="26" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span>Invest</span></a>
+  <a href="record.html" class="nav-item active"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Record</span></a>
+  <a href="mine.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Mine</span></a>
+</nav>
+
+<script src="assets/js/api.js"></script><script src="assets/js/shared.js"></script>
+<script>
+(async function(){
+  var u = API.getCurrentUser();
+  if(!u || !API.getToken()){ window.location.href='login.html'; return; }
+
+  var txs = await API.getMyTransactions();
+  txs = txs.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+
+  // Summary
+  var totalIn = txs.filter(function(t){
+    return t.type==='deposit'||t.type==='profit'||t.type==='referral'||t.type==='task';
+  }).reduce(function(s,t){ return s+(t.amount||0); }, 0);
+  var totalOut = txs.filter(function(t){return t.type==='withdraw';}).reduce(function(s,t){return s+(t.amount||0);},0);
+  document.getElementById('sumIn').textContent = '+$'+totalIn.toFixed(2);
+  document.getElementById('sumOut').textContent = '-$'+totalOut.toFixed(2);
+  document.getElementById('sumCount').textContent = txs.length;
+
+  var ICONS = {deposit:'↓',withdraw:'↑',profit:'★',task:'▲',referral:'👥'};
+  var LABELS = {deposit:'Deposit',withdraw:'Withdrawal',profit:'Daily Profit',task:'Task Completed',referral:'Referral Bonus'};
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  }
+  function fmtTime(iso) {
+    if (!iso) return '';
+    return new Date(iso).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }
+  function escHtml(s){ var d=document.createElement('div');d.textContent=s||'';return d.innerHTML; }
+
+  function renderTxList(list, containerId) {
+    var el = document.getElementById(containerId);
+    if (!list.length) {
+      el.innerHTML = '<div class="empty-rec"><div class="icon">📋</div><p>No transactions yet</p></div>';
+      return;
+    }
+    var groups = {};
+    list.forEach(function(tx) {
+      var d = fmtDate(tx.date);
+      if (!groups[d]) groups[d] = [];
+      groups[d].push(tx);
+    });
+    var html = '';
+    Object.keys(groups).forEach(function(date) {
+      html += '<div class="date-group"><div class="dg-label">'+date+'</div><div class="rec-list">';
+      groups[date].forEach(function(tx) {
+        var isIn = tx.type==='deposit'||tx.type==='profit'||tx.type==='referral'||tx.type==='task';
+        var amt = tx.amount || 0;
+        var amtStr = (isIn?'+':'-')+'$'+amt.toFixed(2)+' USDT';
+        var statusClass = tx.status==='completed'?'success':tx.status==='pending'?'pending':'failed';
+        var statusLabel = tx.status==='completed'?'Completed':tx.status==='pending'?'Processing':'Failed';
+        html += '<div class="rec-item">'
+          +'<div class="rec-icon '+tx.type+'">'+(ICONS[tx.type]||'?')+'</div>'
+          +'<div class="rec-info">'
+          +'<span class="rec-type">'+(LABELS[tx.type]||tx.type)+'</span>'
+          +'<span class="rec-hash">'+escHtml(tx.txHash||tx.description||'')+'</span>'
+          +'<span class="rec-date">'+fmtTime(tx.date)+(tx.network?' · '+tx.network:'')+'</span>'
+          +'</div>'
+          +'<div class="rec-right">'
+          +'<span class="rec-amt '+(isIn?'up':'down')+'">'+amtStr+'</span>'
+          +'<span class="rec-status '+statusClass+'">'+statusLabel+'</span>'
+          +'</div></div>';
+      });
+      html += '</div></div>';
+    });
+    el.innerHTML = html;
+  }
+
+  renderTxList(txs, 'rtab-all');
+  renderTxList(txs.filter(function(t){return t.type==='deposit';}), 'rtab-deposit');
+  renderTxList(txs.filter(function(t){return t.type==='withdraw';}), 'rtab-withdraw');
+  renderTxList(txs.filter(function(t){return t.type==='profit'||t.type==='referral'||t.type==='task';}), 'rtab-profit');
+})();
+
+function switchRTab(btn, tab) {
+  document.querySelectorAll('.rtab').forEach(function(t){t.classList.remove('active');});
+  btn.classList.add('active');
+  document.querySelectorAll('.rtab-content').forEach(function(c){c.classList.remove('active');});
+  document.getElementById('rtab-'+tab).classList.add('active');
+}
+</script>
+</body>
+</html>

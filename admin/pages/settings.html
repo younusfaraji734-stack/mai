@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Platform Settings — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item active"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Platform Settings</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content" style="padding-bottom:80px">
+    <div class="settings-grid">
+      <div class="settings-section">
+        <h3>🌐 General</h3>
+        <div class="form-group"><label>Platform Name</label><input type="text" id="sPlatformName"/></div>
+        <div class="form-group"><label>Telegram Support Link</label><input type="text" id="sTelegramLink"/></div>
+        <div class="form-group"><label>Default Deposit Address</label><input type="text" id="sDepositAddress" style="font-family:monospace;font-size:12px"/></div>
+      </div>
+      <div class="settings-section">
+        <h3>💰 Financial</h3>
+        <div class="form-group"><label>Minimum Deposit (USDT)</label><input type="number" id="sMinDeposit" step="0.01" min="0"/></div>
+        <div class="form-group"><label>Minimum Withdrawal (USDT)</label><input type="number" id="sMinWithdraw" step="0.01" min="0"/></div>
+        <div class="form-group"><label>Withdrawal Fee (USDT)</label><input type="number" id="sWithdrawFee" step="0.01" min="0"/></div>
+      </div>
+      <div class="settings-section">
+        <h3>🎁 Referral Commissions</h3>
+        <div class="form-group"><label>Level 1 Commission (%)</label><input type="number" id="sRefL1" step="0.1" min="0" max="100"/></div>
+        <div class="form-group"><label>Level 2 Commission (%)</label><input type="number" id="sRefL2" step="0.1" min="0" max="100"/></div>
+        <div class="form-group"><label>Level 3 Commission (%)</label><input type="number" id="sRefL3" step="0.1" min="0" max="100"/></div>
+      </div>
+      <div class="settings-section">
+        <h3>⭐ VIP 1 — Starter</h3>
+        <div class="form-group"><label>Task Commission Rate (%)</label><input type="number" id="sVip1Rate" step="0.1" min="0"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Min Balance (USDT)</label><input type="number" id="sVip1Min" step="0.01" min="0"/></div>
+          <div class="form-group"><label>Max Task Amount (USDT)</label><input type="number" id="sVip1Max" step="0.01" min="0"/></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>🌟 VIP 2 — Growth</h3>
+        <div class="form-group"><label>Task Commission Rate (%)</label><input type="number" id="sVip2Rate" step="0.1" min="0"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Min Balance (USDT)</label><input type="number" id="sVip2Min" step="0.01" min="0"/></div>
+          <div class="form-group"><label>Max Task Amount (USDT)</label><input type="number" id="sVip2Max" step="0.01" min="0"/></div>
+        </div>
+      </div>
+      <div class="settings-section">
+        <h3>💎 VIP 3 — Elite</h3>
+        <div class="form-group"><label>Task Commission Rate (%)</label><input type="number" id="sVip3Rate" step="0.1" min="0"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Min Balance (USDT)</label><input type="number" id="sVip3Min" step="0.01" min="0"/></div>
+          <div class="form-group"><label>Max Task Amount (USDT)</label><input type="number" id="sVip3Max" step="0.01" min="0"/></div>
+        </div>
+      </div>
+    </div>
+    <div class="save-bar">
+      <span class="save-bar-left">⚙️ Changes apply immediately across the entire platform.</span>
+      <button class="btn-primary" onclick="saveSettings()" id="saveBtn">💾 Save All Settings</button>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+async function loadSettings() {
+  var d = await ADMIN.getSettings();
+  if (!d.ok) { showToast('Failed to load settings','error'); return; }
+  var s = d.settings || {};
+  var fields = {
+    sPlatformName: s.platformName, sTelegramLink: s.telegramLink, sDepositAddress: s.depositAddress,
+    sMinDeposit: s.minDeposit, sMinWithdraw: s.minWithdraw, sWithdrawFee: s.withdrawFee,
+    sRefL1: s.refL1, sRefL2: s.refL2, sRefL3: s.refL3,
+    sVip1Rate: s.vip1Rate, sVip1Min: s.vip1Min, sVip1Max: s.vip1Max,
+    sVip2Rate: s.vip2Rate, sVip2Min: s.vip2Min, sVip2Max: s.vip2Max,
+    sVip3Rate: s.vip3Rate, sVip3Min: s.vip3Min, sVip3Max: s.vip3Max
+  };
+  Object.keys(fields).forEach(function(id){ var el=document.getElementById(id); if(el&&fields[id]!==undefined) el.value=fields[id]; });
+}
+async function saveSettings() {
+  var btn = document.getElementById('saveBtn');
+  btn.textContent='⏳ Saving…'; btn.disabled=true;
+  function gf(id){ return parseFloat(document.getElementById(id).value)||0; }
+  function gs(id){ return document.getElementById(id).value||''; }
+  var data = {
+    platformName:gs('sPlatformName'), telegramLink:gs('sTelegramLink'), depositAddress:gs('sDepositAddress'),
+    minDeposit:gf('sMinDeposit'), minWithdraw:gf('sMinWithdraw'), withdrawFee:gf('sWithdrawFee'),
+    refL1:gf('sRefL1'), refL2:gf('sRefL2'), refL3:gf('sRefL3'),
+    vip1Rate:gf('sVip1Rate'), vip1Min:gf('sVip1Min'), vip1Max:gf('sVip1Max'),
+    vip2Rate:gf('sVip2Rate'), vip2Min:gf('sVip2Min'), vip2Max:gf('sVip2Max'),
+    vip3Rate:gf('sVip3Rate'), vip3Min:gf('sVip3Min'), vip3Max:gf('sVip3Max')
+  };
+  var d = await ADMIN.saveSettings(data);
+  btn.textContent='💾 Save All Settings'; btn.disabled=false;
+  if(!d.ok){ showToast(d.msg||'Error saving','error'); return; }
+  showToast('✅ Settings saved! Changes are live.','success');
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadSettings(); })();
+</script>
+</body>
+</html>

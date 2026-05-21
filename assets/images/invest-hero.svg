@@ -1,0 +1,51 @@
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="investBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1c1c38"/>
+      <stop offset="50%" style="stop-color:#271a50"/>
+      <stop offset="100%" style="stop-color:#1c1c38"/>
+    </linearGradient>
+    <linearGradient id="chart" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:0.8"/>
+      <stop offset="100%" style="stop-color:#22c55e;stop-opacity:0.3"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="200" fill="url(#investBg)"/>
+  
+  <!-- Chart background -->
+  <rect x="50" y="50" width="300" height="120" fill="rgba(255,255,255,0.05)" rx="8"/>
+  
+  <!-- Chart line -->
+  <polyline points="60,140 100,120 140,100 180,80 220,90 260,70 300,60 340,50" 
+            stroke="#22c55e" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Chart area -->
+  <polygon points="60,140 100,120 140,100 180,80 220,90 260,70 300,60 340,50 340,160 60,160" 
+           fill="url(#chart)"/>
+  
+  <!-- Data points -->
+  <circle cx="100" cy="120" r="4" fill="#22c55e"/>
+  <circle cx="180" cy="80" r="4" fill="#22c55e"/>
+  <circle cx="260" cy="70" r="4" fill="#22c55e"/>
+  <circle cx="340" cy="50" r="4" fill="#22c55e"/>
+  
+  <!-- Floating coins -->
+  <circle cx="80" cy="30" r="12" fill="#FFD700" opacity="0.8">
+    <animate attributeName="cy" values="30;20;30" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="80" y="36" font-family="Arial Black" font-size="12" font-weight="900" fill="#B8860B" text-anchor="middle">$</text>
+  
+  <circle cx="320" cy="30" r="10" fill="#FFD700" opacity="0.6">
+    <animate attributeName="cy" values="30;25;30" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <text x="320" y="35" font-family="Arial Black" font-size="10" font-weight="900" fill="#B8860B" text-anchor="middle">$</text>
+  
+  <!-- Percentage indicators -->
+  <rect x="120" y="90" width="30" height="15" fill="rgba(34,197,94,0.2)" rx="7"/>
+  <text x="135" y="100" font-family="Arial" font-size="8" font-weight="700" fill="#22c55e" text-anchor="middle">+24%</text>
+  
+  <rect x="240" y="60" width="30" height="15" fill="rgba(34,197,94,0.2)" rx="7"/>
+  <text x="255" y="70" font-family="Arial" font-size="8" font-weight="700" fill="#22c55e" text-anchor="middle">+18%</text>
+</svg>

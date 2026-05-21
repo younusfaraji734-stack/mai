@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Withdraw Control — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="editPermModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>🔒 Edit Withdrawal Permission</h3><button class="modal-close" onclick="closeModal('editPermModal')">✕</button></div>
+    <input type="hidden" id="permUserId"/>
+    <div class="form-group"><label>User</label><input type="text" id="permUserDisplay" readonly/></div>
+    <div class="form-group"><label>Withdrawal Status</label>
+      <select id="permStatus">
+        <option value="1">✅ Enabled — User can withdraw</option>
+        <option value="0">🔒 Disabled — User cannot withdraw</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Message shown to user when disabled</label>
+      <textarea id="permMessage" placeholder="e.g. Your account is under review. Please contact support." style="min-height:80px"></textarea>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('editPermModal')">Cancel</button>
+      <button class="btn-save" onclick="savePermission()">Save Changes</button>
+    </div>
+  </div>
+</div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item active"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Withdrawal Permission Control</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-val" id="sEnabled">—</div><div class="stat-lbl">Withdrawals Enabled</div></div>
+      <div class="stat-card red"><div class="stat-icon">🔒</div><div class="stat-val" id="sDisabled">—</div><div class="stat-lbl">Withdrawals Disabled</div></div>
+      <div class="stat-card blue"><div class="stat-icon">👥</div><div class="stat-val" id="sTotal">—</div><div class="stat-lbl">Total Users</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>🔒 User Withdrawal Permissions</h3>
+        <input type="text" class="search-input" id="userSearch" placeholder="🔍 Search users…" oninput="renderUsers()"/>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Email</th><th>Balance</th><th>Status</th><th>Message</th><th>Actions</th></tr></thead>
+          <tbody id="usersTable"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allUsers = [];
+async function loadUsers() {
+  var d = await ADMIN.getUsers();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  allUsers = (d.users||[]).filter(function(u){ return !u.isAdmin; });
+  var enabled = allUsers.filter(function(u){ return u.withdrawEnabled!==false; }).length;
+  document.getElementById('sEnabled').textContent = enabled;
+  document.getElementById('sDisabled').textContent = allUsers.length-enabled;
+  document.getElementById('sTotal').textContent = allUsers.length;
+  renderUsers();
+}
+function renderUsers() {
+  var q = (document.getElementById('userSearch').value||'').toLowerCase();
+  var filtered = allUsers.filter(function(u){ return !q||(u.username+u.email).toLowerCase().includes(q); });
+  document.getElementById('usersTable').innerHTML = filtered.length ? filtered.map(function(u){
+    var enabled = u.withdrawEnabled!==false;
+    var msg = u.withdrawMessage||'';
+    return '<tr>'+
+      '<td><strong>'+escHtml(u.username||'Unknown')+'</strong></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+escHtml(u.email||'')+'</td>'+
+      '<td><strong style="color:var(--green)">$'+fmtAmt(u.balance)+'</strong></td>'+
+      '<td>'+(enabled?'<span class="badge active">✅ Enabled</span>':'<span class="badge inactive">🔒 Disabled</span>')+'</td>'+
+      '<td style="color:var(--text2);font-size:12px;max-width:180px">'+(msg?escHtml(msg.length>40?msg.substring(0,40)+'…':msg):'<span style="color:var(--text3)">—</span>')+'</td>'+
+      '<td>'+
+        (enabled?'<button class="action-btn reject" onclick="quickDisable(\''+u.id+'\',\''+escHtml(u.username)+'\')">🔒 Disable</button>':
+                 '<button class="action-btn approve" onclick="quickEnable(\''+u.id+'\')">✅ Enable</button>')+
+        '<button class="action-btn edit" onclick="openEdit(\''+u.id+'\',\''+escHtml(u.username)+'\','+(enabled?1:0)+',\''+escHtml(msg)+'\')">✏️ Edit</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No users found</td></tr>';
+}
+async function quickEnable(id) {
+  var d = await ADMIN.setWithdrawPerm(id, true, '');
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Withdrawals enabled!','success'); loadUsers();
+}
+async function quickDisable(id, name) {
+  var msg = prompt('Disable withdrawals for '+name+'?\n\nMessage to show user (optional):');
+  if (msg===null) return;
+  var d = await ADMIN.setWithdrawPerm(id, false, msg||'Your withdrawal access has been temporarily disabled.');
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Withdrawals disabled for '+name,'success'); loadUsers();
+}
+function openEdit(id, name, enabled, message) {
+  document.getElementById('permUserId').value = id;
+  document.getElementById('permUserDisplay').value = name;
+  document.getElementById('permStatus').value = enabled?'1':'0';
+  document.getElementById('permMessage').value = message||'';
+  openModal('editPermModal');
+}
+async function savePermission() {
+  var id = document.getElementById('permUserId').value;
+  var enabled = document.getElementById('permStatus').value==='1';
+  var message = document.getElementById('permMessage').value.trim();
+  var btn = document.querySelector('#editPermModal .btn-save');
+  btn.textContent='Saving…'; btn.disabled=true;
+  var d = await ADMIN.setWithdrawPerm(id, enabled, message);
+  btn.textContent='Save Changes'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Permission updated!','success');
+  closeModal('editPermModal'); loadUsers();
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadUsers(); })();
+</script>
+</body>
+</html>

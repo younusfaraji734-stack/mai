@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Test Scores Page</title>
+<style>
+body { font-family: Arial, sans-serif; padding: 40px; background: #1a1a2e; color: #fff; }
+.test { background: #16213e; padding: 20px; margin: 10px 0; border-radius: 10px; border: 1px solid #0f3460; }
+.success { border-color: #00ff00; }
+.error { border-color: #ff0000; }
+h1 { color: #6C63FF; }
+pre { background: #0f0f0f; padding: 10px; border-radius: 5px; overflow-x: auto; }
+</style>
+</head>
+<body>
+<h1>🔍 Scores Page Diagnostic Test</h1>
+
+<div class="test" id="test1">
+<h3>Test 1: Page Loads</h3>
+<p>✅ This page loaded successfully!</p>
+</div>
+
+<div class="test" id="test2">
+<h3>Test 2: data.js Loading</h3>
+<p id="test2result">⏳ Testing...</p>
+</div>
+
+<div class="test" id="test3">
+<h3>Test 3: admin-common.js Loading</h3>
+<p id="test3result">⏳ Testing...</p>
+</div>
+
+<div class="test" id="test4">
+<h3>Test 4: MAI Object</h3>
+<p id="test4result">⏳ Testing...</p>
+</div>
+
+<div class="test" id="test5">
+<h3>Test 5: Admin Authentication</h3>
+<p id="test5result">⏳ Testing...</p>
+</div>
+
+<div class="test" id="test6">
+<h3>Test 6: User Data</h3>
+<p id="test6result">⏳ Testing...</p>
+</div>
+
+<div style="margin-top: 30px;">
+<a href="scores.html" style="display:inline-block;background:#6C63FF;color:#fff;padding:15px 30px;text-decoration:none;border-radius:10px;font-weight:bold;">
+→ Go to Scores Page
+</a>
+<a href="dashboard.html" style="display:inline-block;background:#0f3460;color:#fff;padding:15px 30px;text-decoration:none;border-radius:10px;font-weight:bold;margin-left:10px;">
+← Back to Dashboard
+</a>
+</div>
+
+<script src="../../assets/js/data.js"></script>
+<script src="../admin-common.js"></script>
+
+<script>
+// Test 2: data.js loaded
+setTimeout(function() {
+  var test2 = document.getElementById('test2');
+  var test2result = document.getElementById('test2result');
+  if (typeof MAI !== 'undefined') {
+    test2.className = 'test success';
+    test2result.innerHTML = '✅ data.js loaded successfully!';
+  } else {
+    test2.className = 'test error';
+    test2result.innerHTML = '❌ data.js failed to load!<br><small>Check browser console for errors</small>';
+  }
+}, 100);
+
+// Test 3: admin-common.js loaded
+setTimeout(function() {
+  var test3 = document.getElementById('test3');
+  var test3result = document.getElementById('test3result');
+  if (typeof showToast !== 'undefined' && typeof fmtAmt !== 'undefined' && typeof maskName !== 'undefined') {
+    test3.className = 'test success';
+    test3result.innerHTML = '✅ admin-common.js loaded successfully!';
+  } else {
+    test3.className = 'test error';
+    test3result.innerHTML = '❌ admin-common.js failed to load!<br><small>Check browser console for errors</small>';
+  }
+}, 100);
+
+// Test 4: MAI Object
+setTimeout(function() {
+  var test4 = document.getElementById('test4');
+  var test4result = document.getElementById('test4result');
+  if (typeof MAI !== 'undefined') {
+    var methods = ['getUsers', 'getUser', 'updateUser', 'requireAdmin', 'logout'];
+    var missing = methods.filter(function(m) { return typeof MAI[m] !== 'function'; });
+    if (missing.length === 0) {
+      test4.className = 'test success';
+      test4result.innerHTML = '✅ MAI object has all required methods!<br><small>Methods: ' + methods.join(', ') + '</small>';
+    } else {
+      test4.className = 'test error';
+      test4result.innerHTML = '❌ MAI object missing methods: ' + missing.join(', ');
+    }
+  } else {
+    test4.className = 'test error';
+    test4result.innerHTML = '❌ MAI object not found!';
+  }
+}, 100);
+
+// Test 5: Admin Authentication
+setTimeout(function() {
+  var test5 = document.getElementById('test5');
+  var test5result = document.getElementById('test5result');
+  if (typeof MAI !== 'undefined') {
+    var currentUser = MAI.getCurrentUser();
+    if (currentUser) {
+      if (currentUser.isAdmin) {
+        test5.className = 'test success';
+        test5result.innerHTML = '✅ Logged in as admin: <strong>' + currentUser.username + '</strong><br><small>Email: ' + currentUser.email + '</small>';
+      } else {
+        test5.className = 'test error';
+        test5result.innerHTML = '❌ Logged in but NOT as admin!<br><small>User: ' + currentUser.username + ' (isAdmin: false)</small>';
+      }
+    } else {
+      test5.className = 'test error';
+      test5result.innerHTML = '❌ Not logged in!<br><small><a href="../layout.html" style="color:#6C63FF">Click here to login</a></small>';
+    }
+  } else {
+    test5.className = 'test error';
+    test5result.innerHTML = '❌ Cannot check authentication (MAI not loaded)';
+  }
+}, 100);
+
+// Test 6: User Data
+setTimeout(function() {
+  var test6 = document.getElementById('test6');
+  var test6result = document.getElementById('test6result');
+  if (typeof MAI !== 'undefined') {
+    try {
+      var users = MAI.getUsers();
+      var nonAdminUsers = users.filter(function(u) { return !u.isAdmin; });
+      test6.className = 'test success';
+      test6result.innerHTML = '✅ Found ' + users.length + ' total users (' + nonAdminUsers.length + ' non-admin)<br><pre>' + JSON.stringify(nonAdminUsers.map(function(u) {
+        return {
+          id: u.id,
+          username: u.username,
+          email: u.email,
+          scores: u.scores || 0
+        };
+      }), null, 2) + '</pre>';
+    } catch (e) {
+      test6.className = 'test error';
+      test6result.innerHTML = '❌ Error getting users: ' + e.message;
+    }
+  } else {
+    test6.className = 'test error';
+    test6result.innerHTML = '❌ Cannot get users (MAI not loaded)';
+  }
+}, 100);
+</script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+<title>MAI — Messages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/shared.css"/>
+<style>
+.msg-header{background:linear-gradient(135deg,#1e1e35,#2a1f4e);padding:20px 16px 16px;position:sticky;top:0;z-index:100}
+.msg-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.msg-header h1{font-size:20px;font-weight:800}
+.back-btn2{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px}
+.mark-all-btn{background:rgba(108,99,255,0.15);color:var(--primary);border:1px solid rgba(108,99,255,0.3);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600}
+.msg-list{padding:16px;display:flex;flex-direction:column;gap:10px}
+.msg-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;cursor:pointer;transition:all 0.2s;position:relative}
+.msg-card.unread{border-color:rgba(108,99,255,0.4);background:rgba(108,99,255,0.05)}
+.msg-card:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
+.msg-card-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.msg-icon{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.msg-icon.info{background:rgba(59,130,246,0.15)}
+.msg-icon.warning{background:rgba(255,184,0,0.15)}
+.msg-icon.success{background:rgba(34,197,94,0.15)}
+.msg-icon.error{background:rgba(239,68,68,0.15)}
+.msg-meta{flex:1}
+.msg-subject{font-size:14px;font-weight:700;margin-bottom:3px}
+.msg-date{font-size:11px;color:var(--text3)}
+.msg-unread-dot{width:8px;height:8px;background:var(--primary);border-radius:50%;flex-shrink:0;margin-top:4px}
+.msg-body{font-size:13px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.msg-body.expanded{display:block;-webkit-line-clamp:unset}
+.msg-actions{display:flex;gap:8px;margin-top:12px}
+.msg-del-btn{background:rgba(239,68,68,0.1);color:var(--red);border:1px solid rgba(239,68,68,0.2);padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer}
+.msg-read-btn{background:rgba(108,99,255,0.1);color:var(--primary);border:1px solid rgba(108,99,255,0.2);padding:5px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer}
+.empty-msgs{text-align:center;padding:60px 20px;color:var(--text2)}
+.empty-msgs .em-icon{font-size:48px;margin-bottom:12px}
+.empty-msgs p{font-size:13px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="msg-header">
+  <div class="msg-header-row">
+    <button class="back-btn2" onclick="history.back()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+    <h1>✉️ Messages</h1>
+    <button class="mark-all-btn" onclick="markAllRead()">Mark All Read</button>
+  </div>
+</div>
+
+<div class="msg-list" id="msgList"></div>
+<div style="height:90px"></div>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a href="service.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Service</span></a>
+  <a href="invest.html" class="nav-item center-nav"><div class="center-btn"><svg width="26" height="26" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span>Invest</span></a>
+  <a href="record.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Record</span></a>
+  <a href="mine.html" class="nav-item active"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Mine</span></a>
+</nav>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/shared.js"></script>
+<script>
+var _currentUser = null;
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+}
+
+async function renderMessages() {
+  _currentUser = await API.me();
+  if(!_currentUser){ window.location.href='login.html'; return; }
+  var msgs = await API.getMyMessages();
+  msgs = msgs.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  var list = document.getElementById('msgList');
+  if (!msgs.length) {
+    list.innerHTML = '<div class="empty-msgs"><div class="em-icon">📭</div><p>No messages yet.<br>Admin notifications will appear here.</p></div>';
+    return;
+  }
+  var icons = { info:'ℹ️', warning:'⚠️', success:'✅', error:'🚨' };
+  list.innerHTML = msgs.map(function(m) {
+    var icon = icons[m.type] || 'ℹ️';
+    var dateStr = new Date(m.date).toLocaleString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+    return '<div class="msg-card'+(m.read?'':' unread')+'" id="msg-'+m.id+'">'
+      +'<div class="msg-card-top">'
+        +'<div class="msg-icon '+(m.type||'info')+'">'+icon+'</div>'
+        +'<div class="msg-meta">'
+          +'<div class="msg-subject">'+escHtml(m.subject)+'</div>'
+          +'<div class="msg-date">'+dateStr+'</div>'
+        +'</div>'
+        +(m.read?'':'<div class="msg-unread-dot"></div>')
+      +'</div>'
+      +'<div class="msg-body" id="body-'+m.id+'">'+escHtml(m.body)+'</div>'
+      +'<div class="msg-actions">'
+        +'<button class="msg-read-btn" onclick="toggleExpand(\''+m.id+'\')">Read More</button>'
+        +(m.read?'':'<button class="msg-read-btn" onclick="markRead(\''+m.id+'\')">Mark Read</button>')
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+async function toggleExpand(id) {
+  var body = document.getElementById('body-'+id);
+  if (!body) return;
+  body.classList.toggle('expanded');
+  await API.markMessageRead(id);
+  renderMessages();
+}
+
+async function markRead(id) {
+  await API.markMessageRead(id);
+  renderMessages();
+  showToast('Marked as read', 'success');
+}
+
+async function markAllRead() {
+  var msgs = await API.getMyMessages();
+  for(var i=0;i<msgs.length;i++){
+    if(!msgs[i].read) await API.markMessageRead(msgs[i].id);
+  }
+  renderMessages();
+  showToast('All messages marked as read', 'success');
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast'); if(!t) return;
+  t.textContent = (type==='success'?'✓ ':'✕ ')+msg;
+  t.className = 'toast show '+(type||'success');
+  setTimeout(function(){ t.className='toast'; }, 3500);
+}
+
+renderMessages();
+</script>
+</body>
+</html>

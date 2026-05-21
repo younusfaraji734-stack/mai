@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+<title>MAI — My Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="assets/css/shared.css"/>
+<style>
+.team-header{background:linear-gradient(135deg,#1e1e35,#2a1f4e);padding:20px 16px 16px;position:sticky;top:0;z-index:100}
+.team-header h1{font-size:20px;font-weight:800;text-align:center;margin-bottom:0}
+.back-row{display:flex;align-items:center;margin-bottom:12px}
+.back-row button{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:6px 12px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px}
+.ref-banner{background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(255,101,132,0.1));border:1px solid rgba(108,99,255,0.25);border-radius:16px;padding:16px;margin:16px;display:flex;flex-direction:column;gap:10px}
+.rb-title{font-size:14px;font-weight:700;color:var(--text)}
+.rb-code-row{display:flex;align-items:center;gap:8px}
+.rb-code{flex:1;background:rgba(0,0,0,0.3);border:1px solid rgba(108,99,255,0.3);border-radius:10px;padding:10px 14px;font-family:monospace;font-size:15px;font-weight:700;color:#a89fff;letter-spacing:1px}
+.rb-copy{background:linear-gradient(135deg,#6C63FF,#FF6584);color:white;border:none;padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
+.rb-link-row{display:flex;align-items:center;gap:8px}
+.rb-link{flex:1;background:rgba(0,0,0,0.2);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--text2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rb-link-copy{background:rgba(108,99,255,0.15);color:var(--primary);border:1px solid rgba(108,99,255,0.3);padding:8px 12px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap}
+.commission-row{display:flex;gap:8px}
+.comm-item{flex:1;background:rgba(0,0,0,0.2);border-radius:10px;padding:10px;text-align:center}
+.comm-pct{font-size:18px;font-weight:800;color:var(--green)}
+.comm-lbl{font-size:10px;color:var(--text2);margin-top:2px}
+.team-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:0 16px 16px}
+.ts-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.ts-val{font-size:22px;font-weight:800;margin-bottom:4px}
+.ts-lbl{font-size:11px;color:var(--text2)}
+.level-tabs{display:flex;gap:4px;padding:0 16px 12px}
+.ltab{flex:1;padding:8px;border:1px solid var(--border);border-radius:10px;background:transparent;color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all 0.2s;text-align:center}
+.ltab.active{background:rgba(108,99,255,0.15);color:var(--primary);border-color:rgba(108,99,255,0.3)}
+.member-list{padding:0 16px;display:flex;flex-direction:column;gap:8px}
+.member-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px}
+.mc-avatar{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0;color:white}
+.mc-info{flex:1}
+.mc-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.mc-meta{font-size:11px;color:var(--text2)}
+.mc-right{text-align:right}
+.mc-invested{font-size:13px;font-weight:700;color:var(--green)}
+.mc-date{font-size:10px;color:var(--text3);margin-top:2px}
+.mc-comm{font-size:11px;color:var(--primary);margin-top:2px}
+.empty-team{text-align:center;padding:48px 20px;color:var(--text2)}
+.empty-team .et-icon{font-size:48px;margin-bottom:12px}
+.empty-team p{font-size:13px;margin-bottom:16px}
+.empty-team button{background:linear-gradient(135deg,#6C63FF,#FF6584);color:white;border:none;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:600;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<div class="team-header">
+  <div class="back-row">
+    <button onclick="history.back()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Back
+    </button>
+  </div>
+  <h1>👥 My Team</h1>
+</div>
+
+<!-- REFERRAL BANNER -->
+<div class="ref-banner">
+  <div class="rb-title">🎁 Your Referral Code</div>
+  <div class="rb-code-row">
+    <div class="rb-code" id="refCodeDisplay">MAI-XXXX</div>
+    <button class="rb-copy" onclick="copyRefCode()">Copy Code</button>
+  </div>
+  <div class="rb-link-row">
+    <div class="rb-link" id="refLinkDisplay">Loading...</div>
+    <button class="rb-link-copy" onclick="copyRefLink()">Copy Link</button>
+  </div>
+  <div class="commission-row">
+    <div class="comm-item"><div class="comm-pct">10%</div><div class="comm-lbl">Level 1</div></div>
+    <div class="comm-item"><div class="comm-pct">5%</div><div class="comm-lbl">Level 2</div></div>
+    <div class="comm-item"><div class="comm-pct">2%</div><div class="comm-lbl">Level 3</div></div>
+  </div>
+</div>
+
+<!-- TEAM STATS -->
+<div class="team-stats">
+  <div class="ts-card"><div class="ts-val" id="statTotal">0</div><div class="ts-lbl">Total Members</div></div>
+  <div class="ts-card"><div class="ts-val green" id="statEarned">$0.00</div><div class="ts-lbl">Commission Earned</div></div>
+  <div class="ts-card"><div class="ts-val" id="statActive">0</div><div class="ts-lbl">Active Members</div></div>
+</div>
+
+<!-- LEVEL TABS -->
+<div class="level-tabs">
+  <button class="ltab active" onclick="showLevel('all',this)">All</button>
+  <button class="ltab" onclick="showLevel('l1',this)">Level 1 <span id="l1count"></span></button>
+  <button class="ltab" onclick="showLevel('l2',this)">Level 2 <span id="l2count"></span></button>
+  <button class="ltab" onclick="showLevel('l3',this)">Level 3 <span id="l3count"></span></button>
+</div>
+
+<div class="member-list" id="memberList"></div>
+<div style="height:90px"></div>
+
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></a>
+  <a href="service.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Service</span></a>
+  <a href="invest.html" class="nav-item center-nav"><div class="center-btn"><svg width="26" height="26" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><span>Invest</span></a>
+  <a href="record.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span>Record</span></a>
+  <a href="mine.html" class="nav-item"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Mine</span></a>
+</nav>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/dynamic.js"></script>
+<script>
+  initTeamPage();
+</script>
+</body>
+</html>

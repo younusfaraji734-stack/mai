@@ -1,0 +1,10 @@
+node_modules/
+*.log
+.env
+audit.js
+audit2.js
+fullaudit.js
+check.js
+test_flow.js
+test_grant.js
+test_shadow.js

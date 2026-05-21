@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Telegram Settings — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item active"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Telegram Settings</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content" style="padding-bottom:80px">
+    <div class="tg-card">
+      <h3>🤖 Bot Configuration</h3>
+      <div class="form-group">
+        <label>Bot Token</label>
+        <input type="text" id="tgBotToken" placeholder="123456789:ABCdefGHIjklMNOpqrSTUvwxYZ"/>
+        <div style="margin-top:5px;font-size:11px;color:var(--text3)">Get from @BotFather on Telegram</div>
+      </div>
+      <div class="form-group">
+        <label>Chat ID / Channel ID</label>
+        <input type="text" id="tgChatId" placeholder="-1001234567890"/>
+        <div style="margin-top:5px;font-size:11px;color:var(--text3)">Admin notification channel or group chat ID</div>
+      </div>
+      <div class="form-group">
+        <label>Support Link (shown to users)</label>
+        <input type="text" id="tgSupportLink" placeholder="https://t.me/yoursupport"/>
+      </div>
+    </div>
+    <div class="tg-card">
+      <h3>🔔 Notification Settings</h3>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Enable Notifications</div><div class="toggle-desc">Master switch for all Telegram notifications</div></div>
+        <label class="toggle"><input type="checkbox" id="tgEnabled"/><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">New Deposit Alert</div><div class="toggle-desc">Notify when a user submits a deposit request</div></div>
+        <label class="toggle"><input type="checkbox" id="tgNotifyDeposit" checked/><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">Withdrawal Request Alert</div><div class="toggle-desc">Notify when a user requests a withdrawal</div></div>
+        <label class="toggle"><input type="checkbox" id="tgNotifyWithdraw" checked/><span class="slider"></span></label>
+      </div>
+      <div class="toggle-row">
+        <div><div class="toggle-label">New Registration Alert</div><div class="toggle-desc">Notify when a new user registers</div></div>
+        <label class="toggle"><input type="checkbox" id="tgNotifyRegister"/><span class="slider"></span></label>
+      </div>
+    </div>
+    <div class="save-bar">
+      <span class="save-bar-left">📱 Telegram notifications require a valid bot token and chat ID.</span>
+      <button class="btn-primary" onclick="saveTelegram()" id="saveBtn">💾 Save Telegram Settings</button>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+async function loadTelegram() {
+  var d = await ADMIN.getSettings();
+  if (!d.ok) { showToast('Failed to load settings','error'); return; }
+  var s = d.settings||{};
+  document.getElementById('tgBotToken').value = s.telegramBotToken||'';
+  document.getElementById('tgChatId').value = s.telegramChatId||'';
+  document.getElementById('tgSupportLink').value = s.telegramLink||'';
+  document.getElementById('tgEnabled').checked = !!s.telegramNotifications;
+  document.getElementById('tgNotifyDeposit').checked = s.tgDeposit!==false;
+  document.getElementById('tgNotifyWithdraw').checked = s.tgWithdraw!==false;
+  document.getElementById('tgNotifyRegister').checked = !!s.tgRegister;
+}
+async function saveTelegram() {
+  var btn = document.getElementById('saveBtn');
+  btn.textContent='⏳ Saving…'; btn.disabled=true;
+  var current = await ADMIN.getSettings();
+  var existing = (current.ok&&current.settings)?current.settings:{};
+  var d = await ADMIN.saveSettings(Object.assign({},existing,{
+    telegramBotToken: document.getElementById('tgBotToken').value.trim(),
+    telegramChatId: document.getElementById('tgChatId').value.trim(),
+    telegramLink: document.getElementById('tgSupportLink').value.trim(),
+    telegramNotifications: document.getElementById('tgEnabled').checked,
+    tgDeposit: document.getElementById('tgNotifyDeposit').checked,
+    tgWithdraw: document.getElementById('tgNotifyWithdraw').checked,
+    tgRegister: document.getElementById('tgNotifyRegister').checked
+  }));
+  btn.textContent='💾 Save Telegram Settings'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error saving','error'); return; }
+  showToast('Telegram settings saved!','success');
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadTelegram(); })();
+</script>
+</body>
+</html>

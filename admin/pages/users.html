@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Users — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>✏️ Edit User</h3><button class="modal-close" onclick="closeModal('editModal')">✕</button></div>
+    <input type="hidden" id="editUserId"/>
+    <div class="form-group"><label>Username</label><input type="text" id="editUsername"/></div>
+    <div class="form-group"><label>Email</label><input type="email" id="editEmail"/></div>
+    <div class="form-group"><label>Phone</label><input type="text" id="editPhone"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Balance (USDT)</label><input type="number" id="editBalance" step="0.01" min="0"/></div>
+      <div class="form-group"><label>Total Earned</label><input type="number" id="editEarned" step="0.01" min="0"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Total Invested</label><input type="number" id="editInvested" step="0.01" min="0"/></div>
+      <div class="form-group"><label>Account Status</label>
+        <select id="editStatus"><option value="true">✅ Active</option><option value="false">🚫 Suspended</option></select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>New Password <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:10px">(leave blank to keep current)</span></label>
+      <input type="text" id="editPassword" placeholder="Enter new password..."/>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('editModal')">Cancel</button>
+      <button class="btn-save" onclick="saveUser()">💾 Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADJUST BALANCE MODAL -->
+<div class="modal-overlay" id="addBalModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>💰 Adjust Balance</h3><button class="modal-close" onclick="closeModal('addBalModal')">✕</button></div>
+    <input type="hidden" id="addBalUserId"/>
+    <div class="form-group"><label>User</label><input type="text" id="addBalUsername" readonly/></div>
+    <div class="form-group"><label>Current Balance</label><input type="text" id="addBalCurrent" readonly/></div>
+    <div class="form-group"><label>Operation</label>
+      <select id="addBalOp">
+        <option value="add">➕ Add Balance</option>
+        <option value="deduct">➖ Deduct Balance</option>
+        <option value="set">🎯 Set Balance</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Amount (USDT)</label><input type="number" id="addBalAmount" step="0.01" min="0" placeholder="0.00"/></div>
+    <div class="form-group"><label>Note (optional)</label><input type="text" id="addBalNote" placeholder="Reason for adjustment"/></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('addBalModal')">Cancel</button>
+      <button class="btn-save" onclick="doAddBalance()">✅ Apply</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW USER MODAL -->
+<div class="modal-overlay" id="viewUserModal">
+  <div class="modal" style="max-width:560px">
+    <div class="modal-hdr"><h3>👤 User Details</h3><button class="modal-close" onclick="closeModal('viewUserModal')">✕</button></div>
+    <div id="viewUserContent"></div>
+    <div class="modal-btns" id="viewUserActions"></div>
+  </div>
+</div>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item active"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <h2>Users Management</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- Summary cards -->
+    <div class="stats-grid" id="userStats" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+      <div class="stat-card blue"><div class="stat-icon">👥</div><div class="stat-val" id="statTotal">—</div><div class="stat-lbl">Total Users</div></div>
+      <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-val" id="statActive">—</div><div class="stat-lbl">Active</div></div>
+      <div class="stat-card red"><div class="stat-icon">🚫</div><div class="stat-val" id="statSuspended">—</div><div class="stat-lbl">Suspended</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">💰</div><div class="stat-val" id="statBalance">—</div><div class="stat-lbl">Total Balance</div></div>
+    </div>
+
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>All Users <span id="userCount" style="font-size:12px;color:var(--text2);font-weight:400"></span></h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="search-input" id="searchInput" placeholder="🔍 Search users..." oninput="filterUsers()">
+          <select id="statusFilter" class="search-input" style="min-width:120px" onchange="filterUsers()">
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="suspended">Suspended</option>
+          </select>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>User</th><th>Email</th><th>Balance</th><th>Earned</th>
+              <th>Ref Code</th><th>Joined</th><th>Status</th><th>Withdraw</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTable">
+            <tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allUsers = [];
+
+async function loadUsers() {
+  var d = await ADMIN.getUsers();
+  if (!d.ok) { showToast('Failed to load users','error'); return; }
+  allUsers = d.users.filter(function(u){ return !u.isAdmin; });
+  // Stats
+  var active = allUsers.filter(function(u){ return u.isActive!==false; }).length;
+  var totalBal = allUsers.reduce(function(s,u){ return s+(u.balance||0); }, 0);
+  document.getElementById('statTotal').textContent = allUsers.length;
+  document.getElementById('statActive').textContent = active;
+  document.getElementById('statSuspended').textContent = allUsers.length - active;
+  document.getElementById('statBalance').textContent = '$'+fmtAmt(totalBal);
+  document.getElementById('userCount').textContent = '('+allUsers.length+')';
+  filterUsers();
+}
+
+function filterUsers() {
+  var q = document.getElementById('searchInput').value.toLowerCase();
+  var sf = document.getElementById('statusFilter').value;
+  var filtered = allUsers.filter(function(u){
+    var matchQ = (u.username+u.email+u.referralCode).toLowerCase().includes(q);
+    var matchS = sf==='all' || (sf==='active'&&u.isActive!==false) || (sf==='suspended'&&u.isActive===false);
+    return matchQ && matchS;
+  });
+  displayUsers(filtered);
+}
+
+function displayUsers(users) {
+  document.getElementById('usersTable').innerHTML = users.length ? users.map(function(u){
+    var wEnabled = u.withdrawEnabled !== false;
+    var isActive = u.isActive !== false;
+    return '<tr>'+
+      '<td>'+
+        '<div style="display:flex;align-items:center;gap:8px">'+
+        '<div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#FF6584);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0">'+
+        escHtml((u.username||'U')[0].toUpperCase())+'</div>'+
+        '<div><div style="font-weight:600">'+escHtml(maskName(u.username))+'</div>'+
+        '<div style="font-size:10px;color:var(--text3)">'+escHtml(u.id)+'</div></div></div>'+
+      '</td>'+
+      '<td style="color:var(--text2);font-size:12px">'+escHtml(u.email)+'</td>'+
+      '<td><strong style="color:var(--green)">$'+fmtAmt(u.balance)+'</strong></td>'+
+      '<td style="color:var(--text2)">$'+fmtAmt(u.totalEarned||0)+'</td>'+
+      '<td><code style="background:var(--card2);padding:2px 7px;border-radius:5px;font-size:11px">'+escHtml(u.referralCode)+'</code></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDate(u.joinDate)+'</td>'+
+      '<td><span class="badge '+(isActive?'active':'inactive')+'">'+(isActive?'Active':'Suspended')+'</span></td>'+
+      '<td><span class="badge '+(wEnabled?'active':'inactive')+'">'+(wEnabled?'✅ On':'🔒 Off')+'</span></td>'+
+      '<td style="white-space:nowrap">'+
+        '<button class="action-btn view" onclick="viewUser(\''+u.id+'\')">View</button>'+
+        '<button class="action-btn approve" onclick="openAddBal(\''+u.id+'\')">💰</button>'+
+        '<button class="action-btn edit" onclick="openEdit(\''+u.id+'\')">Edit</button>'+
+        '<button class="action-btn delete" onclick="deleteUser(\''+u.id+'\')">Del</button>'+
+      '</td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--text3)">No users found</td></tr>';
+}
+
+function openEdit(id) {
+  var u = allUsers.find(function(x){ return x.id===id; }); if (!u) return;
+  document.getElementById('editUserId').value = u.id;
+  document.getElementById('editUsername').value = u.username||'';
+  document.getElementById('editEmail').value = u.email||'';
+  document.getElementById('editPhone').value = u.phone||'';
+  document.getElementById('editBalance').value = u.balance||0;
+  document.getElementById('editEarned').value = u.totalEarned||0;
+  document.getElementById('editInvested').value = u.totalInvested||0;
+  document.getElementById('editStatus').value = String(u.isActive!==false);
+  document.getElementById('editPassword').value = '';
+  openModal('editModal');
+}
+
+async function saveUser() {
+  var id = document.getElementById('editUserId').value;
+  var data = {
+    username: document.getElementById('editUsername').value.trim(),
+    email: document.getElementById('editEmail').value.trim(),
+    phone: document.getElementById('editPhone').value.trim(),
+    balance: parseFloat(document.getElementById('editBalance').value)||0,
+    totalEarned: parseFloat(document.getElementById('editEarned').value)||0,
+    totalInvested: parseFloat(document.getElementById('editInvested').value)||0,
+    isActive: document.getElementById('editStatus').value === 'true'
+  };
+  var pw = document.getElementById('editPassword').value.trim();
+  if (pw) data.password = pw;
+  var d = await ADMIN.updateUser(id, data);
+  if (!d.ok) { showToast(d.msg||'Error saving','error'); return; }
+  showToast('User updated successfully!','success');
+  closeModal('editModal');
+  loadUsers();
+}
+
+function openAddBal(id) {
+  var u = allUsers.find(function(x){ return x.id===id; }); if (!u) return;
+  document.getElementById('addBalUserId').value = u.id;
+  document.getElementById('addBalUsername').value = u.username;
+  document.getElementById('addBalCurrent').value = '$'+fmtAmt(u.balance)+' USDT';
+  document.getElementById('addBalAmount').value = '';
+  document.getElementById('addBalNote').value = '';
+  document.getElementById('addBalOp').value = 'add';
+  openModal('addBalModal');
+}
+
+async function doAddBalance() {
+  var id = document.getElementById('addBalUserId').value;
+  var op = document.getElementById('addBalOp').value;
+  var amount = parseFloat(document.getElementById('addBalAmount').value)||0;
+  var note = document.getElementById('addBalNote').value.trim();
+  var u = allUsers.find(function(x){ return x.id===id; }); if (!u) return;
+  if (amount <= 0) { showToast('Enter a valid amount','error'); return; }
+  var newBal = op==='add' ? (u.balance||0)+amount : op==='deduct' ? Math.max(0,(u.balance||0)-amount) : amount;
+  var d = await ADMIN.updateUser(id, { balance: newBal });
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  await ADMIN.addTransaction({ userId:id, type: op==='deduct'?'withdraw':'deposit', amount:amount,
+    status:'completed', description: note||'Balance adjustment by admin', network:'Admin' });
+  showToast('Balance updated to $'+fmtAmt(newBal)+'!','success');
+  closeModal('addBalModal');
+  loadUsers();
+}
+
+async function viewUser(id) {
+  var u = allUsers.find(function(x){ return x.id===id; }); if (!u) return;
+  var wEnabled = u.withdrawEnabled !== false;
+  var txHtml = (u.transactions||[]).slice(0,6).map(function(tx){
+    var isIn = tx.type!=='withdraw';
+    return '<div class="ud-tx-item">'+
+      '<span style="display:flex;align-items:center;gap:6px"><span class="badge '+tx.type+'">'+tx.type+'</span><span style="color:var(--text2);font-size:11px">'+escHtml(tx.description||'')+'</span></span>'+
+      '<span style="color:'+(isIn?'var(--green)':'var(--red)')+'">'+(!isIn?'-':'+')+' $'+fmtAmt(tx.amount)+'</span>'+
+    '</div>';
+  }).join('') || '<div style="color:var(--text3);font-size:12px;padding:8px 0">No transactions yet</div>';
+
+  document.getElementById('viewUserContent').innerHTML =
+    '<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px;background:var(--card2);border-radius:12px">'+
+    '<div style="width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#6C63FF,#FF6584);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800">'+
+    escHtml((u.username||'U')[0].toUpperCase())+'</div>'+
+    '<div><div style="font-weight:700;font-size:15px">'+escHtml(u.username)+'</div>'+
+    '<div style="font-size:12px;color:var(--text2)">'+escHtml(u.email)+'</div>'+
+    '<div style="font-size:11px;color:var(--text3);margin-top:2px">ID: '+escHtml(u.id)+'</div></div>'+
+    '<div style="margin-left:auto;text-align:right">'+
+    '<span class="badge '+(u.isActive!==false?'active':'inactive')+'">'+(u.isActive!==false?'Active':'Suspended')+'</span><br>'+
+    '<span style="font-size:11px;color:var(--text3);margin-top:4px;display:block">'+fmtDate(u.joinDate)+'</span></div>'+
+    '</div>'+
+    '<div class="user-detail-grid">'+
+    '<div class="ud-item"><div class="ud-lbl">Balance</div><div class="ud-val" style="color:var(--green)">$'+fmtAmt(u.balance)+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Total Earned</div><div class="ud-val">$'+fmtAmt(u.totalEarned||0)+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Total Invested</div><div class="ud-val">$'+fmtAmt(u.totalInvested||0)+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Scores</div><div class="ud-val" style="color:var(--yellow)">⭐ '+(u.scores||0)+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Referral Code</div><div class="ud-val" style="font-family:monospace;font-size:12px">'+escHtml(u.referralCode)+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Team (Direct)</div><div class="ud-val">'+((u.teamL1||[]).length)+' members</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Phone</div><div class="ud-val" style="font-size:12px">'+escHtml(u.phone||'—')+'</div></div>'+
+    '<div class="ud-item"><div class="ud-lbl">Withdraw</div><div class="ud-val"><span class="badge '+(wEnabled?'active':'inactive')+'">'+(wEnabled?'Enabled':'Disabled')+'</span></div></div>'+
+    '</div>'+
+    '<div style="font-size:11px;font-weight:700;color:var(--text2);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px">Recent Transactions</div>'+
+    '<div class="ud-tx-list">'+txHtml+'</div>';
+
+  document.getElementById('viewUserActions').innerHTML =
+    '<button class="btn-cancel" onclick="closeModal(\'viewUserModal\')">Close</button>'+
+    '<button class="btn-save" onclick="closeModal(\'viewUserModal\');openEdit(\''+id+'\')">✏️ Edit User</button>';
+
+  openModal('viewUserModal');
+}
+
+async function deleteUser(id) {
+  var u = allUsers.find(function(x){ return x.id===id; }); if (!u) return;
+  if (!confirm('Delete user "'+u.username+'"?\n\nThis will permanently remove all their data and cannot be undone.')) return;
+  var d = await ADMIN.deleteUser(id);
+  if (!d.ok) { showToast(d.msg||'Error deleting user','error'); return; }
+  showToast('User deleted successfully','success');
+  loadUsers();
+}
+
+(async function(){ var a = await ADMIN.requireAdmin(); if (a) loadUsers(); })();
+</script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Referral Codes — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- EDIT USER CODE MODAL -->
+<div class="modal-overlay" id="editCodeModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>✏️ Edit Referral Code</h3><button class="modal-close" onclick="closeModal('editCodeModal')">✕</button></div>
+    <input type="hidden" id="rcUserId"/>
+    <div class="form-group"><label>User</label><input type="text" id="rcUserDisplay" readonly/></div>
+    <div class="form-group"><label>Current Code</label><input type="text" id="rcCurrentCode" readonly style="font-family:monospace;color:var(--primary)"/></div>
+    <div class="form-group">
+      <label>New Code <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:10px">(leave blank to auto-generate)</span></label>
+      <input type="text" id="rcNewCode" placeholder="e.g. MYCODE2024" style="font-family:monospace;text-transform:uppercase" maxlength="20"/>
+    </div>
+    <div style="background:rgba(108,99,255,0.08);border:1px solid rgba(108,99,255,0.2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--text2);margin-bottom:4px">💡 Leave blank to auto-generate a unique code.</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('editCodeModal')">Cancel</button>
+      <button class="btn-save" onclick="saveCode()">Save Code</button>
+    </div>
+  </div>
+</div>
+
+<!-- CREATE GRANT CODE MODAL -->
+<div class="modal-overlay" id="grantCodeModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>🎫 Create Grant Code</h3><button class="modal-close" onclick="closeModal('grantCodeModal')">✕</button></div>
+    <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;margin-bottom:16px;font-size:13px;color:var(--text2)">
+      <strong style="color:var(--green);display:block;margin-bottom:4px">📋 What is a Grant Code?</strong>
+      A standalone invite code not tied to any user. Anyone with this code can register on the platform. Useful for marketing campaigns, VIP invites, or sharing publicly.
+    </div>
+    <div class="form-group">
+      <label>Custom Code <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:10px">(leave blank to auto-generate)</span></label>
+      <input type="text" id="gcCode" placeholder="e.g. WELCOME2024" style="font-family:monospace;text-transform:uppercase;font-size:15px;font-weight:700;letter-spacing:1px" maxlength="20"/>
+    </div>
+    <div class="form-group">
+      <label>Note / Label <span style="color:var(--text3);font-weight:400;text-transform:none;font-size:10px">(optional)</span></label>
+      <input type="text" id="gcNote" placeholder="e.g. Marketing campaign, VIP invite..."/>
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('grantCodeModal')">Cancel</button>
+      <button class="btn-save" onclick="createGrantCode()">🎫 Create Grant Code</button>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW GRANT CODE MODAL -->
+<div class="modal-overlay" id="viewGrantModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>🎫 Grant Code Details</h3><button class="modal-close" onclick="closeModal('viewGrantModal')">✕</button></div>
+    <div id="viewGrantContent"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('viewGrantModal')">Close</button>
+      <button class="btn-save" style="background:rgba(239,68,68,0.15);color:var(--red);border:1px solid rgba(239,68,68,0.3);box-shadow:none" onclick="deleteCurrentGrant()">🗑️ Delete Code</button>
+    </div>
+  </div>
+</div>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item active"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <h2>Referral Codes</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- Stats -->
+    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="stat-card blue"><div class="stat-icon">👥</div><div class="stat-val" id="sTotalCodes">—</div><div class="stat-lbl">User Codes</div></div>
+      <div class="stat-card green"><div class="stat-icon">🎫</div><div class="stat-val" id="sGrantCodes">—</div><div class="stat-lbl">Grant Codes</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">👥</div><div class="stat-val" id="sTotalTeam">—</div><div class="stat-lbl">Total Referrals</div></div>
+      <div class="stat-card purple" style="--purple:#a855f7"><div class="stat-icon">🏆</div><div class="stat-val" id="sTopTeam">—</div><div class="stat-lbl">Largest Team</div></div>
+    </div>
+
+    <!-- Grant Codes Section -->
+    <div class="table-wrap" style="margin-bottom:20px">
+      <div class="table-header">
+        <h3>🎫 Grant Codes <span style="font-size:11px;color:var(--text2);font-weight:400;margin-left:6px">Standalone invite codes for registration</span></h3>
+        <button class="btn-primary-sm" onclick="openGrantModal()">+ Create Grant Code</button>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Code</th><th>Note / Label</th><th>Times Used</th><th>Created</th><th>Register Link</th><th>Actions</th></tr></thead>
+          <tbody id="grantTable"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">No grant codes yet. Create one above.</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- User Referral Codes Section -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>🎁 User Referral Codes</h3>
+        <input type="text" class="search-input" id="codeSearch" placeholder="🔍 Search…" oninput="renderUserCodes()"/>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Email</th><th>Referral Code</th><th>Team Size</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="codesTable"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allUserCodes = [];
+var allGrantCodes = [];
+var currentGrantId = null;
+
+async function loadAll() {
+  var d = await ADMIN.getReferralCodes();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+
+  // Separate user codes from grant codes
+  allUserCodes  = (d.codes||[]).filter(function(c){ return !c.isGrant; });
+  allGrantCodes = (d.codes||[]).filter(function(c){ return c.isGrant; });
+
+  // Stats
+  var totalTeam = allUserCodes.reduce(function(s,c){ return s+(c.teamSize||0); },0);
+  var top = allUserCodes.reduce(function(m,c){ return (c.teamSize||0)>m?(c.teamSize||0):m; },0);
+  document.getElementById('sTotalCodes').textContent  = allUserCodes.length;
+  document.getElementById('sGrantCodes').textContent  = allGrantCodes.length;
+  document.getElementById('sTotalTeam').textContent   = totalTeam;
+  document.getElementById('sTopTeam').textContent     = top;
+
+  renderGrantCodes();
+  renderUserCodes();
+}
+
+// ── GRANT CODES ───────────────────────────────────────────────
+function renderGrantCodes() {
+  var tbody = document.getElementById('grantTable');
+  if (!allGrantCodes.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">No grant codes yet. Click "+ Create Grant Code" to add one.</td></tr>';
+    return;
+  }
+  var origin = window.location.origin.replace('/admin/pages','');
+  tbody.innerHTML = allGrantCodes.map(function(g) {
+    var regLink = origin + '/register.html?ref=' + encodeURIComponent(g.referralCode);
+    return '<tr>'
+      + '<td><code style="background:rgba(34,197,94,0.12);color:var(--green);padding:4px 12px;border-radius:6px;font-size:13px;font-weight:800;letter-spacing:1px">'
+      + escHtml(g.referralCode) + '</code></td>'
+      + '<td style="color:var(--text2);font-size:12px">' + escHtml(g.note||'—') + '</td>'
+      + '<td><strong style="color:var(--yellow)">' + (g.teamSize||0) + ' registrations</strong></td>'
+      + '<td style="color:var(--text2);font-size:12px">' + fmtDate(g.joinDate) + '</td>'
+      + '<td style="font-size:11px;max-width:200px">'
+      + '<div style="display:flex;align-items:center;gap:6px">'
+      + '<span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text3);flex:1">' + escHtml(regLink) + '</span>'
+      + '<button class="action-btn view" onclick="copyLink(\'' + escHtml(regLink) + '\')">📋 Copy</button>'
+      + '</div></td>'
+      + '<td>'
+      + '<button class="action-btn view" onclick="viewGrant(\'' + escHtml(g.referralCode) + '\',\'' + escHtml(g.note||'') + '\',' + (g.teamSize||0) + ',\'' + escHtml(g.joinDate||'') + '\')">View</button>'
+      + '<button class="action-btn delete" onclick="deleteGrant(\'' + escHtml(g.referralCode) + '\')">Delete</button>'
+      + '</td>'
+      + '</tr>';
+  }).join('');
+}
+
+function openGrantModal() {
+  document.getElementById('gcCode').value = '';
+  document.getElementById('gcNote').value = '';
+  openModal('grantCodeModal');
+}
+
+async function createGrantCode() {
+  var code = document.getElementById('gcCode').value.trim().toUpperCase();
+  var note = document.getElementById('gcNote').value.trim();
+  var btn  = document.querySelector('#grantCodeModal .btn-save');
+  btn.textContent = 'Creating…'; btn.disabled = true;
+  var d = await ADMIN.createGrantCode({ code: code||undefined, note: note });
+  btn.textContent = '🎫 Create Grant Code'; btn.disabled = false;
+  if (!d.ok) { showToast(d.msg||'Error creating code','error'); return; }
+  showToast('Grant code created: ' + d.grant.code, 'success');
+  closeModal('grantCodeModal');
+  loadAll();
+}
+
+function copyLink(link) {
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(link).then(function(){ showToast('Register link copied!','success'); });
+  } else {
+    var ta = document.createElement('textarea'); ta.value = link;
+    ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    showToast('Register link copied!','success');
+  }
+}
+
+function viewGrant(code, note, used, created) {
+  currentGrantId = code;
+  var origin = window.location.origin.replace('/admin/pages','');
+  var regLink = origin + '/register.html?ref=' + encodeURIComponent(code);
+  document.getElementById('viewGrantContent').innerHTML =
+    '<div style="background:var(--card2);border-radius:14px;padding:20px;margin-bottom:16px;text-align:center">'
+    + '<div style="font-size:28px;font-weight:900;font-family:monospace;color:var(--green);letter-spacing:3px;margin-bottom:8px">' + escHtml(code) + '</div>'
+    + '<div style="font-size:12px;color:var(--text2)">' + escHtml(note||'No label') + '</div>'
+    + '</div>'
+    + '<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">'
+    + '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text2)">Times Used</span><strong style="color:var(--yellow)">' + used + ' registrations</strong></div>'
+    + '<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--text2)">Created</span><strong>' + fmtDate(created) + '</strong></div>'
+    + '</div>'
+    + '<div style="background:var(--card2);border-radius:10px;padding:12px;margin-bottom:4px">'
+    + '<div style="font-size:10px;color:var(--text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">Registration Link</div>'
+    + '<div style="display:flex;align-items:center;gap:8px">'
+    + '<span style="flex:1;font-size:11px;color:var(--text2);word-break:break-all">' + escHtml(regLink) + '</span>'
+    + '<button class="btn-primary-sm" onclick="copyLink(\'' + escHtml(regLink) + '\')">📋 Copy</button>'
+    + '</div></div>';
+  openModal('viewGrantModal');
+}
+
+async function deleteGrant(code) {
+  if (!confirm('Delete grant code "' + code + '"?\n\nUsers who already registered with this code will not be affected.')) return;
+  var d = await ADMIN.deleteGrantCode(code);
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Grant code deleted','success');
+  closeModal('viewGrantModal');
+  loadAll();
+}
+
+function deleteCurrentGrant() {
+  if (currentGrantId) deleteGrant(currentGrantId);
+}
+
+// ── USER CODES ────────────────────────────────────────────────
+function renderUserCodes() {
+  var q = (document.getElementById('codeSearch').value||'').toLowerCase();
+  var filtered = allUserCodes.filter(function(c){ return !q||(c.username+c.email+c.referralCode).toLowerCase().includes(q); });
+  document.getElementById('codesTable').innerHTML = filtered.length ? filtered.map(function(c){
+    return '<tr>'
+      + '<td><strong>' + escHtml(c.username||'Unknown') + '</strong></td>'
+      + '<td style="color:var(--text2);font-size:12px">' + escHtml(c.email||'') + '</td>'
+      + '<td><code style="background:rgba(108,99,255,0.12);color:var(--primary);padding:3px 10px;border-radius:6px;font-size:12px;font-weight:700">' + escHtml(c.referralCode||'—') + '</code></td>'
+      + '<td>' + (c.teamSize>0 ? '<strong style="color:var(--green)">' + c.teamSize + ' members</strong>' : '<span style="color:var(--text3)">0</span>') + '</td>'
+      + '<td style="color:var(--text2);font-size:12px">' + fmtDate(c.joinDate) + '</td>'
+      + '<td><button class="action-btn edit" onclick="openEdit(\'' + c.userId + '\',\'' + escHtml(c.username) + '\',\'' + escHtml(c.referralCode||'') + '\')">✏️ Edit</button></td>'
+      + '</tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No codes found</td></tr>';
+}
+
+function openEdit(userId, username, currentCode) {
+  document.getElementById('rcUserId').value = userId;
+  document.getElementById('rcUserDisplay').value = username;
+  document.getElementById('rcCurrentCode').value = currentCode||'(none)';
+  document.getElementById('rcNewCode').value = '';
+  openModal('editCodeModal');
+}
+
+async function saveCode() {
+  var userId  = document.getElementById('rcUserId').value;
+  var newCode = document.getElementById('rcNewCode').value.trim().toUpperCase();
+  var btn = document.querySelector('#editCodeModal .btn-save');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+  var d = await ADMIN.setReferralCode(userId, newCode||undefined);
+  btn.textContent = 'Save Code'; btn.disabled = false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Code updated to: ' + d.referralCode, 'success');
+  closeModal('editCodeModal');
+  loadAll();
+}
+
+(async function(){ var a = await ADMIN.requireAdmin(); if (a) loadAll(); })();
+</script>
+</body>
+</html>

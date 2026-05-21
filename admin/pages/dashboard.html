@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Dashboard — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item active"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <h2>Dashboard</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Live</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card blue"><div class="stat-icon">⏳</div><div class="stat-val">—</div><div class="stat-lbl">Loading...</div></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div id="pendingAlert"></div>
+
+    <!-- Charts Row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px" id="chartsRow">
+      <div class="table-wrap" style="margin-bottom:0">
+        <div class="table-header"><h3>📈 Deposit vs Withdrawal</h3></div>
+        <div style="padding:20px" id="chartDepWith"></div>
+      </div>
+      <div class="table-wrap" style="margin-bottom:0">
+        <div class="table-header"><h3>👥 User Growth</h3></div>
+        <div style="padding:20px" id="chartUsers"></div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>Recent Transactions</h3>
+        <a href="transactions.html" style="font-size:12px;color:var(--primary);text-decoration:none;font-weight:600">View All →</a>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Status</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="recentTxTable"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Users -->
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>🏆 Top Users by Balance</h3>
+        <a href="users.html" style="font-size:12px;color:var(--primary);text-decoration:none;font-weight:600">View All →</a>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>#</th><th>User</th><th>Balance</th><th>Earned</th><th>Scores</th><th>Joined</th></tr></thead>
+          <tbody id="topUsersTable"><tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+(async function(){
+  var admin = await ADMIN.requireAdmin();
+  if (!admin) return;
+
+  var [statsRes, usersRes] = await Promise.all([ADMIN.getStats(), ADMIN.getUsers()]);
+  if (!statsRes.ok) { showToast('Failed to load stats','error'); return; }
+  var s = statsRes.stats;
+
+  // Stats grid
+  document.getElementById('statsGrid').innerHTML = [
+    {cls:'blue',   icon:'👥', val: s.totalUsers,              lbl:'Total Users',       sub: s.activeUsers+' active'},
+    {cls:'green',  icon:'💰', val: '$'+fmtAmt(s.totalBalance), lbl:'Total Balance',     sub: 'Platform funds'},
+    {cls:'green',  icon:'📥', val: '$'+fmtAmt(s.totalDeposits),lbl:'Total Deposits',    sub: 'All time'},
+    {cls:'red',    icon:'📤', val: '$'+fmtAmt(s.totalWithdrawals),lbl:'Withdrawals',    sub: 'All time'},
+    {cls:'yellow', icon:'⏳', val: s.pendingDeposits+s.pendingWithdrawals, lbl:'Pending Actions', sub: 'Needs review'},
+    {cls:'purple', icon:'⭐', val: s.totalScores,              lbl:'Total Scores',      sub: 'All users'},
+  ].map(function(c){
+    return '<div class="stat-card '+c.cls+'">'+
+      '<div class="stat-icon">'+c.icon+'</div>'+
+      '<div class="stat-val">'+c.val+'</div>'+
+      '<div class="stat-lbl">'+c.lbl+'</div>'+
+      '<div class="stat-change up">'+c.sub+'</div>'+
+    '</div>';
+  }).join('');
+
+  // Pending alert
+  var pending = s.pendingDeposits + s.pendingWithdrawals;
+  if (pending > 0) {
+    document.getElementById('pendingAlert').innerHTML =
+      '<div style="background:rgba(255,184,0,0.1);border:1px solid rgba(255,184,0,0.3);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">'+
+      '<div style="display:flex;align-items:center;gap:10px"><span style="font-size:20px">⚠️</span>'+
+      '<div><div style="font-weight:700;color:var(--yellow)">'+pending+' Pending Action'+(pending>1?'s':'')+' Need Review</div>'+
+      '<div style="font-size:12px;color:var(--text2)">'+s.pendingDeposits+' deposit'+(s.pendingDeposits!==1?'s':'')+' · '+s.pendingWithdrawals+' withdrawal'+(s.pendingWithdrawals!==1?'s':'')+' awaiting approval</div></div></div>'+
+      '<div style="display:flex;gap:8px">'+
+      (s.pendingDeposits>0?'<a href="deposits.html" class="action-btn approve">Review Deposits</a>':'')+
+      (s.pendingWithdrawals>0?'<a href="withdrawals.html" class="action-btn warn">Review Withdrawals</a>':'')+
+      '</div></div>';
+  }
+
+  // Simple bar chart for deposits vs withdrawals
+  var maxVal = Math.max(s.totalDeposits, s.totalWithdrawals, 1);
+  var depPct = (s.totalDeposits / maxVal * 100).toFixed(0);
+  var withPct = (s.totalWithdrawals / maxVal * 100).toFixed(0);
+  document.getElementById('chartDepWith').innerHTML =
+    '<div style="display:flex;flex-direction:column;gap:14px">'+
+    '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span style="color:var(--green)">💰 Deposits</span><strong style="color:var(--green)">$'+fmtAmt(s.totalDeposits)+'</strong></div>'+
+    '<div style="background:var(--card2);border-radius:50px;height:10px;overflow:hidden"><div style="background:var(--green);height:100%;width:'+depPct+'%;border-radius:50px;transition:width 1s"></div></div></div>'+
+    '<div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px"><span style="color:var(--red)">💸 Withdrawals</span><strong style="color:var(--red)">$'+fmtAmt(s.totalWithdrawals)+'</strong></div>'+
+    '<div style="background:var(--card2);border-radius:50px;height:10px;overflow:hidden"><div style="background:var(--red);height:100%;width:'+withPct+'%;border-radius:50px;transition:width 1s"></div></div></div>'+
+    '<div style="display:flex;justify-content:space-between;font-size:12px;padding-top:8px;border-top:1px solid var(--border)">'+
+    '<span style="color:var(--text2)">Net Balance</span><strong style="color:'+(s.totalDeposits>=s.totalWithdrawals?'var(--green)':'var(--red)')+'">$'+fmtAmt(s.totalDeposits-s.totalWithdrawals)+'</strong></div>'+
+    '</div>';
+
+  // User stats
+  var users = usersRes.ok ? usersRes.users.filter(function(u){return !u.isAdmin;}) : [];
+  var active = users.filter(function(u){return u.isActive!==false;}).length;
+  var inactive = users.length - active;
+  document.getElementById('chartUsers').innerHTML =
+    '<div style="display:flex;flex-direction:column;gap:14px">'+
+    '<div style="display:flex;gap:12px">'+
+    '<div style="flex:1;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;text-align:center">'+
+    '<div style="font-size:24px;font-weight:800;color:var(--green)">'+active+'</div><div style="font-size:11px;color:var(--text2)">Active</div></div>'+
+    '<div style="flex:1;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:14px;text-align:center">'+
+    '<div style="font-size:24px;font-weight:800;color:var(--red)">'+inactive+'</div><div style="font-size:11px;color:var(--text2)">Suspended</div></div>'+
+    '</div>'+
+    '<div style="background:var(--card2);border-radius:12px;padding:12px;font-size:12px">'+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--text2)">Total Users</span><strong>'+users.length+'</strong></div>'+
+    '<div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="color:var(--text2)">Total Scores</span><strong style="color:var(--yellow)">⭐ '+s.totalScores+'</strong></div>'+
+    '<div style="display:flex;justify-content:space-between"><span style="color:var(--text2)">Pending Actions</span><strong style="color:var(--yellow)">'+pending+'</strong></div>'+
+    '</div></div>';
+
+  // Recent transactions
+  var recent = s.recentTx || [];
+  document.getElementById('recentTxTable').innerHTML = recent.length ? recent.map(function(tx){
+    var isIn = tx.type!=='withdraw';
+    return '<tr>'+
+      '<td><strong>'+escHtml(maskName(tx.userName))+'</strong><br><small style="color:var(--text3);font-size:11px">'+escHtml(tx.userEmail)+'</small></td>'+
+      '<td><span class="badge '+tx.type+'">'+tx.type+'</span></td>'+
+      '<td><strong style="color:'+(isIn?'var(--green)':'var(--red)')+'">'+(!isIn?'-':'+')+' $'+fmtAmt(tx.amount)+'</strong></td>'+
+      '<td><span class="badge '+tx.status+'">'+tx.status+'</span></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDateTime(tx.date)+'</td>'+
+      '<td>'+(tx.status==='pending'?
+        '<a href="'+(tx.type==='deposit'?'deposits':'withdrawals')+'.html" class="action-btn approve" style="text-decoration:none">Review</a>':'—')+
+      '</td></tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No transactions yet</td></tr>';
+
+  // Top users
+  var sorted = users.slice().sort(function(a,b){ return (b.balance||0)-(a.balance||0); }).slice(0,8);
+  document.getElementById('topUsersTable').innerHTML = sorted.length ? sorted.map(function(u,i){
+    return '<tr>'+
+      '<td><strong style="color:var(--yellow)">#'+(i+1)+'</strong></td>'+
+      '<td><strong>'+escHtml(maskName(u.username))+'</strong><br><small style="color:var(--text3);font-size:11px">'+escHtml(u.email)+'</small></td>'+
+      '<td><strong style="color:var(--green)">$'+fmtAmt(u.balance)+'</strong></td>'+
+      '<td style="color:var(--text2)">$'+fmtAmt(u.totalEarned||0)+'</td>'+
+      '<td style="color:var(--yellow)">⭐ '+(u.scores||0)+'</td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDate(u.joinDate)+'</td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No users yet</td></tr>';
+
+})();
+</script>
+</body>
+</html>

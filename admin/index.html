@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>MAI Admin — Redirecting...</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#0a0a14;color:#f1f1f1;min-height:100vh;display:flex;align-items:center;justify-content:center}
+.wrap{text-align:center;padding:40px}
+.logo{font-size:48px;margin-bottom:16px}
+h2{font-size:22px;font-weight:700;background:linear-gradient(135deg,#6C63FF,#FF6584);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px}
+p{color:#a0a0c0;font-size:14px;margin-bottom:24px}
+.spinner{width:40px;height:40px;border:3px solid rgba(108,99,255,0.2);border-top-color:#6C63FF;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">🛡️</div>
+  <h2>MAI Admin Panel</h2>
+  <p>Redirecting to dashboard...</p>
+  <div class="spinner"></div>
+</div>
+<script src="../assets/js/api.js"></script>
+<script>
+(async function(){
+  var u = API.getCurrentUser();
+  if (u && API.getToken()) {
+    var fresh = await API.me();
+    if (fresh && fresh.isAdmin) {
+      window.location.replace('pages/dashboard.html');
+      return;
+    }
+  }
+  window.location.replace('../login.html');
+})();
+</script>
+</body>
+</html>

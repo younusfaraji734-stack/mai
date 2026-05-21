@@ -1,0 +1,40 @@
+<svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f093fb"/>
+      <stop offset="100%" style="stop-color:#f5576c"/>
+    </linearGradient>
+    <linearGradient id="doc" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.95"/>
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0.85"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="300" fill="url(#bg2)"/>
+  
+  <!-- Document -->
+  <rect x="120" y="60" width="160" height="180" fill="url(#doc)" rx="8"/>
+  <path d="M260 60 L280 60 L280 80 L260 80 Z" fill="url(#doc)"/>
+  <path d="M260 60 L280 80 L260 80 Z" fill="rgba(240,147,251,0.3)"/>
+  
+  <!-- Document lines -->
+  <rect x="140" y="100" width="100" height="3" fill="rgba(240,147,251,0.6)" rx="1"/>
+  <rect x="140" y="115" width="120" height="3" fill="rgba(240,147,251,0.6)" rx="1"/>
+  <rect x="140" y="130" width="80" height="3" fill="rgba(240,147,251,0.6)" rx="1"/>
+  <rect x="140" y="145" width="110" height="3" fill="rgba(240,147,251,0.6)" rx="1"/>
+  <rect x="140" y="160" width="90" height="3" fill="rgba(240,147,251,0.6)" rx="1"/>
+  
+  <!-- Checkmarks -->
+  <circle cx="150" cy="190" r="8" fill="rgba(34,197,94,0.8)"/>
+  <path d="M146 190 L149 193 L154 187" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="180" cy="190" r="8" fill="rgba(34,197,94,0.8)"/>
+  <path d="M176 190 L179 193 L184 187" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="210" cy="190" r="8" fill="rgba(34,197,94,0.8)"/>
+  <path d="M206 190 L209 193 L214 187" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Floating shield -->
+  <circle cx="320" cy="80" r="20" fill="rgba(255,255,255,0.9)"/>
+  <path d="M320 65 L330 75 L320 95 L310 75 Z" fill="#22c55e"/>
+  <path d="M315 75 L318 78 L325 70" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+</svg>

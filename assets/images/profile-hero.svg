@@ -1,0 +1,55 @@
+<svg viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="profileBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e35"/>
+      <stop offset="50%" style="stop-color:#2a1f4e"/>
+      <stop offset="100%" style="stop-color:#1e1e35"/>
+    </linearGradient>
+    <radialGradient id="avatar" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#6C63FF"/>
+      <stop offset="100%" style="stop-color:#FF6584"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="200" fill="url(#profileBg)"/>
+  
+  <!-- Avatar circle -->
+  <circle cx="200" cy="100" r="40" fill="url(#avatar)"/>
+  <text x="200" y="110" font-family="Arial Black" font-size="32" font-weight="900" fill="white" text-anchor="middle">A</text>
+  
+  <!-- Status indicators -->
+  <circle cx="230" cy="80" r="8" fill="#22c55e"/>
+  <path d="M226 80 L229 83 L234 77" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Achievement badges -->
+  <rect x="120" y="40" width="40" height="20" fill="rgba(255,215,0,0.2)" rx="10"/>
+  <text x="140" y="52" font-family="Arial" font-size="10" font-weight="700" fill="#FFD700" text-anchor="middle">Silver</text>
+  
+  <!-- Stats circles -->
+  <circle cx="80" cy="60" r="15" fill="rgba(34,197,94,0.2)" opacity="0.8">
+    <animate attributeName="r" values="15;18;15" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="80" y="65" font-family="Arial" font-size="10" font-weight="700" fill="#22c55e" text-anchor="middle">$0</text>
+  
+  <circle cx="320" cy="60" r="15" fill="rgba(108,99,255,0.2)" opacity="0.8">
+    <animate attributeName="r" values="15;18;15" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="320" y="65" font-family="Arial" font-size="10" font-weight="700" fill="#6C63FF" text-anchor="middle">0</text>
+  
+  <circle cx="80" cy="140" r="15" fill="rgba(255,165,0,0.2)" opacity="0.8">
+    <animate attributeName="r" values="15;18;15" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="80" y="145" font-family="Arial" font-size="10" font-weight="700" fill="#FFA500" text-anchor="middle">0</text>
+  
+  <circle cx="320" cy="140" r="15" fill="rgba(239,68,68,0.2)" opacity="0.8">
+    <animate attributeName="r" values="15;18;15" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="320" y="145" font-family="Arial" font-size="10" font-weight="700" fill="#ef4444" text-anchor="middle">0</text>
+  
+  <!-- Connection lines -->
+  <line x1="95" y1="60" x2="160" y2="80" stroke="rgba(108,99,255,0.3)" stroke-width="2" opacity="0.6"/>
+  <line x1="240" y1="80" x2="305" y2="60" stroke="rgba(108,99,255,0.3)" stroke-width="2" opacity="0.6"/>
+  <line x1="95" y1="140" x2="160" y2="120" stroke="rgba(108,99,255,0.3)" stroke-width="2" opacity="0.6"/>
+  <line x1="240" y1="120" x2="305" y2="140" stroke="rgba(108,99,255,0.3)" stroke-width="2" opacity="0.6"/>
+</svg>

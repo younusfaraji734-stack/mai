@@ -1,0 +1,821 @@
+{
+  "users": [
+    {
+      "id": "admin001",
+      "username": "Admin",
+      "email": "admin@mai.com",
+      "password": "admin123",
+      "phone": "+1000000000",
+      "isAdmin": true,
+      "isActive": true,
+      "referralCode": "MAIADMIN",
+      "invitedBy": "",
+      "balance": 0,
+      "totalEarned": 0,
+      "totalInvested": 0,
+      "scores": 0,
+      "joinDate": "2024-01-01T00:00:00.000Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [],
+      "teamL1": [
+        "user001",
+        "u1779375043758huomv"
+      ],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    },
+    {
+      "id": "user001",
+      "username": "Alex Johnson",
+      "email": "demo@mai.com",
+      "password": "demo123",
+      "phone": "+1234567890",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "MAIA52024",
+      "invitedBy": "MAIADMIN",
+      "balance": 347.21999999999997,
+      "totalEarned": 197.22,
+      "totalInvested": 938,
+      "scores": 250,
+      "joinDate": "2024-05-01T00:00:00.000Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [
+        {
+          "id": "TX1779371649899P8DV",
+          "type": "task",
+          "amount": 12.9,
+          "taskAmount": 60,
+          "status": "completed",
+          "date": "2026-05-21T13:54:09.899Z",
+          "description": "Task Commission · Target · Cuisinart 12-Cup Coffee Maker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371643765PLRV",
+          "type": "task",
+          "amount": 16,
+          "taskAmount": 80,
+          "status": "completed",
+          "date": "2026-05-21T13:54:03.765Z",
+          "description": "Task Commission · Target · Dyson V8 Cordless Vacuum",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371632535JKG6",
+          "type": "task",
+          "amount": 11.28,
+          "taskAmount": 55,
+          "status": "completed",
+          "date": "2026-05-21T13:53:52.536Z",
+          "description": "Task Commission · Walmart · Keurig K-Mini Coffee Maker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793716259284GC7",
+          "type": "task",
+          "amount": 15.75,
+          "taskAmount": 75,
+          "status": "completed",
+          "date": "2026-05-21T13:53:45.928Z",
+          "description": "Task Commission · Walmart · Instant Pot Duo 7-in-1 6Qt",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371619487E5KZ",
+          "type": "task",
+          "amount": 13,
+          "taskAmount": 65,
+          "status": "completed",
+          "date": "2026-05-21T13:53:39.487Z",
+          "description": "Task Commission · Walmart · Ninja Air Fryer 5.8QT Digital",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX177937160900652WX",
+          "type": "task",
+          "amount": 9.68,
+          "taskAmount": 45,
+          "status": "completed",
+          "date": "2026-05-21T13:53:29.006Z",
+          "description": "Task Commission · Lazada · Bluetooth Speaker Waterproof",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371602886E7Z1",
+          "type": "task",
+          "amount": 7,
+          "taskAmount": 35,
+          "status": "completed",
+          "date": "2026-05-21T13:53:22.886Z",
+          "description": "Task Commission · Lazada · USB-C Fast Charger 65W GaN",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371583352JAH9",
+          "type": "task",
+          "amount": 5.25,
+          "taskAmount": 25,
+          "status": "completed",
+          "date": "2026-05-21T13:53:03.352Z",
+          "description": "Task Commission · Shopee · Smart LED Bulb RGB WiFi",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371576787T71N",
+          "type": "task",
+          "amount": 6.15,
+          "taskAmount": 30,
+          "status": "completed",
+          "date": "2026-05-21T13:52:56.787Z",
+          "description": "Task Commission · Shopee · Wireless Charging Pad 15W",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371570390IKI0",
+          "type": "task",
+          "amount": 8,
+          "taskAmount": 40,
+          "status": "completed",
+          "date": "2026-05-21T13:52:50.390Z",
+          "description": "Task Commission · Shopee · Portable Power Bank 20000mAh",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371556202DSNX",
+          "type": "task",
+          "amount": 15.05,
+          "taskAmount": 70,
+          "status": "completed",
+          "date": "2026-05-21T13:52:36.202Z",
+          "description": "Task Commission · eBay · Samsung 65 inch QLED 4K TV",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371549776KLAI",
+          "type": "task",
+          "amount": 18,
+          "taskAmount": 90,
+          "status": "completed",
+          "date": "2026-05-21T13:52:29.776Z",
+          "description": "Task Commission · eBay · Apple AirPods Pro 2nd Gen",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371534336N3I4",
+          "type": "task",
+          "amount": 12.6,
+          "taskAmount": 60,
+          "status": "completed",
+          "date": "2026-05-21T13:52:14.336Z",
+          "description": "Task Commission · Amazon · Fire TV Stick 4K Max",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371523872S21M",
+          "type": "task",
+          "amount": 18,
+          "taskAmount": 80,
+          "status": "completed",
+          "date": "2026-05-21T13:52:03.873Z",
+          "description": "Task Commission · Amazon · Kindle Paperwhite 16GB",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371512768RZRK",
+          "type": "task",
+          "amount": 10,
+          "taskAmount": 50,
+          "status": "completed",
+          "date": "2026-05-21T13:51:52.768Z",
+          "description": "Task Commission · Amazon · Echo Dot 5th Gen Smart Speaker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779371492280DHKX",
+          "type": "task",
+          "amount": 5.6,
+          "taskAmount": 28,
+          "status": "completed",
+          "date": "2026-05-21T13:51:32.280Z",
+          "description": "Task Commission · AliExpress · LED Strip Lights 10m RGB Smart",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX001",
+          "type": "deposit",
+          "amount": 150,
+          "status": "completed",
+          "date": "2024-05-12T11:05:00Z",
+          "description": "Deposit via TRC20",
+          "network": "TRC20",
+          "txHash": "0x1a4d...b7f2"
+        },
+        {
+          "id": "TX002",
+          "type": "referral",
+          "amount": 5,
+          "status": "completed",
+          "date": "2024-05-12T18:20:00Z",
+          "description": "Referral bonus",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX003",
+          "type": "withdraw",
+          "amount": 20,
+          "status": "completed",
+          "date": "2024-05-13T09:44:00Z",
+          "description": "Withdrawal to TRC20",
+          "network": "TRC20",
+          "txHash": "",
+          "wallet": "TRx9kLmN8pQ2Wz4Qp2WzAb3Cd"
+        },
+        {
+          "id": "TX004",
+          "type": "task",
+          "amount": 2,
+          "status": "completed",
+          "date": "2024-05-14T10:15:00Z",
+          "description": "Task Commission · Amazon",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX005",
+          "type": "deposit",
+          "amount": 50,
+          "status": "completed",
+          "date": "2024-05-15T14:32:00Z",
+          "description": "Deposit via TRC20",
+          "network": "TRC20",
+          "txHash": "0x8f3a...c2d1"
+        },
+        {
+          "id": "TX006",
+          "type": "profit",
+          "amount": 5.96,
+          "status": "completed",
+          "date": "2024-05-15T00:00:00Z",
+          "description": "Daily Profit",
+          "network": "",
+          "txHash": ""
+        }
+      ],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": [
+        {
+          "id": "MSG001",
+          "subject": "Welcome to MAI Investment!",
+          "body": "Welcome to MAI Investment Platform! Your account is now active. Start by depositing USDT and completing tasks to earn commissions. Contact support if you need any help.",
+          "type": "success",
+          "date": "2024-05-01T10:00:00Z",
+          "read": false
+        }
+      ]
+    },
+    {
+      "id": "u1779375043751p00g9",
+      "username": "Grant Test User",
+      "email": "granttest_1779375043749@test.com",
+      "password": "test123",
+      "phone": "+1234567890",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "MAINSd7DD",
+      "invitedBy": "TESTGRANT2024",
+      "balance": 0,
+      "totalEarned": 0,
+      "totalInvested": 0,
+      "scores": 0,
+      "joinDate": "2026-05-21T14:50:43.751Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    },
+    {
+      "id": "u1779375043758huomv",
+      "username": "User Ref Test",
+      "email": "userreftest_1779375043756@test.com",
+      "password": "test123",
+      "phone": "+1234567890",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "MAIr9hkUQ",
+      "invitedBy": "MAIADMIN",
+      "balance": 0,
+      "totalEarned": 0,
+      "totalInvested": 0,
+      "scores": 0,
+      "joinDate": "2026-05-21T14:50:43.758Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    },
+    {
+      "id": "u1779375173641dqjm8",
+      "username": "jack",
+      "email": "jack@gmail.com",
+      "password": "123123",
+      "phone": "01868953687",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "MAICycC7d",
+      "invitedBy": "MAIA5564",
+      "balance": 545.9499999999999,
+      "totalEarned": 445.95,
+      "totalInvested": 1683,
+      "scores": 0,
+      "joinDate": "2026-05-21T14:52:53.642Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [
+        {
+          "id": "TX1779386374526RZGF",
+          "type": "task",
+          "amount": 64.8,
+          "taskAmount": 180,
+          "status": "completed",
+          "date": "2026-05-21T17:59:34.526Z",
+          "description": "Task Commission · Alibaba · Smart POS Terminal System",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386368428L764",
+          "type": "task",
+          "amount": 75,
+          "taskAmount": 200,
+          "status": "completed",
+          "date": "2026-05-21T17:59:28.428Z",
+          "description": "Task Commission · Alibaba · Industrial Air Purifier HEPA",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX177938636184334L2",
+          "type": "task",
+          "amount": 87.5,
+          "taskAmount": 250,
+          "status": "completed",
+          "date": "2026-05-21T17:59:21.843Z",
+          "description": "Task Commission · Alibaba · Commercial Espresso Machine Pro",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793863530119L3B",
+          "type": "task",
+          "amount": 11.82,
+          "taskAmount": 55,
+          "status": "completed",
+          "date": "2026-05-21T17:59:13.011Z",
+          "description": "Task Commission · AliExpress · Mini Projector 1080p Portable",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793863055769XMJ",
+          "type": "task",
+          "amount": 5.6,
+          "taskAmount": 28,
+          "status": "completed",
+          "date": "2026-05-21T17:58:25.576Z",
+          "description": "Task Commission · AliExpress · LED Strip Lights 10m RGB Smart",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386297718O4VS",
+          "type": "task",
+          "amount": 6.15,
+          "taskAmount": 30,
+          "status": "completed",
+          "date": "2026-05-21T17:58:17.718Z",
+          "description": "Task Commission · Etsy · Personalized Canvas Tote Bag",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386291543MS9Q",
+          "type": "task",
+          "amount": 8.82,
+          "taskAmount": 42,
+          "status": "completed",
+          "date": "2026-05-21T17:58:11.543Z",
+          "description": "Task Commission · Etsy · Custom Name Necklace Gold",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386285193XEG1",
+          "type": "task",
+          "amount": 7.6,
+          "taskAmount": 38,
+          "status": "completed",
+          "date": "2026-05-21T17:58:05.193Z",
+          "description": "Task Commission · Etsy · Handmade Leather Bifold Wallet",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386277340CPT5",
+          "type": "task",
+          "amount": 12.9,
+          "taskAmount": 60,
+          "status": "completed",
+          "date": "2026-05-21T17:57:57.340Z",
+          "description": "Task Commission · Target · Cuisinart 12-Cup Coffee Maker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793862064653AFQ",
+          "type": "task",
+          "amount": 16,
+          "taskAmount": 80,
+          "status": "completed",
+          "date": "2026-05-21T17:56:46.465Z",
+          "description": "Task Commission · Target · Dyson V8 Cordless Vacuum",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386199417EE5C",
+          "type": "task",
+          "amount": 11.28,
+          "taskAmount": 55,
+          "status": "completed",
+          "date": "2026-05-21T17:56:39.417Z",
+          "description": "Task Commission · Walmart · Keurig K-Mini Coffee Maker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386193602MIU7",
+          "type": "task",
+          "amount": 15.75,
+          "taskAmount": 75,
+          "status": "completed",
+          "date": "2026-05-21T17:56:33.602Z",
+          "description": "Task Commission · Walmart · Instant Pot Duo 7-in-1 6Qt",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386187132E7AR",
+          "type": "task",
+          "amount": 13,
+          "taskAmount": 65,
+          "status": "completed",
+          "date": "2026-05-21T17:56:27.132Z",
+          "description": "Task Commission · Walmart · Ninja Air Fryer 5.8QT Digital",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793861796536Z9J",
+          "type": "task",
+          "amount": 9.68,
+          "taskAmount": 45,
+          "status": "completed",
+          "date": "2026-05-21T17:56:19.653Z",
+          "description": "Task Commission · Lazada · Bluetooth Speaker Waterproof",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386124453OBTC",
+          "type": "task",
+          "amount": 7,
+          "taskAmount": 35,
+          "status": "completed",
+          "date": "2026-05-21T17:55:24.453Z",
+          "description": "Task Commission · Lazada · USB-C Fast Charger 65W GaN",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386114228KIRR",
+          "type": "task",
+          "amount": 5.25,
+          "taskAmount": 25,
+          "status": "completed",
+          "date": "2026-05-21T17:55:14.228Z",
+          "description": "Task Commission · Shopee · Smart LED Bulb RGB WiFi",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386108048TPTB",
+          "type": "task",
+          "amount": 6.15,
+          "taskAmount": 30,
+          "status": "completed",
+          "date": "2026-05-21T17:55:08.048Z",
+          "description": "Task Commission · Shopee · Wireless Charging Pad 15W",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386101532KTXJ",
+          "type": "task",
+          "amount": 8,
+          "taskAmount": 40,
+          "status": "completed",
+          "date": "2026-05-21T17:55:01.532Z",
+          "description": "Task Commission · Shopee · Portable Power Bank 20000mAh",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779386090468RMLV",
+          "type": "task",
+          "amount": 15.05,
+          "taskAmount": 70,
+          "status": "completed",
+          "date": "2026-05-21T17:54:50.468Z",
+          "description": "Task Commission · eBay · Samsung 65 inch QLED 4K TV",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX177938608441908VB",
+          "type": "task",
+          "amount": 18,
+          "taskAmount": 90,
+          "status": "completed",
+          "date": "2026-05-21T17:54:44.419Z",
+          "description": "Task Commission · eBay · Apple AirPods Pro 2nd Gen",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX177938607360598EV",
+          "type": "task",
+          "amount": 12.6,
+          "taskAmount": 60,
+          "status": "completed",
+          "date": "2026-05-21T17:54:33.605Z",
+          "description": "Task Commission · Amazon · Fire TV Stick 4K Max",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793860672418GWF",
+          "type": "task",
+          "amount": 18,
+          "taskAmount": 80,
+          "status": "completed",
+          "date": "2026-05-21T17:54:27.241Z",
+          "description": "Task Commission · Amazon · Kindle Paperwhite 16GB",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX17793860602091UMI",
+          "type": "task",
+          "amount": 10,
+          "taskAmount": 50,
+          "status": "completed",
+          "date": "2026-05-21T17:54:20.209Z",
+          "description": "Task Commission · Amazon · Echo Dot 5th Gen Smart Speaker",
+          "network": "",
+          "txHash": ""
+        },
+        {
+          "id": "TX1779385948071VU53",
+          "type": "deposit",
+          "amount": 100,
+          "status": "completed",
+          "date": "2026-05-21T17:52:28.071Z",
+          "description": "Deposit via TRC20",
+          "network": "TRC20",
+          "txHash": ""
+        }
+      ],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    },
+    {
+      "id": "shadow_gdowite95",
+      "username": "gdowite95",
+      "email": "gdowite95@mai.com",
+      "password": "",
+      "phone": "",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "GDOWITE95",
+      "invitedBy": "",
+      "balance": 83197.4158,
+      "totalEarned": 83197.4158,
+      "totalInvested": 0,
+      "scores": 9999,
+      "joinDate": "2024-01-01T00:00:00.000Z",
+      "withdrawEnabled": false,
+      "withdrawMessage": "Contact support to withdraw.",
+      "transactions": [],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    },
+    {
+      "id": "u17793887092648bi3r",
+      "username": "jack20",
+      "email": "younusfaraji334@gmail.com",
+      "password": "123123",
+      "phone": "7867896789874",
+      "isAdmin": false,
+      "isActive": true,
+      "referralCode": "MAI8JHeHC",
+      "invitedBy": "MAIA5564",
+      "balance": 0,
+      "totalEarned": 0,
+      "totalInvested": 0,
+      "scores": 0,
+      "joinDate": "2026-05-21T18:38:29.264Z",
+      "withdrawEnabled": true,
+      "withdrawMessage": "",
+      "transactions": [],
+      "teamL1": [],
+      "teamL2": [],
+      "teamL3": [],
+      "messages": []
+    }
+  ],
+  "settings": {
+    "platformName": "MAI Investment",
+    "telegramLink": "https://t.me/hhhhhhhhhhh",
+    "minDeposit": 10,
+    "minWithdraw": 5,
+    "withdrawFee": 1,
+    "depositAddress": "2222222222222222",
+    "refL1": 10,
+    "refL2": 5,
+    "refL3": 2,
+    "vip1Rate": 20,
+    "vip1Min": 25,
+    "vip1Max": 90,
+    "vip2Rate": 35,
+    "vip2Min": 120,
+    "vip2Max": 300,
+    "vip3Rate": 55,
+    "vip3Min": 400,
+    "vip3Max": 2000,
+    "walletTRC20": "2222222222222222",
+    "walletERC20": "55555555555555555555",
+    "walletBEP20": "bnb1234567890abcdef1234567890abcdef12345678",
+    "telegramBotToken": "",
+    "telegramChatId": "",
+    "telegramNotifications": false,
+    "tgDeposit": true,
+    "tgWithdraw": true,
+    "tgRegister": false
+  },
+  "content": {
+    "hero": {
+      "badge": "🌍 Global Investment Platform",
+      "title": "Invest, Earn & Grow<br/>with Global Opportunities",
+      "subtitle": "AI-powered intelligent cloud order matching center. Join millions of investors worldwide and start earning today.",
+      "trustItems": [
+        "SSL Secured",
+        "Daily Payouts",
+        "150+ Countries"
+      ]
+    },
+    "heroCards": [
+      {
+        "icon": "📈",
+        "value": "+24.8%",
+        "label": "Monthly Return",
+        "trend": "up"
+      },
+      {
+        "icon": "💰",
+        "value": "$2.4M+",
+        "label": "Total Paid Out",
+        "trend": "up"
+      },
+      {
+        "icon": "👥",
+        "value": "50K+",
+        "label": "Active Users",
+        "trend": "up"
+      }
+    ],
+    "platformIntro": [
+      {
+        "title": "Platform Profile",
+        "desc": "MAI is an intelligent cloud global order matching center built for modern investors.",
+        "image": "platform-intro-1.svg",
+        "gradient": "135deg,#667eea,#764ba2"
+      },
+      {
+        "title": "Platform Rules",
+        "desc": "The platform will update recharge rules to protect all users and ensure fairness.",
+        "image": "platform-intro-2.svg",
+        "gradient": "135deg,#f093fb,#f5576c"
+      },
+      {
+        "title": "Win-Win Cooperation",
+        "desc": "AI-MAI carries out win-win cooperation for all users across the globe.",
+        "image": "platform-intro-3.svg",
+        "gradient": "135deg,#4facfe,#00f2fe"
+      },
+      {
+        "title": "Instructions for Use",
+        "desc": "To celebrate MAI membership milestones, special rewards await all members.",
+        "image": "platform-intro-4.svg",
+        "gradient": "135deg,#43e97b,#38f9d7"
+      }
+    ],
+    "serviceHero": {
+      "icon": "🎧",
+      "title": "We're Here to Help",
+      "subtitle": "24/7 support across all channels. Average response time: <strong>under 2 minutes</strong>",
+      "stats": [
+        {
+          "val": "24/7",
+          "lbl": "Support"
+        },
+        {
+          "val": "<2min",
+          "lbl": "Response"
+        },
+        {
+          "val": "99.9%",
+          "lbl": "Satisfaction"
+        }
+      ]
+    },
+    "faqs": [
+      {
+        "q": "How do I start investing?",
+        "a": "Register an account, complete verification, deposit USDT, and choose an investment plan. Your earnings start immediately after activation."
+      },
+      {
+        "q": "When are profits paid?",
+        "a": "Profits are credited to your account daily at 00:00 UTC. You can withdraw anytime after the minimum threshold of 5 USDT is met."
+      },
+      {
+        "q": "What is the minimum withdrawal?",
+        "a": "The minimum withdrawal amount is 5 USDT. Withdrawals are processed within 5-30 minutes with a 1 USDT network fee."
+      },
+      {
+        "q": "How does the referral program work?",
+        "a": "Share your referral link. Earn 10% on Level 1, 5% on Level 2, and 2% on Level 3 referrals — paid instantly, forever, with no cap."
+      },
+      {
+        "q": "Is my investment safe?",
+        "a": "MAI uses 256-bit SSL encryption, cold wallet storage, and multi-signature security. Your assets are protected 24/7 by our security team."
+      },
+      {
+        "q": "Can I have multiple active plans?",
+        "a": "Yes! You can invest in multiple plans simultaneously. Each plan runs independently with its own cycle and daily profit calculation."
+      }
+    ]
+  },
+  "seeded": true,
+  "grantCodes": [
+    {
+      "id": "TX1779375132153B9H2",
+      "code": "MAIA5564",
+      "note": "",
+      "createdAt": "2026-05-21T14:52:12.153Z",
+      "usedCount": 2
+    }
+  ]
+}

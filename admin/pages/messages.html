@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Messages — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="sendMsgModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>✉️ Send Message</h3><button class="modal-close" onclick="closeModal('sendMsgModal')">✕</button></div>
+    <input type="hidden" id="msgTargetId"/>
+    <div class="form-group"><label>Recipient</label><input type="text" id="msgTargetDisplay" readonly/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label>
+        <select id="msgType"><option value="info">ℹ️ Info</option><option value="success">✅ Success</option><option value="warning">⚠️ Warning</option><option value="error">❌ Error</option></select>
+      </div>
+      <div class="form-group"><label>Subject</label><input type="text" id="msgSubject" placeholder="Message subject"/></div>
+    </div>
+    <div class="form-group"><label>Body</label><textarea id="msgBody" placeholder="Write your message here…" style="min-height:100px"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('sendMsgModal')">Cancel</button>
+      <button class="btn-save" onclick="sendMessage()">Send Message</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="broadcastModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>📢 Broadcast to All Users</h3><button class="modal-close" onclick="closeModal('broadcastModal')">✕</button></div>
+    <div style="background:rgba(255,184,0,0.08);border:1px solid rgba(255,184,0,0.25);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--yellow)">
+      ⚠️ This message will be sent to <strong id="broadcastCount">all</strong> users.
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label>
+        <select id="bcType"><option value="info">ℹ️ Info</option><option value="success">✅ Success</option><option value="warning">⚠️ Warning</option><option value="error">❌ Error</option></select>
+      </div>
+      <div class="form-group"><label>Subject</label><input type="text" id="bcSubject" placeholder="Broadcast subject"/></div>
+    </div>
+    <div class="form-group"><label>Body</label><textarea id="bcBody" placeholder="Write your broadcast message…" style="min-height:100px"></textarea></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('broadcastModal')">Cancel</button>
+      <button class="btn-save" onclick="sendBroadcast()">📢 Send Broadcast</button>
+    </div>
+  </div>
+</div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item active"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Message Center</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>👥 Users</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="search-input" id="userSearch" placeholder="🔍 Search users…" oninput="renderUsers()"/>
+          <button class="btn-primary-sm" onclick="openBroadcast()">📢 Broadcast to All</button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Email</th><th>Messages</th><th>Unread</th><th>Action</th></tr></thead>
+          <tbody id="usersTable"><tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allUsers = [];
+async function loadUsers() {
+  var d = await ADMIN.getUsers();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  allUsers = (d.users||[]).filter(function(u){ return !u.isAdmin; });
+  renderUsers();
+}
+function renderUsers() {
+  var q = (document.getElementById('userSearch').value||'').toLowerCase();
+  var filtered = allUsers.filter(function(u){ return !q||(u.username+u.email).toLowerCase().includes(q); });
+  document.getElementById('usersTable').innerHTML = filtered.length ? filtered.map(function(u){
+    var msgCount = (u.messages||[]).length;
+    var unread = (u.messages||[]).filter(function(m){ return !m.read; }).length;
+    return '<tr>'+
+      '<td><strong>'+escHtml(u.username||'Unknown')+'</strong></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+escHtml(u.email||'')+'</td>'+
+      '<td style="color:var(--text2)">'+msgCount+'</td>'+
+      '<td>'+(unread>0?'<span style="background:rgba(239,68,68,0.15);color:var(--red);padding:2px 8px;border-radius:50px;font-size:11px;font-weight:700">'+unread+' unread</span>':'<span style="color:var(--text3);font-size:12px">—</span>')+'</td>'+
+      '<td><button class="action-btn edit" onclick="openSendMsg(\''+u.id+'\',\''+escHtml(u.username)+'\')">✉️ Send</button></td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="5" style="text-align:center;padding:40px;color:var(--text3)">No users found</td></tr>';
+}
+function openSendMsg(userId, username) {
+  document.getElementById('msgTargetId').value = userId;
+  document.getElementById('msgTargetDisplay').value = username;
+  document.getElementById('msgType').value = 'info';
+  document.getElementById('msgSubject').value = '';
+  document.getElementById('msgBody').value = '';
+  openModal('sendMsgModal');
+}
+async function sendMessage() {
+  var userId = document.getElementById('msgTargetId').value;
+  var type = document.getElementById('msgType').value;
+  var subject = document.getElementById('msgSubject').value.trim();
+  var body = document.getElementById('msgBody').value.trim();
+  if (!subject) { showToast('Enter a subject','error'); return; }
+  if (!body) { showToast('Enter a message body','error'); return; }
+  var btn = document.querySelector('#sendMsgModal .btn-save');
+  btn.textContent='Sending…'; btn.disabled=true;
+  var d = await ADMIN.sendMessage({ userId, type, subject, body });
+  btn.textContent='Send Message'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Message sent!','success');
+  closeModal('sendMsgModal'); loadUsers();
+}
+function openBroadcast() {
+  document.getElementById('broadcastCount').textContent = allUsers.length+' users';
+  document.getElementById('bcType').value = 'info';
+  document.getElementById('bcSubject').value = '';
+  document.getElementById('bcBody').value = '';
+  openModal('broadcastModal');
+}
+async function sendBroadcast() {
+  var type = document.getElementById('bcType').value;
+  var subject = document.getElementById('bcSubject').value.trim();
+  var body = document.getElementById('bcBody').value.trim();
+  if (!subject) { showToast('Enter a subject','error'); return; }
+  if (!body) { showToast('Enter a message body','error'); return; }
+  if (!confirm('Send this broadcast to all '+allUsers.length+' users?')) return;
+  var btn = document.querySelector('#broadcastModal .btn-save');
+  btn.textContent='Sending…'; btn.disabled=true;
+  var d = await ADMIN.sendMessage({ broadcast:true, type, subject, body });
+  btn.textContent='📢 Send Broadcast'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Broadcast sent to all users!','success');
+  closeModal('broadcastModal'); loadUsers();
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadUsers(); })();
+</script>
+</body>
+</html>

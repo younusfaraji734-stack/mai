@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Scores — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="scoresModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>⭐ Manage Scores</h3><button class="modal-close" onclick="closeModal('scoresModal')">✕</button></div>
+    <input type="hidden" id="scUserId"/>
+    <div class="form-group"><label>User</label><input type="text" id="scUserDisplay" readonly/></div>
+    <div class="form-group"><label>Current Scores</label><input type="text" id="scCurrentScores" readonly style="color:var(--yellow);font-weight:700"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Operation</label>
+        <select id="scOp">
+          <option value="add">➕ Add Scores</option>
+          <option value="deduct">➖ Deduct Scores</option>
+          <option value="set">🎯 Set Exact Value</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Amount</label><input type="number" id="scAmount" min="0" step="1" placeholder="0"/></div>
+    </div>
+    <div id="scPreview" style="background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13px;color:var(--text2);margin-bottom:4px">Enter an amount to preview the result.</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('scoresModal')">Cancel</button>
+      <button class="btn-save" onclick="saveScores()">Apply Changes</button>
+    </div>
+  </div>
+</div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item active"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Scores Management</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card yellow"><div class="stat-icon">⭐</div><div class="stat-val" id="sTotalScores">—</div><div class="stat-lbl">Total Scores</div></div>
+      <div class="stat-card blue"><div class="stat-icon">👥</div><div class="stat-val" id="sTotalUsers">—</div><div class="stat-lbl">Total Users</div></div>
+      <div class="stat-card purple" style="--purple:#a855f7"><div class="stat-icon">🏆</div><div class="stat-val" id="sTopScore">—</div><div class="stat-lbl">Top Score</div></div>
+      <div class="stat-card green"><div class="stat-icon">📊</div><div class="stat-val" id="sAvgScore">—</div><div class="stat-lbl">Average Score</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>🏆 Leaderboard</h3>
+        <input type="text" class="search-input" id="userSearch" placeholder="🔍 Search users…" oninput="renderUsers()"/>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>Rank</th><th>User</th><th>Email</th><th>Scores</th><th>Balance</th><th>Joined</th><th>Actions</th></tr></thead>
+          <tbody id="scoresTable"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allUsers = [], sortedUsers = [];
+async function loadUsers() {
+  var d = await ADMIN.getUsers();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  allUsers = (d.users||[]).filter(function(u){ return !u.isAdmin; });
+  sortedUsers = allUsers.slice().sort(function(a,b){ return (b.scores||0)-(a.scores||0); });
+  var total = sortedUsers.reduce(function(s,u){ return s+(u.scores||0); },0);
+  var top = sortedUsers.length ? (sortedUsers[0].scores||0) : 0;
+  var avg = sortedUsers.length ? Math.round(total/sortedUsers.length) : 0;
+  document.getElementById('sTotalScores').textContent = total;
+  document.getElementById('sTotalUsers').textContent = sortedUsers.length;
+  document.getElementById('sTopScore').textContent = top;
+  document.getElementById('sAvgScore').textContent = avg;
+  renderUsers();
+}
+function renderUsers() {
+  var q = (document.getElementById('userSearch').value||'').toLowerCase();
+  var filtered = sortedUsers.filter(function(u){ return !q||(u.username+u.email).toLowerCase().includes(q); });
+  document.getElementById('scoresTable').innerHTML = filtered.length ? filtered.map(function(u,i){
+    var rank = i+1;
+    var rankDisplay = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'#'+rank;
+    return '<tr>'+
+      '<td><strong style="color:var(--yellow);font-size:15px">'+rankDisplay+'</strong></td>'+
+      '<td><strong>'+escHtml(u.username||'Unknown')+'</strong></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+escHtml(u.email||'')+'</td>'+
+      '<td><strong style="color:var(--yellow)">⭐ '+(u.scores||0)+'</strong></td>'+
+      '<td><strong style="color:var(--green)">$'+fmtAmt(u.balance)+'</strong></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDate(u.joinDate)+'</td>'+
+      '<td><button class="action-btn edit" onclick="openScores(\''+u.id+'\',\''+escHtml(u.username)+'\','+(u.scores||0)+')">⭐ Manage</button></td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3)">No users found</td></tr>';
+}
+function openScores(userId, username, currentScores) {
+  document.getElementById('scUserId').value = userId;
+  document.getElementById('scUserDisplay').value = username;
+  document.getElementById('scCurrentScores').value = '⭐ '+currentScores+' scores';
+  document.getElementById('scOp').value = 'add';
+  document.getElementById('scAmount').value = '';
+  document.getElementById('scPreview').textContent = 'Enter an amount to preview the result.';
+  openModal('scoresModal');
+}
+document.addEventListener('DOMContentLoaded', function(){
+  function updatePreview() {
+    var current = parseInt((document.getElementById('scCurrentScores').value||'0').replace(/\D/g,''))||0;
+    var op = document.getElementById('scOp').value;
+    var amount = parseInt(document.getElementById('scAmount').value)||0;
+    var result = op==='add'?current+amount:op==='deduct'?Math.max(0,current-amount):amount;
+    var preview = document.getElementById('scPreview');
+    if (amount>0) preview.innerHTML='Result: <strong style="color:var(--yellow)">⭐ '+result+' scores</strong> (was '+current+')';
+    else preview.textContent='Enter an amount to preview the result.';
+  }
+  document.getElementById('scOp').addEventListener('change', updatePreview);
+  document.getElementById('scAmount').addEventListener('input', updatePreview);
+});
+async function saveScores() {
+  var userId = document.getElementById('scUserId').value;
+  var op = document.getElementById('scOp').value;
+  var amount = parseInt(document.getElementById('scAmount').value)||0;
+  if (amount<=0) { showToast('Enter a valid amount','error'); return; }
+  var btn = document.querySelector('#scoresModal .btn-save');
+  btn.textContent='Applying…'; btn.disabled=true;
+  var d = await ADMIN.setScores(userId, op, amount);
+  btn.textContent='Apply Changes'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Scores updated!','success');
+  closeModal('scoresModal'); loadUsers();
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadUsers(); })();
+</script>
+</body>
+</html>

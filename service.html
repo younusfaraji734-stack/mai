@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+  <title>MAI — Service</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/shared.css"/>
+</head>
+<body class="page-service">
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<header class="page-header">
+  <button class="back-btn" onclick="location.href='index.html'">
+    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+  </button>
+  <h1>Customer Service</h1>
+  <div style="width:36px"></div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     HERO BANNER
+═══════════════════════════════════════════ -->
+<div class="svc-hero">
+  <div class="svc-hero-bg" style="background-image: url('assets/images/service-hero.svg'); background-size: cover; background-position: center;"></div>
+  <div class="svc-hero-content">
+    <div class="svc-hero-icon">🎧</div>
+    <h2>We're Here to Help</h2>
+    <p>24/7 support across all channels. Average response time: <strong>under 2 minutes</strong></p>
+    <div class="svc-hero-stats">
+      <div class="shs"><div class="shs-val">24/7</div><div class="shs-lbl">Support</div></div>
+      <div class="shs-div"></div>
+      <div class="shs"><div class="shs-val">&lt;2min</div><div class="shs-lbl">Response</div></div>
+      <div class="shs-div"></div>
+      <div class="shs"><div class="shs-val">99.9%</div><div class="shs-lbl">Satisfaction</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     CONTACT CHANNELS
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr"><h2>Contact Us</h2></div>
+  <div class="contact-grid">
+    <a href="https://t.me/MAI_Official_Support" target="_blank" rel="noopener" class="contact-card primary-contact" style="background:linear-gradient(135deg,rgba(0,136,204,0.15),rgba(0,180,216,0.08));border-color:rgba(0,136,204,0.4);">
+      <div class="cc-icon-wrap" style="background:linear-gradient(135deg,#0088cc,#00b4d8);width:56px;height:56px;font-size:26px;">
+        <span>✈️</span>
+      </div>
+      <div class="cc-info">
+        <h4 style="font-size:16px;color:#00b4d8">Telegram Support</h4>
+        <p>@MAI_Official_Support</p>
+        <span class="cc-status online">● Online 24/7</span>
+      </div>
+      <div class="cc-arrow" style="color:#0088cc;font-size:20px">→</div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PLATFORM INTRO ARTICLES
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr"><h2>Platform Introduction</h2></div>
+  <div class="article-list">
+    <div class="article-card" onclick="toggleArticle(this)">
+      <div class="article-header">
+        <div class="article-icon" style="background:linear-gradient(135deg,#667eea,#764ba2); overflow:hidden; padding:0;">
+          <img src="assets/images/platform-intro-1.svg" alt="Platform Profile" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="article-meta">
+          <h4>Platform Profile</h4>
+          <span>About MAI</span>
+        </div>
+        <div class="article-arrow">▼</div>
+      </div>
+      <div class="article-body">
+        <p>MAI is an intelligent cloud global order matching center. We leverage cutting-edge AI technology to provide users with the most efficient and profitable investment experience. Our platform connects investors worldwide with global market opportunities, ensuring maximum returns with minimal risk through our proprietary algorithms.</p>
+        <p style="margin-top:10px">Founded in 2021, MAI has grown to serve over 50,000 active investors across 150+ countries, with a total payout exceeding $2.4 million USDT.</p>
+      </div>
+    </div>
+    <div class="article-card" onclick="toggleArticle(this)">
+      <div class="article-header">
+        <div class="article-icon" style="background:linear-gradient(135deg,#f093fb,#f5576c); overflow:hidden; padding:0;">
+          <img src="assets/images/platform-intro-2.svg" alt="Platform Rules" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="article-meta">
+          <h4>Platform Rules</h4>
+          <span>Terms & Conditions</span>
+        </div>
+        <div class="article-arrow">▼</div>
+      </div>
+      <div class="article-body">
+        <p>About recharge: The platform will change the recharge rules to protect all users. Minimum deposit is 10 USDT. All deposits must be made via supported networks (TRC20, ERC20, BEP20).</p>
+        <p style="margin-top:10px">About withdrawal: Minimum withdrawal is 5 USDT. Withdrawals are processed within 5–30 minutes. A network fee of 1 USDT applies per withdrawal.</p>
+        <p style="margin-top:10px">Investment rules: Each plan has a fixed cycle. Early termination is not permitted. Profits are credited daily at 00:00 UTC.</p>
+      </div>
+    </div>
+    <div class="article-card" onclick="toggleArticle(this)">
+      <div class="article-header">
+        <div class="article-icon" style="background:linear-gradient(135deg,#4facfe,#00f2fe); overflow:hidden; padding:0;">
+          <img src="assets/images/platform-intro-3.svg" alt="Win-Win Cooperation" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="article-meta">
+          <h4>Win-Win Cooperation</h4>
+          <span>Referral Program</span>
+        </div>
+        <div class="article-arrow">▼</div>
+      </div>
+      <div class="article-body">
+        <p>AI-MAI carries out win-win cooperation for all users. Our referral program rewards you for growing the community:</p>
+        <ul style="margin-top:10px;padding-left:16px;display:flex;flex-direction:column;gap:6px">
+          <li>Level 1 referrals: <strong style="color:#22c55e">10% commission</strong></li>
+          <li>Level 2 referrals: <strong style="color:#22c55e">5% commission</strong></li>
+          <li>Level 3 referrals: <strong style="color:#22c55e">2% commission</strong></li>
+        </ul>
+        <p style="margin-top:10px">Commissions are paid instantly when your referral makes an investment. No cap on earnings.</p>
+      </div>
+    </div>
+    <div class="article-card" onclick="toggleArticle(this)">
+      <div class="article-header">
+        <div class="article-icon" style="background:linear-gradient(135deg,#43e97b,#38f9d7); overflow:hidden; padding:0;">
+          <img src="assets/images/platform-intro-4.svg" alt="Instructions for Use" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="article-meta">
+          <h4>Instructions for Use</h4>
+          <span>Getting Started</span>
+        </div>
+        <div class="article-arrow">▼</div>
+      </div>
+      <div class="article-body">
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div><strong>Register</strong><p>Create your account with email and set a secure password.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div><strong>Deposit</strong><p>Recharge your account with USDT via TRC20, ERC20, or BEP20.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div><strong>Invest</strong><p>Choose a plan that fits your goals and confirm your investment.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div><strong>Earn</strong><p>Receive daily profits automatically. Withdraw anytime.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     FAQ
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr"><h2>Frequently Asked Questions</h2></div>
+  <div class="faq-list">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How do I start investing? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Register an account, complete verification, deposit USDT, and choose an investment plan. Your earnings start immediately after activation.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">When are profits paid? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Profits are credited to your account daily at 00:00 UTC. You can withdraw anytime after the minimum threshold of 5 USDT is met.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">What is the minimum withdrawal? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">The minimum withdrawal amount is 5 USDT. Withdrawals are processed within 5–30 minutes with a 1 USDT network fee.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">How does the referral program work? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Share your referral link. Earn 10% on Level 1, 5% on Level 2, and 2% on Level 3 referrals — paid instantly, forever, with no cap.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Is my investment safe? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">MAI uses 256-bit SSL encryption, cold wallet storage, and multi-signature security. Your assets are protected 24/7 by our security team.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">Can I have multiple active plans? <span class="faq-arr">▼</span></div>
+      <div class="faq-a">Yes! You can invest in multiple plans simultaneously. Each plan runs independently with its own cycle and daily profit calculation.</div>
+    </div>
+  </div>
+</section>
+
+<div style="height:90px"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="service.html" class="nav-item active">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span>Service</span>
+  </a>
+  <a href="invest.html" class="nav-item center-nav">
+    <div class="center-btn">
+      <svg width="26" height="26" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <span>Invest</span>
+  </a>
+  <a href="record.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Record</span>
+  </a>
+  <a href="mine.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Mine</span>
+  </a>
+</nav>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/content-loader.js"></script>
+<script src="assets/js/dynamic.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  initServicePage();
+  ContentLoader.loadAll();
+  function toggleArticle(card){var o=card.classList.contains('open');document.querySelectorAll('.article-card').forEach(function(c){c.classList.remove('open');});if(!o)card.classList.add('open');}
+  function toggleFaq(item){var o=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(function(f){f.classList.remove('open');});if(!o)item.classList.add('open');}
+</script>
+</body>
+</html>

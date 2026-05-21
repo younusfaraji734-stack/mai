@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="icon" type="image/png" href="assets/images/favarit/fa.png"/>
+  <title>MAI — Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/shared.css"/>
+</head>
+<body>
+
+<!-- RECHARGE MODAL -->
+<div class="modal-overlay" id="modalRecharge">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Recharge USDT</h3>
+      <button class="modal-close" onclick="closeModal('modalRecharge')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="qr-box">
+        <div class="qr-placeholder">
+          <svg width="130" height="130" viewBox="0 0 130 130" fill="none">
+            <rect x="10" y="10" width="45" height="45" rx="4" stroke="#6C63FF" stroke-width="3" fill="none"/>
+            <rect x="20" y="20" width="25" height="25" rx="2" fill="#6C63FF"/>
+            <rect x="75" y="10" width="45" height="45" rx="4" stroke="#6C63FF" stroke-width="3" fill="none"/>
+            <rect x="85" y="20" width="25" height="25" rx="2" fill="#6C63FF"/>
+            <rect x="10" y="75" width="45" height="45" rx="4" stroke="#6C63FF" stroke-width="3" fill="none"/>
+            <rect x="20" y="85" width="25" height="25" rx="2" fill="#6C63FF"/>
+            <rect x="75" y="75" width="12" height="12" fill="#6C63FF"/>
+            <rect x="93" y="75" width="12" height="12" fill="#6C63FF"/>
+            <rect x="111" y="75" width="12" height="12" fill="#6C63FF"/>
+            <rect x="75" y="93" width="12" height="12" fill="#6C63FF"/>
+            <rect x="111" y="93" width="12" height="12" fill="#6C63FF"/>
+            <rect x="75" y="111" width="12" height="12" fill="#6C63FF"/>
+            <rect x="93" y="111" width="30" height="12" fill="#6C63FF"/>
+          </svg>
+        </div>
+        <p class="qr-label">Scan to deposit USDT</p>
+      </div>
+      <div class="copy-address">
+        <span class="addr-text">TRx9kLmN8pQ2Wz4Qp2WzAb3Cd</span>
+        <button class="copy-btn" onclick="showToast('Address copied!','success')">Copy</button>
+      </div>
+      <div class="network-tags">
+        <span class="ntag active" data-net="TRC20">TRC20</span>
+        <span class="ntag" data-net="ERC20">ERC20</span>
+      </div>
+      <div class="modal-info">
+        <div class="info-row"><span>Min. Deposit</span><strong>10 USDT</strong></div>
+        <div class="info-row"><span>Network Fee</span><strong>1 USDT</strong></div>
+        <div class="info-row"><span>Arrival Time</span><strong>~5 minutes</strong></div>
+      </div>
+      <div class="form-group" style="margin-top:14px">
+        <label style="font-size:12px;color:#a0a0c0;font-weight:600;text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:6px">Amount (USDT)</label>
+        <input type="number" class="form-input" placeholder="Enter deposit amount" step="0.01"/>
+      </div>
+      <button class="btn-primary full" style="margin-top:8px" onclick="submitDeposit()">Submit Deposit</button>
+    </div>
+  </div>
+</div>
+
+<!-- WITHDRAW MODAL -->
+<div class="modal-overlay" id="modalWithdraw">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Withdraw USDT</h3>
+      <button class="modal-close" onclick="closeModal('modalWithdraw')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Wallet Address</label>
+        <input type="text" class="form-input" placeholder="Enter USDT wallet address"/>
+      </div>
+      <div class="form-group">
+        <label>Amount (USDT)</label>
+        <div class="input-with-max">
+          <input type="number" class="form-input" placeholder="0.00" step="0.01"/>
+          <button class="max-btn">MAX</button>
+        </div>
+      </div>
+      <div class="network-tags" style="margin-bottom:16px">
+        <span class="ntag active" data-net="TRC20">TRC20</span>
+        <span class="ntag" data-net="ERC20">ERC20</span>
+      </div>
+      <div class="modal-info">
+        <div class="info-row"><span>Available</span><strong>0.00 USDT</strong></div>
+        <div class="info-row"><span>Min. Withdraw</span><strong>5 USDT</strong></div>
+        <div class="info-row"><span>Fee</span><strong>1 USDT</strong></div>
+      </div>
+      <button class="btn-primary full" style="margin-top:16px" onclick="submitWithdraw()">Confirm Withdrawal</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════ -->
+<header class="home-header">
+  <div class="logo">
+    <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
+      <circle cx="17" cy="17" r="17" fill="url(#lg1)"/>
+      <path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      <defs><linearGradient id="lg1" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs>
+    </svg>
+    <span class="logo-text">MAI</span>
+  </div>
+  <div class="header-actions">
+    <button class="hdr-btn" onclick="openDepositModal()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg>
+      Recharge
+    </button>
+    <button class="hdr-btn" onclick="openWithdrawModal()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Withdraw
+    </button>
+    <button class="hdr-btn" onclick="location.href='mine.html'">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+      Teams
+    </button>
+    <button class="hdr-btn accent" id="inviteBtn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      Invite
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-orb hero-orb1"></div>
+  <div class="hero-orb hero-orb2"></div>
+  <div class="hero-orb hero-orb3"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🌍 Global Investment Platform</div>
+    <h1 class="hero-title">Invest, Earn &amp; Grow<br/>with Global Opportunities</h1>
+    <p class="hero-sub">AI-powered intelligent cloud order matching center. Join millions of investors worldwide and start earning today.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="location.href='invest.html'">
+        <svg width="16" height="16" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        Start Investing
+      </button>
+      <button class="btn-ghost" onclick="location.href='service.html'">Learn More →</button>
+    </div>
+    <div class="hero-trust">
+      <div class="ht-item">
+        <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>SSL Secured</span>
+      </div>
+      <div class="ht-item">
+        <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>Daily Payouts</span>
+      </div>
+      <div class="ht-item">
+        <svg width="13" height="13" fill="none" stroke="#22c55e" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        <span>150+ Countries</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-cards">
+    <div class="hcard" style="--d:0s">
+      <div class="hcard-icon" style="background:rgba(34,197,94,.15)">📈</div>
+      <div>
+        <div class="hcard-val">+24.8%</div>
+        <div class="hcard-lbl">Monthly Return</div>
+      </div>
+      <div class="hcard-trend up">▲</div>
+    </div>
+    <div class="hcard" style="--d:.3s">
+      <div class="hcard-icon" style="background:rgba(59,130,246,.15)">💰</div>
+      <div>
+        <div class="hcard-val">$2.4M+</div>
+        <div class="hcard-lbl">Total Paid Out</div>
+      </div>
+      <div class="hcard-trend up">▲</div>
+    </div>
+    <div class="hcard" style="--d:.6s">
+      <div class="hcard-icon" style="background:rgba(108,99,255,.15)">👥</div>
+      <div>
+        <div class="hcard-val">50K+</div>
+        <div class="hcard-lbl">Active Users</div>
+      </div>
+      <div class="hcard-trend up">▲</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     BALANCE CARD
+═══════════════════════════════════════════ -->
+<section class="balance-wrap">
+  <div class="balance-card">
+    <div class="bc-top-row">
+      <div class="bc-left">
+        <div class="bc-avatar">A</div>
+        <div>
+          <div class="bc-name">A****5</div>
+          <div class="bc-verified">✓ Verified</div>
+        </div>
+      </div>
+      <div class="bc-right">
+        <div class="bc-lbl">Available Balance</div>
+        <div class="bc-amount">12.96 <span>USDT</span></div>
+        <div class="bc-btns-row">
+          <button class="mini-btn green" onclick="openDepositModal()">+ Deposit</button>
+          <button class="mini-btn red" onclick="openWithdrawModal()">↑ Withdraw</button>
+        </div>
+      </div>
+    </div>
+    <div class="bc-stats">
+      <div class="bcs">
+        <div class="bcs-val">0.00</div>
+        <div class="bcs-lbl">Today's Profit</div>
+      </div>
+      <div class="bcs-div"></div>
+      <div class="bcs">
+        <div class="bcs-val">0.00</div>
+        <div class="bcs-lbl">Total Earned</div>
+      </div>
+      <div class="bcs-div"></div>
+      <div class="bcs">
+        <div class="bcs-val">0</div>
+        <div class="bcs-lbl">Team Members</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     TICKER
+═══════════════════════════════════════════ -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     TASK TIERS
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr">
+    <h2>Task Tiers</h2>
+    <a href="invest.html" class="see-all">View Tasks →</a>
+  </div>
+  <div class="tier-cards">
+
+    <div class="tier-card tier-vip1" onclick="location.href='invest.html'">
+      <div class="tier-top">
+        <div class="tier-icon">👑</div>
+        <div class="tier-info">
+          <div class="tier-name">VIP 1</div>
+          <div class="tier-label">Starter</div>
+        </div>
+        <div class="tier-rate">4%<small>/task</small></div>
+      </div>
+      <div class="tier-brands">Amazon · eBay · Shopee · Walmart +4</div>
+      <div class="tier-rows">
+        <div class="tier-row"><span>Min Balance</span><strong>$25 USDT</strong></div>
+        <div class="tier-row"><span>Task Range</span><strong>$25 – $90</strong></div>
+        <div class="tier-row"><span>Brands</span><strong>8 brands</strong></div>
+      </div>
+      <button class="tier-btn tier-btn-1">Start Tasks →</button>
+    </div>
+
+    <div class="tier-card tier-vip2" onclick="location.href='invest.html'">
+      <div class="tier-badge">Popular</div>
+      <div class="tier-top">
+        <div class="tier-icon">💎</div>
+        <div class="tier-info">
+          <div class="tier-name">VIP 2</div>
+          <div class="tier-label">Growth</div>
+        </div>
+        <div class="tier-rate">8%<small>/task</small></div>
+      </div>
+      <div class="tier-brands">Alibaba · Flipkart · Rakuten · Noon +4</div>
+      <div class="tier-rows">
+        <div class="tier-row"><span>Min Balance</span><strong>$120 USDT</strong></div>
+        <div class="tier-row"><span>Task Range</span><strong>$120 – $300</strong></div>
+        <div class="tier-row"><span>Brands</span><strong>7 brands</strong></div>
+      </div>
+      <button class="tier-btn tier-btn-2">Start Tasks →</button>
+    </div>
+
+    <div class="tier-card tier-vip3" onclick="location.href='invest.html'">
+      <div class="tier-top">
+        <div class="tier-icon">🔥</div>
+        <div class="tier-info">
+          <div class="tier-name">VIP 3</div>
+          <div class="tier-label">Elite</div>
+        </div>
+        <div class="tier-rate">12%<small>/task</small></div>
+      </div>
+      <div class="tier-brands">Apple · Samsung · Nike · Rolex +4</div>
+      <div class="tier-rows">
+        <div class="tier-row"><span>Min Balance</span><strong>$400 USDT</strong></div>
+        <div class="tier-row"><span>Task Range</span><strong>$400 – $2,000</strong></div>
+        <div class="tier-row"><span>Brands</span><strong>8 brands</strong></div>
+      </div>
+      <button class="tier-btn tier-btn-3">Start Tasks →</button>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     PLATFORM INTRO
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr">
+    <h2>Platform Introduction</h2>
+    <a href="service.html" class="see-all">See All →</a>
+  </div>
+  <div class="intro-scroll">
+    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+      <div class="intro-img" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+        <img src="assets/images/platform-intro-1.svg" alt="Platform Profile" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h4>Platform Profile</h4>
+      <p>MAI is an intelligent cloud global order matching center built for modern investors.</p>
+      <a href="service.html" class="read-more">Read More →</a>
+    </div>
+    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+      <div class="intro-img" style="background:linear-gradient(135deg,#f093fb,#f5576c)">
+        <img src="assets/images/platform-intro-2.svg" alt="Platform Rules" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h4>Platform Rules</h4>
+      <p>The platform will update recharge rules to protect all users and ensure fairness.</p>
+      <a href="service.html" class="read-more">Read More →</a>
+    </div>
+    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+      <div class="intro-img" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">
+        <img src="assets/images/platform-intro-3.svg" alt="Win-Win Cooperation" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h4>Win-Win Cooperation</h4>
+      <p>AI-MAI carries out win-win cooperation for all users across the globe.</p>
+      <a href="service.html" class="read-more">Read More →</a>
+    </div>
+    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+      <div class="intro-img" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">
+        <img src="assets/images/platform-intro-4.svg" alt="Instructions for Use" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <h4>Instructions for Use</h4>
+      <p>To celebrate MAI membership milestones, special rewards await all members.</p>
+      <a href="service.html" class="read-more">Read More →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     LIVE ACTIVITY
+═══════════════════════════════════════════ -->
+<section class="section">
+  <div class="sec-hdr">
+    <h2>Live Activity</h2>
+    <a href="record.html" class="see-all">View All →</a>
+  </div>
+  <div class="activity-list" id="activityList">
+    <div class="act-item">
+      <div class="act-av" style="background:#6C63FF">J</div>
+      <div class="act-info"><span class="act-name">J****n</span><span class="act-desc">Invested in Gold Plan</span></div>
+      <div class="act-amt up">+$500</div>
+      <div class="act-time">2m ago</div>
+    </div>
+    <div class="act-item">
+      <div class="act-av" style="background:#FF6584">M</div>
+      <div class="act-info"><span class="act-name">M****a</span><span class="act-desc">Withdrawal processed</span></div>
+      <div class="act-amt down">-$120</div>
+      <div class="act-time">5m ago</div>
+    </div>
+    <div class="act-item">
+      <div class="act-av" style="background:#43e97b">R</div>
+      <div class="act-info"><span class="act-name">R****s</span><span class="act-desc">Earned daily profit</span></div>
+      <div class="act-amt up">+$42.50</div>
+      <div class="act-time">12m ago</div>
+    </div>
+    <div class="act-item">
+      <div class="act-av" style="background:#4facfe">K</div>
+      <div class="act-info"><span class="act-name">K****i</span><span class="act-desc">Referral bonus received</span></div>
+      <div class="act-amt up">+$25.00</div>
+      <div class="act-time">18m ago</div>
+    </div>
+  </div>
+</section>
+
+<div style="height:90px"></div>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <a href="index.html" class="nav-item active">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <span>Home</span>
+  </a>
+  <a href="service.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <span>Service</span>
+  </a>
+  <a href="invest.html" class="nav-item center-nav">
+    <div class="center-btn">
+      <svg width="26" height="26" fill="none" stroke="white" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+    <span>Invest</span>
+  </a>
+  <a href="record.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span>Record</span>
+  </a>
+  <a href="mine.html" class="nav-item">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    <span>Mine</span>
+  </a>
+</nav>
+
+<script src="assets/js/api.js"></script>
+<script src="assets/js/content-loader.js"></script>
+<script src="assets/js/dynamic.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  initIndexPage();
+  ContentLoader.loadAll();
+</script>
+</body>
+</html>

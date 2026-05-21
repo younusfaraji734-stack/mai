@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Transactions — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="addTxModal">
+  <div class="modal">
+    <div class="modal-hdr"><h3>➕ Add Transaction</h3><button class="modal-close" onclick="closeModal('addTxModal')">✕</button></div>
+    <div class="form-group"><label>Select User</label><select id="txUserId"><option value="">— Select User —</option></select></div>
+    <div class="form-row">
+      <div class="form-group"><label>Type</label>
+        <select id="txType"><option value="deposit">Deposit</option><option value="withdraw">Withdraw</option><option value="profit">Profit</option><option value="task">Task</option><option value="referral">Referral</option></select>
+      </div>
+      <div class="form-group"><label>Status</label>
+        <select id="txStatus"><option value="completed">Completed</option><option value="pending">Pending</option><option value="failed">Failed</option></select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Amount (USDT)</label><input type="number" id="txAmount" step="0.01" min="0" placeholder="0.00"/></div>
+      <div class="form-group"><label>Network</label>
+        <select id="txNetwork"><option value="">— None —</option><option value="TRC20">TRC20</option><option value="ERC20">ERC20</option><option value="BEP20">BEP20</option></select>
+      </div>
+    </div>
+    <div class="form-group"><label>Description</label><input type="text" id="txDesc" placeholder="Transaction description"/></div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeModal('addTxModal')">Cancel</button>
+      <button class="btn-save" onclick="addTransaction()">Add Transaction</button>
+    </div>
+  </div>
+</div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item active"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>All Transactions</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card blue"><div class="stat-icon">📋</div><div class="stat-val" id="sTotalTx">—</div><div class="stat-lbl">Total Transactions</div></div>
+      <div class="stat-card green"><div class="stat-icon">📥</div><div class="stat-val" id="sTotalDep">—</div><div class="stat-lbl">Total Deposits</div></div>
+      <div class="stat-card red"><div class="stat-icon">📤</div><div class="stat-val" id="sTotalWith">—</div><div class="stat-lbl">Total Withdrawals</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">⏳</div><div class="stat-val" id="sPending">—</div><div class="stat-lbl">Pending</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>📋 Transaction History</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input type="text" class="search-input" id="txSearch" placeholder="🔍 Search user…" oninput="renderTx()"/>
+          <button class="btn-primary-sm" onclick="openAddTx()">➕ Add</button>
+        </div>
+      </div>
+      <div style="padding:10px 18px;border-bottom:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap">
+        <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('deposit',this)">Deposit</button>
+        <button class="filter-btn" onclick="setFilter('withdraw',this)">Withdraw</button>
+        <button class="filter-btn" onclick="setFilter('profit',this)">Profit</button>
+        <button class="filter-btn" onclick="setFilter('task',this)">Task</button>
+        <button class="filter-btn" onclick="setFilter('referral',this)">Referral</button>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Type</th><th>Amount</th><th>Description</th><th>Status</th><th>Date</th></tr></thead>
+          <tbody id="txTable"><tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allTx = [], currentFilter = 'all', allUsers = [];
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderTx();
+}
+async function loadTx() {
+  var d = await ADMIN.getTransactions();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  allTx = d.transactions||[];
+  var deps = allTx.filter(function(t){ return t.type==='deposit'; });
+  var withs = allTx.filter(function(t){ return t.type==='withdraw'; });
+  var pending = allTx.filter(function(t){ return t.status==='pending'; });
+  document.getElementById('sTotalTx').textContent = allTx.length;
+  document.getElementById('sTotalDep').textContent = '$'+fmtAmt(deps.reduce(function(s,t){ return s+(t.amount||0); },0));
+  document.getElementById('sTotalWith').textContent = '$'+fmtAmt(withs.reduce(function(s,t){ return s+(t.amount||0); },0));
+  document.getElementById('sPending').textContent = pending.length;
+  renderTx();
+}
+function renderTx() {
+  var q = (document.getElementById('txSearch').value||'').toLowerCase();
+  var filtered = allTx.filter(function(t){
+    var matchType = currentFilter==='all'||t.type===currentFilter;
+    var matchQ = !q||(t.userName+t.userEmail).toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+  var amtColors = {deposit:'var(--green)',profit:'var(--green)',task:'var(--green)',referral:'var(--yellow)',withdraw:'var(--red)'};
+  var amtPrefix = {deposit:'+',profit:'+',task:'+',referral:'+',withdraw:'-'};
+  document.getElementById('txTable').innerHTML = filtered.length ? filtered.map(function(tx){
+    var color = amtColors[tx.type]||'var(--text)';
+    var prefix = amtPrefix[tx.type]||'';
+    return '<tr>'+
+      '<td><strong>'+escHtml(maskName(tx.userName||'Unknown'))+'</strong><br><small style="color:var(--text3);font-size:11px">'+escHtml(tx.userEmail||'')+'</small></td>'+
+      '<td><span class="badge '+tx.type+'">'+tx.type+'</span></td>'+
+      '<td><strong style="color:'+color+'">'+prefix+'$'+fmtAmt(tx.amount)+'</strong></td>'+
+      '<td style="color:var(--text2);font-size:12px;max-width:200px">'+escHtml(tx.description||'—')+'</td>'+
+      '<td><span class="badge '+tx.status+'">'+tx.status+'</span></td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDateTime(tx.date)+'</td>'+
+    '</tr>';
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--text3)">No transactions found</td></tr>';
+}
+async function openAddTx() {
+  var d = await ADMIN.getUsers();
+  if (!d.ok) return;
+  allUsers = (d.users||[]).filter(function(u){ return !u.isAdmin; });
+  document.getElementById('txUserId').innerHTML = '<option value="">— Select User —</option>'+
+    allUsers.map(function(u){ return '<option value="'+u.id+'">'+escHtml(u.username)+' ('+escHtml(u.email)+') — $'+fmtAmt(u.balance)+'</option>'; }).join('');
+  document.getElementById('txAmount').value='';
+  document.getElementById('txDesc').value='';
+  openModal('addTxModal');
+}
+async function addTransaction() {
+  var userId = document.getElementById('txUserId').value;
+  var type = document.getElementById('txType').value;
+  var status = document.getElementById('txStatus').value;
+  var amount = parseFloat(document.getElementById('txAmount').value)||0;
+  var description = document.getElementById('txDesc').value.trim();
+  var network = document.getElementById('txNetwork').value;
+  if (!userId) { showToast('Select a user','error'); return; }
+  if (amount<=0) { showToast('Enter valid amount','error'); return; }
+  var btn = document.querySelector('#addTxModal .btn-save');
+  btn.textContent='Adding…'; btn.disabled=true;
+  var d = await ADMIN.addTransaction({ userId, type, amount, status, description:description||type+' by admin', network:network||undefined });
+  btn.textContent='Add Transaction'; btn.disabled=false;
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Transaction added!','success');
+  closeModal('addTxModal'); loadTx();
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a) loadTx(); })();
+</script>
+</body>
+</html>

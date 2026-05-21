@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<link rel="icon" type="image/png" href="../../assets/images/favarit/fa.png"/>
+<title>Withdrawals — MAI Admin</title>
+<link rel="stylesheet" href="../admin-style.css">
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="17" fill="url(#lg)"/><path d="M11 23L17 11L23 23" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M13 19h8" stroke="white" stroke-width="2.5" stroke-linecap="round"/><defs><linearGradient id="lg" x1="0" y1="0" x2="34" y2="34"><stop stop-color="#6C63FF"/><stop offset="1" stop-color="#FF6584"/></linearGradient></defs></svg>
+    <span>MAI Admin<span class="sidebar-badge">ADMIN</span></span>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-section-label">Overview</div>
+    <a href="dashboard.html" class="nav-item"><span class="icon">📊</span>Dashboard</a>
+    <a href="users.html" class="nav-item"><span class="icon">👥</span>Users</a>
+    <div class="nav-section-label">Finance</div>
+    <a href="deposits.html" class="nav-item"><span class="icon">💰</span>Deposits</a>
+    <a href="withdrawals.html" class="nav-item active"><span class="icon">💸</span>Withdrawals</a>
+    <a href="transactions.html" class="nav-item"><span class="icon">📋</span>Transactions</a>
+    <div class="nav-section-label">Users</div>
+    <a href="messages.html" class="nav-item"><span class="icon">✉️</span>Messages</a>
+    <a href="withdraw-control.html" class="nav-item"><span class="icon">🔒</span>Withdraw Control</a>
+    <a href="referral-codes.html" class="nav-item"><span class="icon">🎁</span>Referral Codes</a>
+    <a href="scores.html" class="nav-item"><span class="icon">⭐</span>Scores</a>
+    <div class="nav-section-label">Platform</div>
+    <a href="content.html" class="nav-item"><span class="icon">📝</span>Content</a>
+    <a href="wallet-setup.html" class="nav-item"><span class="icon">👛</span>Wallet Setup</a>
+    <a href="telegram-settings.html" class="nav-item"><span class="icon">📱</span>Telegram</a>
+    <a href="settings.html" class="nav-item"><span class="icon">⚙️</span>Settings</a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="nav-item" onclick="ADMIN.logout()" style="color:var(--red)"><span class="icon">🚪</span>Logout</button>
+  </div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <h2>Withdrawal Management</h2>
+    <div class="topbar-right">
+      <span class="admin-badge">🔴 Admin</span>
+      <span id="adminName" style="font-size:13px;color:var(--text2)"></span>
+      <button class="logout-link" onclick="ADMIN.logout()">Logout</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stats-grid">
+      <div class="stat-card blue"><div class="stat-icon">📤</div><div class="stat-val" id="sTotalCount">—</div><div class="stat-lbl">Total Withdrawals</div></div>
+      <div class="stat-card red"><div class="stat-icon">💸</div><div class="stat-val" id="sTotalAmt">—</div><div class="stat-lbl">Total Amount</div></div>
+      <div class="stat-card yellow"><div class="stat-icon">⏳</div><div class="stat-val" id="sPendingCount">—</div><div class="stat-lbl">Pending</div></div>
+      <div class="stat-card green"><div class="stat-icon">✅</div><div class="stat-val" id="sCompletedCount">—</div><div class="stat-lbl">Completed</div></div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-header">
+        <h3>💸 Withdrawal Requests</h3>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="filter-btn active" onclick="setFilter('all',this)">All</button>
+          <button class="filter-btn" onclick="setFilter('pending',this)">Pending</button>
+          <button class="filter-btn" onclick="setFilter('completed',this)">Completed</button>
+          <button class="filter-btn" onclick="setFilter('failed',this)">Failed</button>
+        </div>
+      </div>
+      <div class="tbl-scroll">
+        <table>
+          <thead><tr><th>User</th><th>Amount</th><th>Network</th><th>Wallet</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="withdrawalsTable"><tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3)">Loading...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="../admin-common.js"></script>
+<script src="../admin-api.js"></script>
+<script>
+var allWithdrawals = [], currentFilter = 'all';
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderWithdrawals();
+}
+async function loadWithdrawals() {
+  var d = await ADMIN.getTransactions();
+  if (!d.ok) { showToast('Failed to load','error'); return; }
+  allWithdrawals = (d.transactions||[]).filter(function(t){ return t.type==='withdraw'; });
+  var totalAmt = allWithdrawals.reduce(function(s,t){ return s+(t.amount||0); },0);
+  var pending = allWithdrawals.filter(function(t){ return t.status==='pending'; }).length;
+  var completed = allWithdrawals.filter(function(t){ return t.status==='completed'; }).length;
+  document.getElementById('sTotalCount').textContent = allWithdrawals.length;
+  document.getElementById('sTotalAmt').textContent = '$'+fmtAmt(totalAmt);
+  document.getElementById('sPendingCount').textContent = pending;
+  document.getElementById('sCompletedCount').textContent = completed;
+  renderWithdrawals();
+}
+function renderWithdrawals() {
+  var filtered = currentFilter==='all' ? allWithdrawals : allWithdrawals.filter(function(t){ return t.status===currentFilter; });
+  if (!filtered.length) {
+    document.getElementById('withdrawalsTable').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--text3)">No withdrawals found</td></tr>';
+    return;
+  }
+  document.getElementById('withdrawalsTable').innerHTML = filtered.map(function(tx){
+    var isPending = tx.status==='pending';
+    var wallet = tx.wallet||tx.txHash||'—';
+    var walletDisplay = wallet.length>18 ? wallet.substring(0,8)+'…'+wallet.slice(-6) : wallet;
+    return '<tr style="'+(isPending?'border-left:3px solid var(--yellow)':'')+'">'+
+      '<td><strong>'+escHtml(maskName(tx.userName||'Unknown'))+'</strong><br><small style="color:var(--text3);font-size:11px">'+escHtml(tx.userEmail||'')+'</small></td>'+
+      '<td><strong style="color:var(--red)">-$'+fmtAmt(tx.amount)+'</strong></td>'+
+      '<td><span style="background:rgba(108,99,255,0.12);color:var(--primary);padding:3px 9px;border-radius:50px;font-size:10px;font-weight:700">'+escHtml(tx.network||'N/A')+'</span></td>'+
+      '<td style="font-family:monospace;font-size:11px;color:var(--text2)" title="'+escHtml(wallet)+'">'+escHtml(walletDisplay)+'</td>'+
+      '<td style="color:var(--text2);font-size:12px">'+fmtDateTime(tx.date)+'</td>'+
+      '<td><span class="badge '+tx.status+'">'+tx.status+'</span>'+(isPending?'<span class="pending-dot"></span>':'')+'</td>'+
+      '<td>'+(isPending?
+        '<button class="action-btn approve" onclick="approveTx(\''+tx.id+'\',\''+fmtAmt(tx.amount)+'\')">✓ Approve</button>'+
+        '<button class="action-btn reject" onclick="rejectTx(\''+tx.id+'\')">✕ Reject</button>':
+        '<span style="color:var(--text3);font-size:12px">—</span>')+
+      '</td></tr>';
+  }).join('');
+}
+async function approveTx(txId, amount) {
+  if (!confirm('Approve withdrawal of $'+amount+'?\n\n⚠️ Ensure funds have been sent to the user\'s wallet first.')) return;
+  var d = await ADMIN.approveTransaction(txId);
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Withdrawal approved!','success'); loadWithdrawals();
+}
+async function rejectTx(txId) {
+  if (!confirm('Reject this withdrawal?\n\nThe user\'s balance will be automatically refunded.')) return;
+  var d = await ADMIN.rejectTransaction(txId);
+  if (!d.ok) { showToast(d.msg||'Error','error'); return; }
+  showToast('Withdrawal rejected. Balance refunded.','success'); loadWithdrawals();
+}
+(async function(){ var a=await ADMIN.requireAdmin(); if(a){ await loadWithdrawals(); setInterval(loadWithdrawals,30000); } })();
+</script>
+</body>
+</html>
