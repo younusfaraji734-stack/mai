@@ -309,6 +309,22 @@ body {
   border-radius: 4px;
 }
 
+/* Desktop: 4-column grid, no slider */
+@media (min-width: 768px) {
+  .intro-slider-wrap { overflow: visible; border-radius: 0; background: none; }
+  .intro-scroll {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    transform: none !important;
+    transition: none !important;
+    width: 100%;
+  }
+  .intro-scroll .intro-card { min-width: 0; width: 100%; }
+  .intro-scroll .intro-img { height: 140px; }
+  .intro-dots { display: none !important; }
+}
+
 /* ===== LIVE ACTIVITY ===== */
 .act-item {
   display: flex; align-items: center; gap: 12px;

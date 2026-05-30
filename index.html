@@ -425,8 +425,11 @@
   initIndexPage();
   ContentLoader.loadAll();
 
-  // ── PLATFORM INTRO SLIDER ─────────────────────────────────
+  // ── PLATFORM INTRO SLIDER (mobile only) ─────────────────────
   (function initSlider() {
+    // Only run slider on mobile
+    if (window.innerWidth >= 768) return;
+
     var scroll = document.getElementById('introScroll');
     var dotsWrap = document.getElementById('introDots');
     if (!scroll) return;
@@ -464,7 +467,7 @@
       autoTimer = setInterval(function(){ goTo(current + 1); }, 3500);
     }
 
-    // Touch swipe support
+    // Touch swipe
     var startX = 0;
     scroll.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
     scroll.addEventListener('touchend', function(e){
@@ -472,7 +475,6 @@
       if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
     }, {passive:true});
 
-    // Build after content loads (content-loader may update cards)
     setTimeout(function(){
       buildDots();
       resetAuto();
