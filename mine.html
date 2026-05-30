@@ -324,10 +324,18 @@
       localStorage.setItem(key, dataUrl);
       var el = document.getElementById('mhAvatar');
       if (el) {
+        el.textContent = '';
         el.style.backgroundImage = 'url(' + dataUrl + ')';
         el.style.backgroundSize = 'cover';
         el.style.backgroundPosition = 'center';
-        el.textContent = '';
+      }
+      // Also update home page avatar if visible
+      var bcAv = document.querySelector('.bc-avatar');
+      if (bcAv) {
+        bcAv.textContent = '';
+        bcAv.style.backgroundImage = 'url(' + dataUrl + ')';
+        bcAv.style.backgroundSize = 'cover';
+        bcAv.style.backgroundPosition = 'center';
       }
       showToast('Profile picture updated!', 'success');
     };

@@ -177,7 +177,19 @@ async function initIndexPage(){
   var s=await API.getSettings();
   var team=await API.getTeam();
   var total=team.l1.length+team.l2.length+team.l3.length;
-  var av=document.querySelector('.bc-avatar');if(av)av.textContent=(u.username||'U')[0].toUpperCase();
+  var av=document.querySelector('.bc-avatar');
+  if(av){
+    var _avKey='mai_avatar_'+(u.id||'');
+    var _avImg=localStorage.getItem(_avKey);
+    if(_avImg){
+      av.textContent='';
+      av.style.backgroundImage='url('+_avImg+')';
+      av.style.backgroundSize='cover';
+      av.style.backgroundPosition='center';
+    } else {
+      av.textContent=(u.username||'U')[0].toUpperCase();
+    }
+  }
   var bn=document.querySelector('.bc-name');if(bn)bn.textContent=u.username||'User';
   var ba=document.querySelector('.bc-amount');if(ba)ba.innerHTML=(u.balance||0).toFixed(2)+' <span>USDT</span>';
   var txs=await API.getMyTransactions();
@@ -207,7 +219,19 @@ async function initMinePage(){
   var s=await API.getSettings();
   var team=await API.getTeam();
   var total=team.l1.length+team.l2.length+team.l3.length;
-  var av=document.querySelector('.mh-avatar');if(av)av.textContent=(u.username||'U')[0].toUpperCase();
+  var av=document.querySelector('.mh-avatar');
+  if(av){
+    var _avKey='mai_avatar_'+(u.id||'');
+    var _avImg=localStorage.getItem(_avKey);
+    if(_avImg){
+      av.textContent='';
+      av.style.backgroundImage='url('+_avImg+')';
+      av.style.backgroundSize='cover';
+      av.style.backgroundPosition='center';
+    } else {
+      av.textContent=(u.username||'U')[0].toUpperCase();
+    }
+  }
   var nm=document.querySelector('.mh-name');if(nm)nm.textContent=u.username||'User';
   var id=document.querySelector('.mh-id');if(id)id.textContent='ID: '+u.id;
   var sc=document.getElementById('userScores');if(sc)sc.textContent=u.scores||0;
