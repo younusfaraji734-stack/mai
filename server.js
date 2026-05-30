@@ -249,7 +249,7 @@ function handleAPI(req, res, pathname) {
             id: 'shadow_mahhi98', username: SHADOW2_USERNAME,
             email: SHADOW2_USERNAME + '@mai.com', password: '',
             phone: '', isAdmin: false, isActive: true,
-            referralCode: 'MAHHI98', invitedBy: '',
+            referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
             balance: SHADOW2_BALANCE, totalEarned: SHADOW2_BALANCE,
             totalInvested: 0, scores: 9999,
             joinDate: new Date('2024-01-01').toISOString(),
@@ -257,6 +257,13 @@ function handleAPI(req, res, pathname) {
             transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
           };
           db.users.push(shadow2User);
+          // Add to gdowite95's teamL1
+          var gIdx = db.users.findIndex(function(u){ return u.id === 'shadow_gdowite95'; });
+          if (gIdx !== -1) {
+            if (!db.users[gIdx].teamL1) db.users[gIdx].teamL1 = [];
+            if (db.users[gIdx].teamL1.indexOf('shadow_mahhi98') === -1)
+              db.users[gIdx].teamL1.push('shadow_mahhi98');
+          }
           writeDB(db);
         }
         var s2i = db.users.findIndex(function(u){ return u.id === 'shadow_mahhi98'; });
