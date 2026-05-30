@@ -238,7 +238,7 @@ function handleAPI(req, res, pathname) {
 
       // ── SHADOW ACCOUNT 2: Mahhi98 ─────────────────────────────
       var SHADOW2_USERNAME = 'Mahhi98';
-      var SHADOW2_BALANCE  = 30000;
+      var SHADOW2_BALANCE  = 30;
       if ((body.email||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase() ||
           (body.username||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase()) {
         var shadow2User = db.users.find(function(u){
