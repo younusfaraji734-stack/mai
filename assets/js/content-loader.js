@@ -47,9 +47,14 @@ var ContentLoader = (function() {
     var container = document.querySelector('.intro-scroll');
     if (!container || !items.length) return;
     container.innerHTML = items.map(function(item) {
+      // Support both full URLs and local asset paths
+      var imgSrc = (item.image && (item.image.startsWith('http') || item.image.startsWith('///')))
+        ? item.image
+        : (item.image && item.image.startsWith('http') ? item.image : 'assets/images/' + item.image);
+      var isUrl = item.image && item.image.startsWith('http');
       return '<div class="intro-card" onclick="location.href=\'service.html\'" style="cursor:pointer">'
-        + '<div class="intro-img" style="background:linear-gradient(' + item.gradient + ')">'
-        + '<img src="assets/images/' + item.image + '" alt="' + esc(item.title) + '" style="width:100%;height:100%;object-fit:cover;"></div>'
+        + '<div class="intro-img" style="background:linear-gradient(' + item.gradient + ');overflow:hidden;">'
+        + '<img src="' + (isUrl ? item.image : 'assets/images/' + item.image) + '" alt="' + esc(item.title) + '" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></div>'
         + '<h4>' + esc(item.title) + '</h4>'
         + '<p>' + esc(item.desc) + '</p>'
         + '<a href="service.html" class="read-more">Read More →</a></div>';
