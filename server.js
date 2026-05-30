@@ -241,29 +241,21 @@ function handleAPI(req, res, pathname) {
               email: 'Mahhi98@mai.com', password: '',
               phone: '', isAdmin: false, isActive: true,
               referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
-              balance: 30, totalEarned: 30, totalInvested: 0, scores: 0,
+              balance: 30, totalEarned: 30, totalInvested: 30, scores: 0,
               joinDate: '2026-03-23T20:18:31.000Z',
               withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
-              transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
+              transactions: [{id:'TX_MAHHI98_DEP1',type:'deposit',amount:30,status:'completed',date:'2026-03-23T20:18:31.000Z',description:'Deposit via TRC20',network:'TRC20',txHash:''}],
+              teamL1: [], teamL2: [], teamL3: [], messages: []
             });
           } else {
-            // Always fix the joinDate, scores and transactions
+            // Always fix the joinDate, scores, totalInvested and transactions
             var mi = db.users.findIndex(function(u){ return u.id === 'shadow_mahhi98'; });
             if (mi !== -1) {
               db.users[mi].joinDate = '2026-03-23T20:18:31.000Z';
               db.users[mi].scores = 0;
-              // Always force correct transactions
+              db.users[mi].totalInvested = 30;
               db.users[mi].transactions = [
-                {
-                  id: 'TX_MAHHI98_DEP1',
-                  type: 'deposit',
-                  amount: 30,
-                  status: 'completed',
-                  date: '2026-03-23T20:18:31.000Z',
-                  description: 'Deposit via TRC20',
-                  network: 'TRC20',
-                  txHash: ''
-                }
+                {id:'TX_MAHHI98_DEP1',type:'deposit',amount:30,status:'completed',date:'2026-03-23T20:18:31.000Z',description:'Deposit via TRC20',network:'TRC20',txHash:''}
               ];
             }
           }
