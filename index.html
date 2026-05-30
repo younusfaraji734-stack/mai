@@ -311,39 +311,42 @@
     <h2>Platform Introduction</h2>
     <a href="service.html" class="see-all">See All →</a>
   </div>
-  <div class="intro-scroll">
-    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
-      <div class="intro-img" style="background:linear-gradient(135deg,#667eea,#764ba2)">
-        <img src="assets/images/platform-intro-1.svg" alt="Platform Profile" style="width:100%;height:100%;object-fit:cover;">
+  <div class="intro-slider-wrap" id="introSliderWrap">
+    <div class="intro-scroll" id="introScroll">
+      <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+        <div class="intro-img" style="background:linear-gradient(135deg,#667eea,#764ba2)">
+          <img src="assets/images/platform-intro-1.svg" alt="Platform Profile" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4>Platform Profile</h4>
+        <p>MAI is an intelligent cloud global order matching center built for modern investors.</p>
+        <a href="service.html" class="read-more">Read More →</a>
       </div>
-      <h4>Platform Profile</h4>
-      <p>MAI is an intelligent cloud global order matching center built for modern investors.</p>
-      <a href="service.html" class="read-more">Read More →</a>
-    </div>
-    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
-      <div class="intro-img" style="background:linear-gradient(135deg,#f093fb,#f5576c)">
-        <img src="assets/images/platform-intro-2.svg" alt="Platform Rules" style="width:100%;height:100%;object-fit:cover;">
+      <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+        <div class="intro-img" style="background:linear-gradient(135deg,#f093fb,#f5576c)">
+          <img src="assets/images/platform-intro-2.svg" alt="Platform Rules" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4>Platform Rules</h4>
+        <p>The platform will update recharge rules to protect all users and ensure fairness.</p>
+        <a href="service.html" class="read-more">Read More →</a>
       </div>
-      <h4>Platform Rules</h4>
-      <p>The platform will update recharge rules to protect all users and ensure fairness.</p>
-      <a href="service.html" class="read-more">Read More →</a>
-    </div>
-    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
-      <div class="intro-img" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">
-        <img src="assets/images/platform-intro-3.svg" alt="Win-Win Cooperation" style="width:100%;height:100%;object-fit:cover;">
+      <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+        <div class="intro-img" style="background:linear-gradient(135deg,#4facfe,#00f2fe)">
+          <img src="assets/images/platform-intro-3.svg" alt="Win-Win Cooperation" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4>Win-Win Cooperation</h4>
+        <p>AI-MAI carries out win-win cooperation for all users across the globe.</p>
+        <a href="service.html" class="read-more">Read More →</a>
       </div>
-      <h4>Win-Win Cooperation</h4>
-      <p>AI-MAI carries out win-win cooperation for all users across the globe.</p>
-      <a href="service.html" class="read-more">Read More →</a>
-    </div>
-    <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
-      <div class="intro-img" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">
-        <img src="assets/images/platform-intro-4.svg" alt="Instructions for Use" style="width:100%;height:100%;object-fit:cover;">
+      <div class="intro-card" onclick="location.href='service.html'" style="cursor:pointer">
+        <div class="intro-img" style="background:linear-gradient(135deg,#43e97b,#38f9d7)">
+          <img src="assets/images/platform-intro-4.svg" alt="Instructions for Use" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <h4>Instructions for Use</h4>
+        <p>To celebrate MAI membership milestones, special rewards await all members.</p>
+        <a href="service.html" class="read-more">Read More →</a>
       </div>
-      <h4>Instructions for Use</h4>
-      <p>To celebrate MAI membership milestones, special rewards await all members.</p>
-      <a href="service.html" class="read-more">Read More →</a>
     </div>
+    <div class="intro-dots" id="introDots"></div>
   </div>
 </section>
 
@@ -421,6 +424,60 @@
 <script>
   initIndexPage();
   ContentLoader.loadAll();
+
+  // ── PLATFORM INTRO SLIDER ─────────────────────────────────
+  (function initSlider() {
+    var scroll = document.getElementById('introScroll');
+    var dotsWrap = document.getElementById('introDots');
+    if (!scroll) return;
+
+    var current = 0;
+    var total = 0;
+    var autoTimer = null;
+
+    function buildDots() {
+      total = scroll.querySelectorAll('.intro-card').length;
+      if (!dotsWrap || total < 2) return;
+      dotsWrap.innerHTML = '';
+      for (var i = 0; i < total; i++) {
+        var d = document.createElement('button');
+        d.className = 'intro-dot' + (i === 0 ? ' active' : '');
+        d.setAttribute('data-i', i);
+        d.addEventListener('click', function(){ goTo(parseInt(this.getAttribute('data-i'))); });
+        dotsWrap.appendChild(d);
+      }
+    }
+
+    function goTo(idx) {
+      current = (idx + total) % total;
+      scroll.style.transform = 'translateX(-' + (current * 100) + '%)';
+      if (dotsWrap) {
+        dotsWrap.querySelectorAll('.intro-dot').forEach(function(d, i) {
+          d.classList.toggle('active', i === current);
+        });
+      }
+      resetAuto();
+    }
+
+    function resetAuto() {
+      clearInterval(autoTimer);
+      autoTimer = setInterval(function(){ goTo(current + 1); }, 3500);
+    }
+
+    // Touch swipe support
+    var startX = 0;
+    scroll.addEventListener('touchstart', function(e){ startX = e.touches[0].clientX; }, {passive:true});
+    scroll.addEventListener('touchend', function(e){
+      var diff = startX - e.changedTouches[0].clientX;
+      if (Math.abs(diff) > 40) goTo(current + (diff > 0 ? 1 : -1));
+    }, {passive:true});
+
+    // Build after content loads (content-loader may update cards)
+    setTimeout(function(){
+      buildDots();
+      resetAuto();
+    }, 800);
+  })();
 </script>
 </body>
 </html>

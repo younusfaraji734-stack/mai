@@ -229,26 +229,39 @@ body {
 .tier-btn-3 { background: linear-gradient(135deg,var(--secondary),#f43f5e); color: white; box-shadow: 0 4px 14px rgba(255,101,132,0.4); }
 @media (max-width: 480px) { .tier-cards { grid-template-columns: 1fr; } }
 
-/* ===== PLATFORM INTRO CARDS ===== */
+/* ===== PLATFORM INTRO SLIDER ===== */
+.intro-slider-wrap {
+  position: relative; overflow: hidden; border-radius: 18px;
+  margin: 0 4px;
+}
 .intro-scroll {
-  display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px;
-  scrollbar-width: none;
+  display: flex; transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  will-change: transform;
 }
-.intro-scroll::-webkit-scrollbar { display: none; }
 .intro-scroll .intro-card {
-  min-width: 200px; flex-shrink: 0;
+  min-width: 100%; flex-shrink: 0;
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 18px; overflow: hidden; transition: all 0.3s; cursor: pointer;
+  border-radius: 18px; overflow: hidden; cursor: pointer;
 }
-.intro-scroll .intro-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-card); }
 .intro-scroll .intro-img {
-  height: 110px; display: flex; align-items: center;
-  justify-content: center; font-size: 36px; overflow: hidden; position: relative;
+  height: 200px; display: flex; align-items: center;
+  justify-content: center; overflow: hidden; position: relative;
 }
 .intro-scroll .intro-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.intro-scroll .intro-card h4 { font-size: 13px; font-weight: 700; color: var(--text); padding: 10px 14px 4px; }
-.intro-scroll .intro-card p  { font-size: 12px; color: var(--text2); padding: 0 14px 6px; line-height: 1.5; }
-.intro-scroll .read-more { display: block; padding: 0 14px 12px; font-size: 12px; color: var(--primary); font-weight: 600; text-decoration: none; }
+.intro-scroll .intro-card h4 { font-size: 15px; font-weight: 700; color: var(--text); padding: 14px 16px 6px; }
+.intro-scroll .intro-card p  { font-size: 13px; color: var(--text2); padding: 0 16px 8px; line-height: 1.6; }
+.intro-scroll .read-more { display: block; padding: 0 16px 16px; font-size: 13px; color: var(--primary); font-weight: 600; text-decoration: none; }
+.intro-dots {
+  display: flex; justify-content: center; gap: 6px; padding: 12px 0 4px;
+}
+.intro-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: rgba(255,255,255,0.2); cursor: pointer;
+  transition: all 0.3s; border: none; padding: 0;
+}
+.intro-dot.active {
+  background: var(--primary); width: 22px; border-radius: 4px;
+}
 
 /* ===== LIVE ACTIVITY ===== */
 .act-item {
