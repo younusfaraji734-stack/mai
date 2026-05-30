@@ -861,10 +861,10 @@ seedDB();
   var db = readDB();
   var s = db.settings || {};
   var changed = false;
-  if (!s.vip1Rate || s.vip1Rate < 10) { s.vip1Rate = 20; changed = true; }
-  if (!s.vip2Rate || s.vip2Rate < 10) { s.vip2Rate = 35; changed = true; }
-  if (!s.vip3Rate || s.vip3Rate < 10) { s.vip3Rate = 55; changed = true; }
-  if (changed) { db.settings = s; writeDB(db); console.log('VIP rates migrated to 20/35/55'); }
+  if (s.vip1Rate !== 20) { s.vip1Rate = 20; changed = true; }
+  if (s.vip2Rate !== 35) { s.vip2Rate = 35; changed = true; }
+  if (s.vip3Rate !== 55) { s.vip3Rate = 55; changed = true; }
+  if (changed) { db.settings = s; writeDB(db); console.log('VIP rates forced to 20/35/55'); }
 })();
 
 // ── MIGRATE PLATFORM INTRO IMAGES (fix old SVG to real photos) ─

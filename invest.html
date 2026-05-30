@@ -361,7 +361,7 @@ var BRANDS = [
     {product:'Logitech MX Master 3S Mouse',      price:'$99.00',  amount:120, rate:36.5, reviews:'11,200', type:'Product Review', img:'🖱️', imgUrl:'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=200&h=200&fit=crop'},
     {product:'Samsung 27 inch 4K Monitor IPS',   price:'$399.00', amount:190, rate:35.5, reviews:'4,300',  type:'Order Task',     img:'🖥️', imgUrl:'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=200&h=200&fit=crop'}
    ]},
-  {id:16,vip:3, name:'Apple',         logoKey:'Apple',        color:'#888888', bg:'#111111',
+  {id:16,vip:3, name:'Apple',         logoKey:'Apple',        color:'#a0a0a0', bg:'#1a1a1a',
    tasks:[
     {product:'MacBook Pro M3 Pro 14-inch',       price:'$1,999.00',amount:900, rate:55.0,reviews:'3,400',  type:'Premium Order',  img:'💻', imgUrl:'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200&h=200&fit=crop'},
     {product:'iPhone 15 Pro Max 256GB',          price:'$1,199.00',amount:800, rate:57.5,reviews:'8,900',  type:'Premium Order',  img:'📱', imgUrl:'https://images.unsplash.com/photo-1510557880182-3d4d3cba35a5?w=200&h=200&fit=crop'},
@@ -451,7 +451,7 @@ var BRAND_LOGOS = {
   Noon:        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Noon_logo.svg/320px-Noon_logo.svg.png',
   Zalando:     'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Zalando_logo.svg/320px-Zalando_logo.svg.png',
   Tokopedia:   'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Tokopedia_logo.svg/320px-Tokopedia_logo.svg.png',
-  Apple:       'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+  Apple:       'https://upload.wikimedia.org/wikipedia/commons/a/ab/Apple-logo.png',
   Samsung:     'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/320px-Samsung_Logo.svg.png',
   Nike:        'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg',
   Adidas:      'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg',
@@ -590,9 +590,12 @@ function openTask(brandId) {
 
   // Header logo
   var headerLogoEl = document.getElementById('tmHeaderLogo');
+  var procLogoEl2 = null;
   var brandLogoUrl = BRAND_LOGOS[brand.logoKey];
+  var needsInvert = (brand.logoKey === 'Apple' || brand.logoKey === 'Nike' || brand.logoKey === 'Adidas');
+  var imgStyle = needsInvert ? 'width:100%;height:100%;object-fit:contain;padding:4px;filter:invert(1);' : 'width:100%;height:100%;object-fit:contain;padding:4px;';
   if (brandLogoUrl) {
-    headerLogoEl.innerHTML = '<img src="'+brandLogoUrl+'" alt="'+brand.name+'" style="width:100%;height:100%;object-fit:contain;padding:4px;" onerror="this.parentNode.innerHTML=logoSvg(brand,34)">';
+    headerLogoEl.innerHTML = '<img src="'+brandLogoUrl+'" alt="'+brand.name+'" style="'+imgStyle+'">';
   } else {
     headerLogoEl.innerHTML = logoSvg(brand, 34);
   }
@@ -668,8 +671,10 @@ function startTask() {
 
   var procLogoEl = document.getElementById('tmProcLogo');
   var procLogoUrl = BRAND_LOGOS[brand.logoKey];
+  var needsInvert2 = (brand.logoKey === 'Apple' || brand.logoKey === 'Nike' || brand.logoKey === 'Adidas');
+  var procImgStyle = needsInvert2 ? 'width:100%;height:100%;object-fit:contain;padding:8px;filter:invert(1);' : 'width:100%;height:100%;object-fit:contain;padding:8px;';
   if (procLogoUrl) {
-    procLogoEl.innerHTML = '<img src="'+procLogoUrl+'" alt="'+brand.name+'" style="width:100%;height:100%;object-fit:contain;padding:8px;">';
+    procLogoEl.innerHTML = '<img src="'+procLogoUrl+'" alt="'+brand.name+'" style="'+procImgStyle+'">';
   } else {
     procLogoEl.innerHTML = logoSvg(brand, 60);
   }

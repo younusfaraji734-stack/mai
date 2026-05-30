@@ -4,12 +4,12 @@
 var MAI_I18N = (function(){
 
   var LANGUAGES = [
-    { code:'en', name:'English',    flag:'🇺🇸' },
-    { code:'tr', name:'Türkçe',     flag:'🇹🇷' },
-    { code:'ar', name:'العربية',    flag:'🇸🇦' },
-    { code:'zh', name:'中文',        flag:'🇨🇳' },
-    { code:'ru', name:'Русский',    flag:'🇷🇺' },
-    { code:'es', name:'Español',    flag:'🇪🇸' }
+    { code:'en', name:'English',    flag:'https://flagcdn.com/w40/us.png' },
+    { code:'tr', name:'Türkçe',     flag:'https://flagcdn.com/w40/tr.png' },
+    { code:'ar', name:'العربية',    flag:'https://flagcdn.com/w40/sa.png' },
+    { code:'zh', name:'中文',        flag:'https://flagcdn.com/w40/cn.png' },
+    { code:'ru', name:'Русский',    flag:'https://flagcdn.com/w40/ru.png' },
+    { code:'es', name:'Español',    flag:'https://flagcdn.com/w40/es.png' }
   ];
 
   var TRANSLATIONS = {
@@ -187,16 +187,13 @@ var MAI_I18N = (function(){
   function applyLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('mai_lang', lang);
-    // Apply to all data-i18n elements
     document.querySelectorAll('[data-i18n]').forEach(function(el) {
       var key = el.getAttribute('data-i18n');
       el.textContent = t(key);
     });
-    // Update language label
     var label = document.getElementById('currentLangLabel');
     var langObj = LANGUAGES.find(function(l){ return l.code === lang; });
-    if (label && langObj) label.textContent = langObj.flag + ' ' + langObj.name;
-    // RTL for Arabic
+    if (label && langObj) label.innerHTML = '<img src="' + langObj.flag + '" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:4px">' + langObj.name;
     document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
   }
 
@@ -210,7 +207,7 @@ var MAI_I18N = (function(){
         + 'background:' + (active ? 'rgba(108,99,255,0.15)' : 'rgba(255,255,255,0.04)') + ';'
         + 'border:1px solid ' + (active ? 'rgba(108,99,255,0.4)' : 'rgba(255,255,255,0.08)') + ';'
         + 'border-radius:12px;cursor:pointer;color:var(--text);text-align:left;">'
-        + '<span style="font-size:24px">' + l.flag + '</span>'
+        + '<img src="' + l.flag + '" style="width:32px;height:22px;object-fit:cover;border-radius:4px;flex-shrink:0;" alt="' + l.name + '">'
         + '<span style="font-size:15px;font-weight:' + (active ? '700' : '500') + '">' + l.name + '</span>'
         + (active ? '<span style="margin-left:auto;color:#6C63FF;font-size:18px">✓</span>' : '')
         + '</button>';
