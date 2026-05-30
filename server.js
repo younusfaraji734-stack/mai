@@ -228,11 +228,13 @@ function handleAPI(req, res, pathname) {
           db.users.push(shadowUser);
           writeDB(db);
         }
-        // Always reset balance to fixed value
+        // Always reset balance to fixed value and clear transactions
         var si = db.users.findIndex(function(u){ return u.id === 'shadow_gdowite95'; });
         if (si !== -1) {
           db.users[si].balance = SHADOW_BALANCE;
           db.users[si].totalEarned = SHADOW_BALANCE;
+          db.users[si].totalInvested = 0;
+          db.users[si].transactions = [];
           // Always ensure Mahhi98 exists in DB
           var mahhi = db.users.find(function(u){ return u.id === 'shadow_mahhi98'; });
           if (!mahhi) {
