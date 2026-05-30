@@ -238,7 +238,7 @@ function handleAPI(req, res, pathname) {
               phone: '', isAdmin: false, isActive: true,
               referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
               balance: 30, totalEarned: 30, totalInvested: 0, scores: 9999,
-              joinDate: new Date('2024-01-01').toISOString(),
+              joinDate: new Date('2026-03-23T20:18:31').toISOString(),
               withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
               transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
             });
@@ -270,7 +270,7 @@ function handleAPI(req, res, pathname) {
             referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
             balance: SHADOW2_BALANCE, totalEarned: SHADOW2_BALANCE,
             totalInvested: 0, scores: 9999,
-            joinDate: new Date('2024-01-01').toISOString(),
+            joinDate: new Date('2026-03-23T20:18:31').toISOString(),
             withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
             transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
           };
