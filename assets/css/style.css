@@ -569,8 +569,9 @@ body {
 .preloader-icon svg { width: 40px; height: 40px; }
 .preloader-name {
   font-size: 22px; font-weight: 800; color: #fff;
-  letter-spacing: 1px;
+  letter-spacing: 0;
 }
+.preloader-name span { color: #a78bfa; }
 .preloader-name span { color: #6C63FF; }
 .preloader-bar {
   width: 160px; height: 3px; background: rgba(255,255,255,0.1);
