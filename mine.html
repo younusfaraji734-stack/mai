@@ -248,14 +248,16 @@
       <div class="mi-info"><span>Notifications</span><small>Manage alerts</small></div>
       <span class="mi-arrow">→</span>
     </a>
-    <a href="#" class="menu-item" onclick="showToast('Language: English','success');return false">
+    <a href="#" class="menu-item" onclick="openLangModal();return false">
       <div class="mi-icon" style="background:rgba(67,233,123,.15);color:#43e97b">🌍</div>
-      <div class="mi-info"><span>Language</span><small>English</small></div>
+      <div class="mi-info"><span data-i18n="language">Language</span><small id="currentLangLabel">English</small></div>
       <span class="mi-arrow">→</span>
     </a>
     <a href="service.html" class="menu-item">
-      <div class="mi-icon" style="background:rgba(160,160,192,.1);color:#a0a0c0">🎧</div>
-      <div class="mi-info"><span>Customer Support</span><small>24/7 help center</small></div>
+      <div class="mi-icon" style="background:linear-gradient(135deg,#0088cc,#00aaff);color:#fff;font-size:18px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.248l-1.97 9.289c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.48 14.697l-2.95-.924c-.642-.204-.657-.642.136-.953l11.57-4.461c.537-.194 1.006.131.326.889z"/></svg>
+      </div>
+      <div class="mi-info"><span data-i18n="customerSupport">Customer Support</span><small data-i18n="support247">24/7 help center</small></div>
       <span class="mi-arrow">→</span>
     </a>
     <a href="#" class="menu-item" onclick="return false">
@@ -273,6 +275,19 @@
 </div>
 
 <div style="height:90px"></div>
+
+<!-- LANGUAGE MODAL -->
+<div class="modal-overlay" id="langModal" style="z-index:10000">
+  <div class="modal" style="max-width:340px">
+    <div class="modal-header">
+      <h3>🌍 Select Language</h3>
+      <button class="modal-close" onclick="closeModal('langModal')">✕</button>
+    </div>
+    <div class="modal-body" style="padding-bottom:20px">
+      <div id="langList" style="display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+  </div>
+</div>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
@@ -302,6 +317,7 @@
 
 <script src="assets/js/api.js"></script>
 <script src="assets/js/shared.js"></script>
+<script src="assets/js/i18n.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="assets/js/content-loader.js"></script>
 <script src="assets/js/dynamic.js"></script>
