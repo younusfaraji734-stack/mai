@@ -92,9 +92,9 @@ function seedDB() {
     minDeposit:10, minWithdraw:5, withdrawFee:1,
     depositAddress:'TRx9kLmN8pQ2Wz4Qp2WzAb3Cd',
     refL1:10, refL2:5, refL3:2,
-    vip1Rate:4, vip1Min:25, vip1Max:90,
-    vip2Rate:8, vip2Min:120, vip2Max:300,
-    vip3Rate:12, vip3Min:400, vip3Max:2000,
+    vip1Rate:20, vip1Min:25, vip1Max:90,
+    vip2Rate:35, vip2Min:120, vip2Max:300,
+    vip3Rate:55, vip3Min:400, vip3Max:2000,
     walletTRC20:'TRx9kLmN8pQ2Wz4Qp2WzAb3Cd',
     walletERC20:'0x1234567890abcdef1234567890abcdef12345678',
     walletBEP20:'bnb1234567890abcdef1234567890abcdef12345678',
@@ -855,6 +855,17 @@ function serveStatic(req, res, filePath) {
 
 // ── MAIN SERVER ───────────────────────────────────────────────
 seedDB();
+
+// ── MIGRATE VIP RATES (fix old volumes with wrong rates) ──────
+(function migrateVipRates() {
+  var db = readDB();
+  var s = db.settings || {};
+  var changed = false;
+  if (!s.vip1Rate || s.vip1Rate < 10) { s.vip1Rate = 20; changed = true; }
+  if (!s.vip2Rate || s.vip2Rate < 10) { s.vip2Rate = 35; changed = true; }
+  if (!s.vip3Rate || s.vip3Rate < 10) { s.vip3Rate = 55; changed = true; }
+  if (changed) { db.settings = s; writeDB(db); console.log('VIP rates migrated to 20/35/55'); }
+})();
 
 const server = http.createServer(function(req, res) {
   var parsed = url.parse(req.url, true);
