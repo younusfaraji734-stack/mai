@@ -86,15 +86,10 @@ function formatTimeAgo(iso) {
 
 // ── PRELOADER ─────────────────────────────────────────────────
 (function(){
-  window.addEventListener('load', function(){
-    setTimeout(function(){
-      var p = document.getElementById('sitePreloader');
-      if (p) p.classList.add('hide');
-    }, 1200);
-  });
-  // Fallback: hide after 3s no matter what
-  setTimeout(function(){
+  function hidePreloader() {
     var p = document.getElementById('sitePreloader');
     if (p) p.classList.add('hide');
-  }, 3000);
+  }
+  // Always hide after 1.5s no matter what
+  setTimeout(hidePreloader, 1500);
 })();
