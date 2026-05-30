@@ -418,6 +418,32 @@ var BRANDS = [
 BRANDS.forEach(function(b){ brandProgress[b.id] = 0; });
 
 // ── LOGO HTML ─────────────────────────────────────────────────
+var BRAND_LOGOS = {
+  Amazon:      'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg',
+  eBay:        'https://upload.wikimedia.org/wikipedia/commons/1/1b/EBay_logo.svg',
+  Shopee:      'https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg',
+  Lazada:      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Lazada_logo.svg/320px-Lazada_logo.svg.png',
+  Walmart:     'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Walmart_Spark.svg/200px-Walmart_Spark.svg.png',
+  Target:      'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Target_logo.svg/200px-Target_logo.svg.png',
+  Etsy:        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Etsy_logo.svg/320px-Etsy_logo.svg.png',
+  AliExpress:  'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/AliExpress_logo.svg/320px-AliExpress_logo.svg.png',
+  Alibaba:     'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Alibaba_Group_logo.svg/320px-Alibaba_Group_logo.svg.png',
+  Flipkart:    'https://upload.wikimedia.org/wikipedia/en/thumb/1/1b/Flipkart_logo.svg/320px-Flipkart_logo.svg.png',
+  Rakuten:     'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Rakuten_Global_Brand_Logo.svg/320px-Rakuten_Global_Brand_Logo.svg.png',
+  JDcom:       'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/JD.com_logo.svg/320px-JD.com_logo.svg.png',
+  Noon:        'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/Noon_logo.svg/320px-Noon_logo.svg.png',
+  Zalando:     'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Zalando_logo.svg/320px-Zalando_logo.svg.png',
+  Tokopedia:   'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Tokopedia_logo.svg/320px-Tokopedia_logo.svg.png',
+  Apple:       'https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg',
+  Samsung:     'https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Samsung_Logo.svg/320px-Samsung_Logo.svg.png',
+  Nike:        'https://upload.wikimedia.org/wikipedia/commons/a/a6/Logo_NIKE.svg',
+  Adidas:      'https://upload.wikimedia.org/wikipedia/commons/2/20/Adidas_Logo.svg',
+  Tesla:       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Tesla_Motors.svg/200px-Tesla_Motors.svg.png',
+  LouisVuitton:'https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Louis_Vuitton_logo_and_wordmark.svg/320px-Louis_Vuitton_logo_and_wordmark.svg.png',
+  Gucci:       'https://upload.wikimedia.org/wikipedia/commons/thumb/7/79/1960s_Gucci_Logo.svg/320px-1960s_Gucci_Logo.svg.png',
+  Rolex:       'https://upload.wikimedia.org/wikipedia/en/thumb/9/95/Rolex_logo.svg/200px-Rolex_logo.svg.png'
+};
+
 function logoSvg(brand, size) {
   size = size || 52;
   var svg = LOGOS[brand.logoKey] || '';
@@ -546,7 +572,13 @@ function openTask(brandId) {
   var ret    = (t.amount + parseFloat(profit)).toFixed(2);
 
   // Header logo
-  document.getElementById('tmHeaderLogo').innerHTML = logoSvg(brand, 34);
+  var headerLogoEl = document.getElementById('tmHeaderLogo');
+  var brandLogoUrl = BRAND_LOGOS[brand.logoKey];
+  if (brandLogoUrl) {
+    headerLogoEl.innerHTML = '<img src="'+brandLogoUrl+'" alt="'+brand.name+'" style="width:100%;height:100%;object-fit:contain;padding:4px;" onerror="this.parentNode.innerHTML=logoSvg(brand,34)">';
+  } else {
+    headerLogoEl.innerHTML = logoSvg(brand, 34);
+  }
   document.getElementById('tmTitle').textContent = brand.name;
 
   // Counter dots
@@ -562,7 +594,7 @@ function openTask(brandId) {
   // Product
   var imgEl = document.getElementById('tmProductImg');
   if (t.imgUrl) {
-    imgEl.innerHTML = '<img src="'+t.imgUrl+'" alt="'+t.product+'" style="width:100%;height:100%;object-fit:contain;border-radius:10px;" onerror="this.parentNode.textContent=\''+t.img+'\'">';
+    imgEl.innerHTML = '<img src="'+t.imgUrl+'" alt="'+t.product+'">';
   } else {
     imgEl.textContent = t.img || '📦';
   }
