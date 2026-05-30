@@ -90,6 +90,6 @@ function formatTimeAgo(iso) {
     var p = document.getElementById('sitePreloader');
     if (p) p.classList.add('hide');
   }
-  // Always hide after 1.5s no matter what
-  setTimeout(hidePreloader, 1500);
+  // Hide after 1s
+  setTimeout(hidePreloader, 1000);
 })();
