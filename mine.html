@@ -88,9 +88,10 @@
 <div class="mine-hero">
   <div class="mine-hero-bg" style="background-image: url('assets/images/profile-hero.svg'); background-size: cover; background-position: center;"></div>
   <div class="mine-hero-content">
-    <div class="mh-avatar-wrap">
-      <div class="mh-avatar">A</div>
-      <div class="mh-edit">✏️</div>
+    <div class="mh-avatar-wrap" onclick="document.getElementById('avatarInput').click()" style="cursor:pointer">
+      <div class="mh-avatar" id="mhAvatar">A</div>
+      <div class="mh-edit">📷</div>
+      <input type="file" id="avatarInput" accept="image/*" style="display:none" onchange="uploadAvatar(this)"/>
     </div>
     <h2 class="mh-name">A****5</h2>
     <div class="mh-id">ID: 10284756</div>
@@ -296,6 +297,43 @@
 <script>
   initMinePage();
   function doLogout(){ API.logout(); }
+
+  // ── PROFILE PICTURE ──────────────────────────────────────────
+  function _avatarKey() {
+    var u = API.getCurrentUser();
+    return u ? 'mai_avatar_' + u.id : null;
+  }
+  function loadAvatar() {
+    var key = _avatarKey(); if (!key) return;
+    var img = localStorage.getItem(key);
+    var el = document.getElementById('mhAvatar');
+    if (!el) return;
+    if (img) {
+      el.style.backgroundImage = 'url(' + img + ')';
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.textContent = '';
+    }
+  }
+  function uploadAvatar(input) {
+    var file = input.files[0]; if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var dataUrl = e.target.result;
+      var key = _avatarKey(); if (!key) return;
+      localStorage.setItem(key, dataUrl);
+      var el = document.getElementById('mhAvatar');
+      if (el) {
+        el.style.backgroundImage = 'url(' + dataUrl + ')';
+        el.style.backgroundSize = 'cover';
+        el.style.backgroundPosition = 'center';
+        el.textContent = '';
+      }
+      showToast('Profile picture updated!', 'success');
+    };
+    reader.readAsDataURL(file);
+  }
+  document.addEventListener('DOMContentLoaded', function(){ loadAvatar(); });
 </script>
 </body>
 </html>
