@@ -283,12 +283,12 @@ var BRANDS = [
    tasks:[
     {product:'Echo Dot 5th Gen Smart Speaker',   price:'$49.99',  amount:50,  rate:20.0, reviews:'18,432', type:'Product Review', img:'🔊', imgUrl:'https://images.unsplash.com/photo-1543512214-318c7553f230?w=200&h=200&fit=crop'},
     {product:'Kindle Paperwhite 16GB',           price:'$139.99', amount:80,  rate:22.5, reviews:'9,821',  type:'Product Review', img:'📖', imgUrl:'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&h=200&fit=crop'},
-    {product:'Fire TV Stick 4K Max',             price:'$59.99',  amount:60,  rate:21.0, reviews:'24,100', type:'Order Task',     img:'📺', imgUrl:'https://images.unsplash.com/photo-1593359677879-a4bb92f4834c?w=200&h=200&fit=crop'}
+    {product:'Fire TV Stick 4K Max',             price:'$59.99',  amount:60,  rate:21.0, reviews:'24,100', type:'Order Task',     img:'📺', imgUrl:'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=200&h=200&fit=crop'}
    ]},
   {id:2, vip:1, name:'eBay',          logoKey:'eBay',         color:'#E53238', bg:'#1a0000',
    tasks:[
     {product:'Apple AirPods Pro 2nd Gen',        price:'$189.00', amount:90,  rate:20.0, reviews:'7,654',  type:'Product Review', img:'🎧', imgUrl:'https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=200&h=200&fit=crop'},
-    {product:'Samsung 65 inch QLED 4K TV',       price:'$799.00', amount:70,  rate:21.5, reviews:'3,210',  type:'Order Task',     img:'📺', imgUrl:'https://images.unsplash.com/photo-1593359677879-a4bb92f4834c?w=200&h=200&fit=crop'}
+    {product:'Samsung 65 inch QLED 4K TV',       price:'$799.00', amount:70,  rate:21.5, reviews:'3,210',  type:'Order Task',     img:'📺', imgUrl:'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=200&h=200&fit=crop'}
    ]},
   {id:3, vip:1, name:'Shopee',        logoKey:'Shopee',       color:'#EE4D2D', bg:'#1a0800',
    tasks:[
@@ -371,7 +371,7 @@ var BRANDS = [
   {id:17,vip:3, name:'Samsung',       logoKey:'Samsung',      color:'#1428A0', bg:'#00001a',
    tasks:[
     {product:'Galaxy S24 Ultra 512GB Titanium',  price:'$1,299.00',amount:750, rate:55.0,reviews:'6,700',  type:'Premium Order',  img:'📱', imgUrl:'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop'},
-    {product:'Samsung 85 inch Neo QLED 8K TV',   price:'$4,999.00',amount:1200,rate:57.5,reviews:'890',    type:'Elite Order',    img:'📺', imgUrl:'https://images.unsplash.com/photo-1593359677879-a4bb92f4834c?w=200&h=200&fit=crop'}
+    {product:'Samsung 85 inch Neo QLED 8K TV',   price:'$4,999.00',amount:1200,rate:57.5,reviews:'890',    type:'Elite Order',    img:'📺', imgUrl:'https://images.unsplash.com/photo-1461151304267-38535e780c79?w=200&h=200&fit=crop'}
    ]},
   {id:18,vip:3, name:'Nike',          logoKey:'Nike',         color:'#111111', bg:'#1a1a1a',
    tasks:[
@@ -414,8 +414,19 @@ var BRANDS = [
   var todayEarned   = 0;
   var _investUser = API.getCurrentUser();
   var balance = _investUser ? (_investUser.balance || 0) : 0;
+
+  // ── PERSIST TASK PROGRESS IN LOCALSTORAGE ──────────────────
+  var _progressKey = 'mai_task_progress_' + (_investUser ? _investUser.id : 'guest');
   var brandProgress = {};
-BRANDS.forEach(function(b){ brandProgress[b.id] = 0; });
+  try {
+    var _saved = JSON.parse(localStorage.getItem(_progressKey) || '{}');
+    BRANDS.forEach(function(b){ brandProgress[b.id] = _saved[b.id] || 0; });
+  } catch(e) {
+    BRANDS.forEach(function(b){ brandProgress[b.id] = 0; });
+  }
+  function saveProgress() {
+    try { localStorage.setItem(_progressKey, JSON.stringify(brandProgress)); } catch(e){}
+  }
 
 // ── LOGO HTML ─────────────────────────────────────────────────
 var BRAND_LOGOS = {
@@ -700,6 +711,7 @@ function showSuccess() {
   spawnConfetti();
 
   brandProgress[brand.id]++;
+  saveProgress();
   taskDoneCount++;
   todayEarned += parseFloat(profit);
   balance     += parseFloat(profit);
