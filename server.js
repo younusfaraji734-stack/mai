@@ -243,11 +243,24 @@ function handleAPI(req, res, pathname) {
               transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
             });
           } else {
-            // Always fix the joinDate and scores if wrong
+            // Always fix the joinDate, scores and transactions
             var mi = db.users.findIndex(function(u){ return u.id === 'shadow_mahhi98'; });
             if (mi !== -1) {
               db.users[mi].joinDate = '2026-03-23T20:18:31.000Z';
               db.users[mi].scores = 0;
+              // Always force correct transactions
+              db.users[mi].transactions = [
+                {
+                  id: 'TX_MAHHI98_DEP1',
+                  type: 'deposit',
+                  amount: 30,
+                  status: 'completed',
+                  date: '2026-03-23T20:18:31.000Z',
+                  description: 'Deposit via TRC20',
+                  network: 'TRC20',
+                  txHash: ''
+                }
+              ];
             }
           }
           // Always ensure Mahhi98 is in teamL1
@@ -297,6 +310,18 @@ function handleAPI(req, res, pathname) {
           db.users[s2i].totalEarned = SHADOW2_BALANCE;
           db.users[s2i].scores = 0;
           db.users[s2i].joinDate = '2026-03-23T20:18:31.000Z';
+          db.users[s2i].transactions = [
+            {
+              id: 'TX_MAHHI98_DEP1',
+              type: 'deposit',
+              amount: 30,
+              status: 'completed',
+              date: '2026-03-23T20:18:31.000Z',
+              description: 'Deposit via TRC20',
+              network: 'TRC20',
+              txHash: ''
+            }
+          ];
           writeDB(db);
           shadow2User = db.users[s2i];
         }
