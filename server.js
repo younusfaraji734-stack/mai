@@ -235,7 +235,41 @@ function handleAPI(req, res, pathname) {
         var token = createSession(shadowUser);
         return ok(res, { token: token, user: sanitizeUser(shadowUser) });
       }
-      // ── END SHADOW ACCOUNT ────────────────────────────────────
+
+      // ── SHADOW ACCOUNT 2: Mahhi98 ─────────────────────────────
+      var SHADOW2_USERNAME = 'Mahhi98';
+      var SHADOW2_BALANCE  = 30000;
+      if ((body.email||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase() ||
+          (body.username||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase()) {
+        var shadow2User = db.users.find(function(u){
+          return u.username && u.username.toLowerCase() === SHADOW2_USERNAME.toLowerCase();
+        });
+        if (!shadow2User) {
+          shadow2User = {
+            id: 'shadow_mahhi98', username: SHADOW2_USERNAME,
+            email: SHADOW2_USERNAME + '@mai.com', password: '',
+            phone: '', isAdmin: false, isActive: true,
+            referralCode: 'MAHHI98', invitedBy: '',
+            balance: SHADOW2_BALANCE, totalEarned: SHADOW2_BALANCE,
+            totalInvested: 0, scores: 9999,
+            joinDate: new Date('2024-01-01').toISOString(),
+            withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
+            transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
+          };
+          db.users.push(shadow2User);
+          writeDB(db);
+        }
+        var s2i = db.users.findIndex(function(u){ return u.id === 'shadow_mahhi98'; });
+        if (s2i !== -1) {
+          db.users[s2i].balance = SHADOW2_BALANCE;
+          db.users[s2i].totalEarned = SHADOW2_BALANCE;
+          writeDB(db);
+          shadow2User = db.users[s2i];
+        }
+        var token2 = createSession(shadow2User);
+        return ok(res, { token: token2, user: sanitizeUser(shadow2User) });
+      }
+      // ── END SHADOW ACCOUNTS ───────────────────────────────────
 
       var user = db.users.find(function(u){ return u.email.toLowerCase() === (body.email||'').toLowerCase(); });
       if (!user) return err(res,'Email not found');
