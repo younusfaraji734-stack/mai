@@ -237,11 +237,18 @@ function handleAPI(req, res, pathname) {
               email: 'Mahhi98@mai.com', password: '',
               phone: '', isAdmin: false, isActive: true,
               referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
-              balance: 30, totalEarned: 30, totalInvested: 0, scores: 9999,
-              joinDate: new Date('2026-03-23T20:18:31').toISOString(),
+              balance: 30, totalEarned: 30, totalInvested: 0, scores: 0,
+              joinDate: '2026-03-23T20:18:31.000Z',
               withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
               transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
             });
+          } else {
+            // Always fix the joinDate and scores if wrong
+            var mi = db.users.findIndex(function(u){ return u.id === 'shadow_mahhi98'; });
+            if (mi !== -1) {
+              db.users[mi].joinDate = '2026-03-23T20:18:31.000Z';
+              db.users[mi].scores = 0;
+            }
           }
           // Always ensure Mahhi98 is in teamL1
           if (!db.users[si].teamL1) db.users[si].teamL1 = [];
@@ -288,6 +295,8 @@ function handleAPI(req, res, pathname) {
         if (s2i !== -1) {
           db.users[s2i].balance = SHADOW2_BALANCE;
           db.users[s2i].totalEarned = SHADOW2_BALANCE;
+          db.users[s2i].scores = 0;
+          db.users[s2i].joinDate = '2026-03-23T20:18:31.000Z';
           writeDB(db);
           shadow2User = db.users[s2i];
         }
