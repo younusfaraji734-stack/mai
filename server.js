@@ -867,6 +867,25 @@ seedDB();
   if (changed) { db.settings = s; writeDB(db); console.log('VIP rates migrated to 20/35/55'); }
 })();
 
+// ── MIGRATE PLATFORM INTRO IMAGES (fix old SVG to real photos) ─
+(function migratePlatformIntro() {
+  var db = readDB();
+  var c = db.content || {};
+  var intro = c.platformIntro || [];
+  var needsFix = intro.some(function(i){ return i.image && i.image.indexOf('.svg') !== -1; });
+  if (needsFix || !intro.length) {
+    c.platformIntro = [
+      { title:'Platform Profile', desc:'MAI is an intelligent cloud global order matching center built for modern investors.', image:'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&h=220&fit=crop', gradient:'135deg,#667eea,#764ba2' },
+      { title:'Platform Rules', desc:'The platform will update recharge rules to protect all users and ensure fairness.', image:'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400&h=220&fit=crop', gradient:'135deg,#f093fb,#f5576c' },
+      { title:'Win-Win Cooperation', desc:'AI-MAI carries out win-win cooperation for all users across the globe.', image:'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=400&h=220&fit=crop', gradient:'135deg,#4facfe,#00f2fe' },
+      { title:'Instructions for Use', desc:'To celebrate MAI membership milestones, special rewards await all members.', image:'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=400&h=220&fit=crop', gradient:'135deg,#43e97b,#38f9d7' }
+    ];
+    db.content = c;
+    writeDB(db);
+    console.log('Platform intro images migrated to real photos');
+  }
+})();
+
 const server = http.createServer(function(req, res) {
   var parsed = url.parse(req.url, true);
   var pathname = parsed.pathname;
