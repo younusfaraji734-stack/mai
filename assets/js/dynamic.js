@@ -64,6 +64,16 @@ function _updateDepositAddress(s,network){
   if(addrEl)addrEl.textContent=addr||'Address not configured';
   var copyBtn=document.querySelector('#modalRecharge .copy-btn');
   if(copyBtn)copyBtn.onclick=function(){copyToClipboard(addr);};
+  // Generate real QR code
+  var qrEl=document.getElementById('qrcode');
+  if(qrEl&&typeof QRCode!=='undefined'){
+    qrEl.innerHTML='';
+    if(addr){
+      new QRCode(qrEl,{text:addr,width:120,height:120,colorDark:'#000000',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+    } else {
+      qrEl.innerHTML='<div style="width:120px;height:120px;display:flex;align-items:center;justify-content:center;color:#a0a0c0;font-size:11px;text-align:center">No address<br>configured</div>';
+    }
+  }
 }
 
 /* ── OPEN WITHDRAW MODAL ────────────────────────────────────── */
