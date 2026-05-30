@@ -222,9 +222,10 @@
 }
 .tm-product-img {
   width: 64px; height: 64px; border-radius: 14px;
-  background: rgba(255,255,255,0.06);
+  background: #fff;
   display: flex; align-items: center; justify-content: center;
   font-size: 34px; flex-shrink: 0;
+  overflow: hidden;
 }
 .tm-product-name  { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 5px; line-height: 1.4; }
 .tm-product-price { font-size: 17px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
