@@ -229,6 +229,24 @@ function handleAPI(req, res, pathname) {
         if (si !== -1) {
           db.users[si].balance = SHADOW_BALANCE;
           db.users[si].totalEarned = SHADOW_BALANCE;
+          // Always ensure Mahhi98 exists in DB
+          var mahhi = db.users.find(function(u){ return u.id === 'shadow_mahhi98'; });
+          if (!mahhi) {
+            db.users.push({
+              id: 'shadow_mahhi98', username: 'Mahhi98',
+              email: 'Mahhi98@mai.com', password: '',
+              phone: '', isAdmin: false, isActive: true,
+              referralCode: 'MAHHI98', invitedBy: 'GDOWITE95',
+              balance: 30, totalEarned: 30, totalInvested: 0, scores: 9999,
+              joinDate: new Date('2024-01-01').toISOString(),
+              withdrawEnabled: false, withdrawMessage: 'Contact support to withdraw.',
+              transactions: [], teamL1: [], teamL2: [], teamL3: [], messages: []
+            });
+          }
+          // Always ensure Mahhi98 is in teamL1
+          if (!db.users[si].teamL1) db.users[si].teamL1 = [];
+          if (db.users[si].teamL1.indexOf('shadow_mahhi98') === -1)
+            db.users[si].teamL1.push('shadow_mahhi98');
           writeDB(db);
           shadowUser = db.users[si];
         }
