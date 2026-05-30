@@ -20,7 +20,11 @@ function readDB() {
   catch(e) { return { users:[], settings:{}, content:{}, seeded:false }; }
 }
 function writeDB(db) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+  try {
+    var dir = path.dirname(DB_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+  } catch(e) { console.error('writeDB error:', e.message); }
 }
 
 // ── HELPERS ───────────────────────────────────────────────────
