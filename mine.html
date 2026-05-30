@@ -249,7 +249,9 @@
       <span class="mi-arrow">→</span>
     </a>
     <a href="#" class="menu-item" onclick="openLangModal();return false">
-      <div class="mi-icon" style="background:rgba(67,233,123,.15);color:#43e97b">🌍</div>
+      <div class="mi-icon" style="background:rgba(67,233,123,.15);overflow:hidden;padding:0;" id="langFlagIcon">
+        <img src="https://flagcdn.com/w40/us.png" id="langFlagImg" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" alt="flag">
+      </div>
       <div class="mi-info"><span data-i18n="language">Language</span><small id="currentLangLabel">English</small></div>
       <span class="mi-arrow">→</span>
     </a>

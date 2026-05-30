@@ -290,7 +290,9 @@ body {
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 20px rgba(108,99,255,0.5); transition: all 0.2s;
 }
+.center-btn svg { stroke: #fff !important; }
 .center-btn:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(108,99,255,0.6); }
+.center-nav span { color: #fff !important; font-weight: 600; }
 
 /* ===== MODALS ===== */
 .modal-overlay {

@@ -191,10 +191,16 @@ var MAI_I18N = (function(){
       var key = el.getAttribute('data-i18n');
       el.textContent = t(key);
     });
-    var label = document.getElementById('currentLangLabel');
-    var langObj = LANGUAGES.find(function(l){ return l.code === lang; });
-    if (label && langObj) label.innerHTML = '<img src="' + langObj.flag + '" style="width:18px;height:13px;object-fit:cover;border-radius:2px;vertical-align:middle;margin-right:4px">' + langObj.name;
+    _updateLangLabel();
     document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+  }
+
+  function _updateLangLabel() {
+    var label = document.getElementById('currentLangLabel');
+    var langObj = LANGUAGES.find(function(l){ return l.code === currentLang; });
+    if (label && langObj) label.textContent = langObj.name;
+    var flagImg = document.getElementById('langFlagImg');
+    if (flagImg && langObj) flagImg.src = langObj.flag;
   }
 
   function openLangModal() {
@@ -225,9 +231,7 @@ var MAI_I18N = (function(){
   // Auto-apply on page load
   document.addEventListener('DOMContentLoaded', function(){
     if (currentLang !== 'en') applyLanguage(currentLang);
-    var label = document.getElementById('currentLangLabel');
-    var langObj = LANGUAGES.find(function(l){ return l.code === currentLang; });
-    if (label && langObj) label.textContent = langObj.flag + ' ' + langObj.name;
+    _updateLangLabel();
   });
 
   return { t:t, applyLanguage:applyLanguage, openLangModal:openLangModal, selectLang:selectLang, LANGUAGES:LANGUAGES };
