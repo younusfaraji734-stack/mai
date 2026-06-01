@@ -107,12 +107,13 @@ async function saveWallets() {
   if (!trc20&&!erc20&&!bep20) { showToast('Enter at least one wallet address','error'); return; }
   var btn = document.getElementById('saveBtn');
   btn.textContent='⏳ Saving…'; btn.disabled=true;
-  var current = await ADMIN.getSettings();
-  var existing = (current.ok&&current.settings)?current.settings:{};
-  var d = await ADMIN.saveSettings(Object.assign({},existing,{
-    walletTRC20:trc20, walletERC20:erc20, walletBEP20:bep20,
-    depositAddress:trc20||existing.depositAddress||''
-  }));
+  // Only save wallet fields — server merges with existing settings
+  var d = await ADMIN.saveSettings({
+    walletTRC20: trc20,
+    walletERC20: erc20,
+    walletBEP20: bep20,
+    depositAddress: trc20 || ''
+  });
   btn.textContent='💾 Save Wallet Addresses'; btn.disabled=false;
   if (!d.ok) { showToast(d.msg||'Error','error'); return; }
   showToast('Wallet addresses saved!','success');

@@ -119,8 +119,16 @@ async function toggleExpand(id) {
   var body = document.getElementById('body-'+id);
   if (!body) return;
   body.classList.toggle('expanded');
+  // Mark as read without re-rendering
   await API.markMessageRead(id);
-  renderMessages();
+  var card = document.getElementById('msg-'+id);
+  if (card) {
+    card.classList.remove('unread');
+    var dot = card.querySelector('.msg-unread-dot');
+    if (dot) dot.remove();
+    var readBtn = card.querySelector('.msg-read-btn[onclick*="markRead"]');
+    if (readBtn) readBtn.remove();
+  }
 }
 
 async function markRead(id) {

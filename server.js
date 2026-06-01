@@ -133,18 +133,38 @@ function seedDB() {
   writeDB(db);
 }
 
-// ── SESSION STORE (in-memory) ─────────────────────────────────
+// ── SESSION STORE (persisted in DB) ──────────────────────────
 var sessions = {};
 function createSession(user) {
   var token = 'sess_' + Date.now() + Math.random().toString(36).substr(2,12);
   sessions[token] = { userId: user.id, isAdmin: user.isAdmin, created: Date.now() };
+  // Persist to DB
+  try {
+    var db = readDB();
+    if (!db.sessions) db.sessions = {};
+    // Clean old sessions (older than 30 days)
+    var now = Date.now();
+    Object.keys(db.sessions).forEach(function(k){
+      if (now - (db.sessions[k].created||0) > 30*24*60*60*1000) delete db.sessions[k];
+    });
+    db.sessions[token] = sessions[token];
+    writeDB(db);
+  } catch(e) {}
   return token;
 }
 function getSession(req) {
   var auth = req.headers['authorization'] || '';
   var token = auth.replace('Bearer ','').trim();
   if (!token) return null;
+  // Check memory first, then DB
   var sess = sessions[token];
+  if (!sess) {
+    try {
+      var db = readDB();
+      sess = db.sessions && db.sessions[token];
+      if (sess) sessions[token] = sess; // restore to memory
+    } catch(e) {}
+  }
   if (!sess) return null;
   var db = readDB();
   return db.users.find(function(u){ return u.id === sess.userId; }) || null;
@@ -343,6 +363,10 @@ function handleAPI(req, res, pathname) {
   if (pathname === '/api/auth/logout' && method === 'POST') {
     var auth = (req.headers['authorization']||'').replace('Bearer ','').trim();
     delete sessions[auth];
+    try {
+      var db = readDB();
+      if (db.sessions) { delete db.sessions[auth]; writeDB(db); }
+    } catch(e) {}
     return ok(res);
   }
 
@@ -792,8 +816,10 @@ function handleAPI(req, res, pathname) {
       var amount = parseFloat(body.amount)||0;
       var taskAmount = parseFloat(body.taskAmount)||0;
       if (amount <= 0) return err(res,'Invalid amount');
-      // Check balance
+      // Check balance covers the task amount
       if ((db.users[idx].balance||0) < taskAmount) return err(res,'Insufficient balance for this task');
+      // Deduct task amount, then credit commission back (net effect: user pays taskAmount, gets taskAmount + commission)
+      db.users[idx].balance = (db.users[idx].balance||0) - taskAmount;
       var tx = { id:genTxId(), type:'task', amount:amount,
         taskAmount:taskAmount, status:'completed', date:new Date().toISOString(),
         description:body.description||'Task Commission', network:'', txHash:'' };
@@ -857,15 +883,16 @@ function serveStatic(req, res, filePath) {
 // ── MAIN SERVER ───────────────────────────────────────────────
 seedDB();
 
-// ── MIGRATE VIP RATES (fix old volumes with wrong rates) ──────
+// ── MIGRATE VIP RATES (only fix if still at old wrong values 4/8/12) ──────
 (function migrateVipRates() {
   var db = readDB();
   var s = db.settings || {};
   var changed = false;
-  if (s.vip1Rate !== 20) { s.vip1Rate = 20; changed = true; }
-  if (s.vip2Rate !== 35) { s.vip2Rate = 35; changed = true; }
-  if (s.vip3Rate !== 55) { s.vip3Rate = 55; changed = true; }
-  if (changed) { db.settings = s; writeDB(db); console.log('VIP rates forced to 20/35/55'); }
+  // Only fix if they are the old wrong seed values (4, 8, 12)
+  if (s.vip1Rate === 4)  { s.vip1Rate = 20; changed = true; }
+  if (s.vip2Rate === 8)  { s.vip2Rate = 35; changed = true; }
+  if (s.vip3Rate === 12) { s.vip3Rate = 55; changed = true; }
+  if (changed) { db.settings = s; writeDB(db); console.log('VIP rates migrated from old 4/8/12 to 20/35/55'); }
 })();
 
 // ── MIGRATE PLATFORM INTRO IMAGES (fix old SVG to real photos) ─
