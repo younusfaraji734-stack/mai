@@ -325,17 +325,8 @@ async function initTeamPage(){
     members.forEach(function(m,i){
       var comm=((m.totalInvested||0)*rate).toFixed(2);
       var joined=new Date(m.joinDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-      var maskedEmail = (function(e){
-        if(!e||e.indexOf('@')===-1) return '****';
-        var parts=e.split('@');
-        var name=parts[0];
-        var domain=parts[1];
-        var masked=name[0]+'****'+(name.length>1?name.slice(-1):'');
-        var dparts=domain.split('.');
-        return masked+'@'+'****'+'.'+dparts[dparts.length-1];
-      })(m.email);
       html+='<div class="member-card"><div class="mc-avatar" style="background:'+COLORS[i%COLORS.length]+'">'+(m.username||'U')[0].toUpperCase()+'</div>'
-        +'<div class="mc-info"><div class="mc-name">'+maskName(m.username)+'</div><div class="mc-meta">'+maskedEmail+'</div></div>'
+        +'<div class="mc-info"><div class="mc-name">'+maskName(m.username)+'</div></div>'
         +'<div class="mc-right"><div class="mc-invested">$'+(m.totalInvested||0).toFixed(2)+' invested</div>'
         +'<div class="mc-comm">+$'+comm+' commission</div><div class="mc-date">Joined '+joined+'</div></div></div>';
     });
