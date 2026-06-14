@@ -139,7 +139,8 @@ async function sendMessage() {
   var type = document.getElementById('msgType').value;
   var subject = document.getElementById('msgSubject').value.trim();
   var body = document.getElementById('msgBody').value.trim();
-  if (!subject) { showToast('Enter a subject','error'); return; }
+  var typeLabels = {info:'Notice',success:'Good News',warning:'Important Warning',error:'Urgent Alert'};
+  if (!subject) subject = typeLabels[type] || 'Message from Admin';
   if (!body) { showToast('Enter a message body','error'); return; }
   var btn = document.querySelector('#sendMsgModal .btn-save');
   btn.textContent='Sending…'; btn.disabled=true;
@@ -160,7 +161,8 @@ async function sendBroadcast() {
   var type = document.getElementById('bcType').value;
   var subject = document.getElementById('bcSubject').value.trim();
   var body = document.getElementById('bcBody').value.trim();
-  if (!subject) { showToast('Enter a subject','error'); return; }
+  var typeLabels2 = {info:'Notice',success:'Good News',warning:'Important Warning',error:'Urgent Alert'};
+  if (!subject) subject = typeLabels2[type] || 'Message from Admin';
   if (!body) { showToast('Enter a message body','error'); return; }
   if (!confirm('Send this broadcast to all '+allUsers.length+' users?')) return;
   var btn = document.querySelector('#broadcastModal .btn-save');
