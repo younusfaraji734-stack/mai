@@ -173,34 +173,41 @@ async function checkWarningMessages(){
   try {
     var msgs = await API.getMyMessages();
     if (!msgs || !msgs.length) return;
-    // Find unread warning messages
+    // Find unread warning OR error messages
     var warnings = msgs.filter(function(m){
-      return m.type === 'warning' && !m.read;
+      return (m.type === 'warning' || m.type === 'error') && !m.read;
     });
     if (!warnings.length) return;
-    // Show the most recent unread warning as a blocking popup
+    // Only show once per browser session per message
+    var shownKey = '_warnShown_' + warnings[0].id;
+    if (sessionStorage.getItem(shownKey)) return;
+    sessionStorage.setItem(shownKey, '1');
     var w = warnings[0];
     var old = document.getElementById('_warnPopup');
     if (old) old.remove();
+    var iconColor = w.type === 'error' ? '#ef4444' : '#FFB800';
+    var borderColor = w.type === 'error' ? 'rgba(239,68,68,0.4)' : 'rgba(255,184,0,0.4)';
+    var btnColor = w.type === 'error'
+      ? 'background:linear-gradient(135deg,#ef4444,#b91c1c)'
+      : 'background:linear-gradient(135deg,#FFB800,#FF8C00)';
     var d = document.createElement('div');
     d.id = '_warnPopup';
     d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px';
     d.innerHTML =
-      '<div style="background:#16162a;border:1px solid rgba(255,184,0,0.4);border-radius:20px;padding:32px 24px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)">'
+      '<div style="background:#16162a;border:1px solid '+borderColor+';border-radius:20px;padding:32px 24px;max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)">'
       + '<div style="width:64px;height:64px;background:rgba(255,184,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">'
-      + '<svg width="32" height="32" fill="none" stroke="#FFB800" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+      + '<svg width="32" height="32" fill="none" stroke="'+iconColor+'" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
       + '</div>'
-      + '<h3 style="font-size:18px;font-weight:800;color:#FFB800;margin-bottom:8px">' + (w.subject || 'Important Notice') + '</h3>'
-      + '<p style="font-size:14px;color:#c0c0d0;line-height:1.7;margin-bottom:28px;white-space:pre-wrap">' + (w.body || '') + '</p>'
-      + '<button id="_warnOkBtn" style="background:linear-gradient(135deg,#FFB800,#FF8C00);color:white;border:none;padding:14px 40px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%">OK, I Understand</button>'
+      + '<h3 style="font-size:18px;font-weight:800;color:'+iconColor+';margin-bottom:12px">' + (w.subject || 'Important Notice') + '</h3>'
+      + '<p style="font-size:14px;color:#c0c0d0;line-height:1.75;margin-bottom:28px;white-space:pre-wrap;text-align:left">' + (w.body || '') + '</p>'
+      + '<button id="_warnOkBtn" style="'+btnColor+';color:white;border:none;padding:14px 40px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%">OK, I Understand</button>'
       + '</div>';
     document.body.appendChild(d);
     document.getElementById('_warnOkBtn').addEventListener('click', async function(){
-      // Mark as read then remove popup
       await API.markMessageRead(w.id);
       d.remove();
     });
-  } catch(e) {}
+  } catch(e) { console.error('checkWarningMessages error:', e); }
 }
 
 /* ── PAGE INIT: INDEX.HTML ──────────────────────────────────── */
