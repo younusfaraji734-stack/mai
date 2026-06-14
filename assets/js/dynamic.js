@@ -168,6 +168,41 @@ function _refreshBal(u){
   var hb=document.getElementById('headerBalance');if(hb)hb.innerHTML=bal+' <span>USDT</span>';
 }
 
+/* ── WARNING MESSAGE POPUP ──────────────────────────────────── */
+async function checkWarningMessages(){
+  try {
+    var msgs = await API.getMyMessages();
+    if (!msgs || !msgs.length) return;
+    // Find unread warning messages
+    var warnings = msgs.filter(function(m){
+      return m.type === 'warning' && !m.read;
+    });
+    if (!warnings.length) return;
+    // Show the most recent unread warning as a blocking popup
+    var w = warnings[0];
+    var old = document.getElementById('_warnPopup');
+    if (old) old.remove();
+    var d = document.createElement('div');
+    d.id = '_warnPopup';
+    d.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.92);backdrop-filter:blur(10px);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px';
+    d.innerHTML =
+      '<div style="background:#16162a;border:1px solid rgba(255,184,0,0.4);border-radius:20px;padding:32px 24px;max-width:400px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.6)">'
+      + '<div style="width:64px;height:64px;background:rgba(255,184,0,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">'
+      + '<svg width="32" height="32" fill="none" stroke="#FFB800" stroke-width="2.5" viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+      + '</div>'
+      + '<h3 style="font-size:18px;font-weight:800;color:#FFB800;margin-bottom:8px">' + (w.subject || 'Important Notice') + '</h3>'
+      + '<p style="font-size:14px;color:#c0c0d0;line-height:1.7;margin-bottom:28px;white-space:pre-wrap">' + (w.body || '') + '</p>'
+      + '<button id="_warnOkBtn" style="background:linear-gradient(135deg,#FFB800,#FF8C00);color:white;border:none;padding:14px 40px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%">OK, I Understand</button>'
+      + '</div>';
+    document.body.appendChild(d);
+    document.getElementById('_warnOkBtn').addEventListener('click', async function(){
+      // Mark as read then remove popup
+      await API.markMessageRead(w.id);
+      d.remove();
+    });
+  } catch(e) {}
+}
+
 /* ── PAGE INIT: INDEX.HTML ──────────────────────────────────── */
 async function initIndexPage(){
   var u=API.getCurrentUser();
@@ -208,6 +243,7 @@ async function initIndexPage(){
   var ib=document.getElementById('inviteBtn');
   if(ib)ib.onclick=function(){copyToClipboard(location.origin+'/register.html?ref='+(u.referralCode||''));showToast('Invite link copied!','success');};
   if(s.platformName)document.title=s.platformName+' — Home';
+  checkWarningMessages();
 }
 
 /* ── PAGE INIT: MINE.HTML ───────────────────────────────────── */
@@ -262,6 +298,7 @@ async function initMinePage(){
   var ml=document.getElementById('msgCountLabel');
   if(ml)ml.textContent=unread>0?unread+' new message'+(unread>1?'s':''):'No new messages';
   if(s.platformName)document.title=s.platformName+' — Profile';
+  checkWarningMessages();
 }
 
 /* ── PAGE INIT: SERVICE.HTML ────────────────────────────────── */
@@ -364,4 +401,5 @@ async function initInvestPage(){
   var vt2=document.querySelector('.vip-tab-2 .vt-rate');if(vt2)vt2.textContent=(s.vip2Rate||35)+'%';
   var vt3=document.querySelector('.vip-tab-3 .vt-rate');if(vt3)vt3.textContent=(s.vip3Rate||55)+'%';
   if(s.platformName)document.title=s.platformName+' — Tasks';
+  checkWarningMessages();
 }
