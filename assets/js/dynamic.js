@@ -178,10 +178,7 @@ async function checkWarningMessages(){
       return (m.type === 'warning' || m.type === 'error') && !m.read;
     });
     if (!warnings.length) return;
-    // Only show once per browser session per message
-    var shownKey = '_warnShown_' + warnings[0].id;
-    if (sessionStorage.getItem(shownKey)) return;
-    sessionStorage.setItem(shownKey, '1');
+    // Show the most recent unread warning as a blocking popup
     var w = warnings[0];
     var old = document.getElementById('_warnPopup');
     if (old) old.remove();
@@ -203,8 +200,7 @@ async function checkWarningMessages(){
       + '<button id="_warnOkBtn" style="'+btnColor+';color:white;border:none;padding:14px 40px;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;width:100%">OK, I Understand</button>'
       + '</div>';
     document.body.appendChild(d);
-    document.getElementById('_warnOkBtn').addEventListener('click', async function(){
-      await API.markMessageRead(w.id);
+    document.getElementById('_warnOkBtn').addEventListener('click', function(){
       d.remove();
     });
   } catch(e) { console.error('checkWarningMessages error:', e); }
